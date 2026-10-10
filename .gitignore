@@ -1,0 +1,8 @@
+node_modules/
+.DS_Store
+dist/
+public/vision/
+public/models/*.task
+playwright-report/
+test-results/
+evidence/verification/
