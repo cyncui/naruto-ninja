@@ -1,0 +1,1148 @@
+{
+  "schemaVersion": "1.0.0",
+  "researchedOn": "2026-10-09",
+  "counts": {
+    "signs": 33,
+    "signsByKind": {
+      "action": 3,
+      "basic": 12,
+      "special": 13,
+      "variant": 5
+    },
+    "techniques": 81,
+    "techniquesByCategory": {
+      "clan": 23,
+      "elemental": 29,
+      "general": 29
+    },
+    "variants": 95,
+    "variantsByVerification": {
+      "primary_verified": 0,
+      "secondary_reported": 85,
+      "unresolved": 10
+    },
+    "variantsByTrigger": {
+      "no_seals": 4,
+      "seal_sequence": 67,
+      "special_gesture": 14,
+      "unresolved": 10
+    },
+    "sources": 85,
+    "sourcesByAccess": {
+      "full_page": 4,
+      "search_excerpt": 81
+    }
+  },
+  "exactSequenceCollisions": [
+    {
+      "steps": [
+        "tiger"
+      ],
+      "variants": [
+        "beast-human-clone/reference",
+        "four-legs/tiger",
+        "earth-rampart/reported",
+        "fire-great-destruction/madara-tiger",
+        "body-flicker-technique/listed",
+        "bringer-of-darkness-technique/listed",
+        "nine-masked-beasts/reported",
+        "temple-of-nirvana-technique/listed"
+      ]
+    },
+    {
+      "steps": [
+        "ram"
+      ],
+      "variants": [
+        "mind-body-transmission/reference",
+        "heavenly-transfer-technique/listed"
+      ]
+    },
+    {
+      "steps": [
+        "rat"
+      ],
+      "variants": [
+        "shadow-clutch/reference",
+        "shadow-imitation/reference"
+      ]
+    },
+    {
+      "steps": [
+        "snake"
+      ],
+      "variants": [
+        "lightning-false-darkness/reported",
+        "water-exploding-wave/reported",
+        "wood-dragon/reported",
+        "demonic-statue-chains/reported"
+      ]
+    },
+    {
+      "steps": [
+        "clone-seal"
+      ],
+      "variants": [
+        "wood-multiple-clones/reported",
+        "multiple-shadow-clone-technique/listed",
+        "shadow-clone-technique/listed",
+        "shuriken-shadow-clone-technique/naruto-anime"
+      ]
+    }
+  ],
+  "sequencePrefixConflicts": [
+    {
+      "prefix": {
+        "steps": [
+          "tiger"
+        ],
+        "variants": [
+          "beast-human-clone/reference",
+          "four-legs/tiger",
+          "earth-rampart/reported",
+          "fire-great-destruction/madara-tiger",
+          "body-flicker-technique/listed",
+          "bringer-of-darkness-technique/listed",
+          "nine-masked-beasts/reported",
+          "temple-of-nirvana-technique/listed"
+        ]
+      },
+      "continuation": {
+        "steps": [
+          "tiger",
+          "ram",
+          "rat",
+          "slam-surface"
+        ],
+        "variants": [
+          "earth-sandwich/reported"
+        ]
+      }
+    },
+    {
+      "prefix": {
+        "steps": [
+          "tiger"
+        ],
+        "variants": [
+          "beast-human-clone/reference",
+          "four-legs/tiger",
+          "earth-rampart/reported",
+          "fire-great-destruction/madara-tiger",
+          "body-flicker-technique/listed",
+          "bringer-of-darkness-technique/listed",
+          "nine-masked-beasts/reported",
+          "temple-of-nirvana-technique/listed"
+        ]
+      },
+      "continuation": {
+        "steps": [
+          "tiger",
+          "hare",
+          "boar",
+          "dog"
+        ],
+        "variants": [
+          "earth-wall/reported"
+        ]
+      }
+    },
+    {
+      "prefix": {
+        "steps": [
+          "tiger"
+        ],
+        "variants": [
+          "beast-human-clone/reference",
+          "four-legs/tiger",
+          "earth-rampart/reported",
+          "fire-great-destruction/madara-tiger",
+          "body-flicker-technique/listed",
+          "bringer-of-darkness-technique/listed",
+          "nine-masked-beasts/reported",
+          "temple-of-nirvana-technique/listed"
+        ]
+      },
+      "continuation": {
+        "steps": [
+          "tiger",
+          "ox",
+          "tiger",
+          "rat"
+        ],
+        "variants": [
+          "water-bullet/reported"
+        ]
+      }
+    },
+    {
+      "prefix": {
+        "steps": [
+          "tiger"
+        ],
+        "variants": [
+          "beast-human-clone/reference",
+          "four-legs/tiger",
+          "earth-rampart/reported",
+          "fire-great-destruction/madara-tiger",
+          "body-flicker-technique/listed",
+          "bringer-of-darkness-technique/listed",
+          "nine-masked-beasts/reported",
+          "temple-of-nirvana-technique/listed"
+        ]
+      },
+      "continuation": {
+        "steps": [
+          "tiger",
+          "snake",
+          "rat",
+          "snake",
+          "tiger"
+        ],
+        "variants": [
+          "water-formation-wall/reported"
+        ]
+      }
+    },
+    {
+      "prefix": {
+        "steps": [
+          "tiger"
+        ],
+        "variants": [
+          "beast-human-clone/reference",
+          "four-legs/tiger",
+          "earth-rampart/reported",
+          "fire-great-destruction/madara-tiger",
+          "body-flicker-technique/listed",
+          "bringer-of-darkness-technique/listed",
+          "nine-masked-beasts/reported",
+          "temple-of-nirvana-technique/listed"
+        ]
+      },
+      "continuation": {
+        "steps": [
+          "tiger",
+          "ox",
+          "dragon",
+          "hare",
+          "dog",
+          "bird",
+          "rat",
+          "clone-seal",
+          "dragon",
+          "ram"
+        ],
+        "variants": [
+          "water-shark-bullet/reported"
+        ]
+      }
+    },
+    {
+      "prefix": {
+        "steps": [
+          "tiger"
+        ],
+        "variants": [
+          "beast-human-clone/reference",
+          "four-legs/tiger",
+          "earth-rampart/reported",
+          "fire-great-destruction/madara-tiger",
+          "body-flicker-technique/listed",
+          "bringer-of-darkness-technique/listed",
+          "nine-masked-beasts/reported",
+          "temple-of-nirvana-technique/listed"
+        ]
+      },
+      "continuation": {
+        "steps": [
+          "tiger",
+          "ox",
+          "dog",
+          "hare",
+          "snake"
+        ],
+        "variants": [
+          "wind-great-breakthrough/reported"
+        ]
+      }
+    },
+    {
+      "prefix": {
+        "steps": [
+          "tiger"
+        ],
+        "variants": [
+          "beast-human-clone/reference",
+          "four-legs/tiger",
+          "earth-rampart/reported",
+          "fire-great-destruction/madara-tiger",
+          "body-flicker-technique/listed",
+          "bringer-of-darkness-technique/listed",
+          "nine-masked-beasts/reported",
+          "temple-of-nirvana-technique/listed"
+        ]
+      },
+      "continuation": {
+        "steps": [
+          "tiger",
+          "dog",
+          "snake"
+        ],
+        "variants": [
+          "wood-clone/reported"
+        ]
+      }
+    },
+    {
+      "prefix": {
+        "steps": [
+          "tiger"
+        ],
+        "variants": [
+          "beast-human-clone/reference",
+          "four-legs/tiger",
+          "earth-rampart/reported",
+          "fire-great-destruction/madara-tiger",
+          "body-flicker-technique/listed",
+          "bringer-of-darkness-technique/listed",
+          "nine-masked-beasts/reported",
+          "temple-of-nirvana-technique/listed"
+        ]
+      },
+      "continuation": {
+        "steps": [
+          "tiger",
+          "snake"
+        ],
+        "variants": [
+          "wood-nativity-world-trees/reported"
+        ]
+      }
+    },
+    {
+      "prefix": {
+        "steps": [
+          "tiger"
+        ],
+        "variants": [
+          "beast-human-clone/reference",
+          "four-legs/tiger",
+          "earth-rampart/reported",
+          "fire-great-destruction/madara-tiger",
+          "body-flicker-technique/listed",
+          "bringer-of-darkness-technique/listed",
+          "nine-masked-beasts/reported",
+          "temple-of-nirvana-technique/listed"
+        ]
+      },
+      "continuation": {
+        "steps": [
+          "tiger",
+          "boar",
+          "ox",
+          "dog",
+          "snake"
+        ],
+        "variants": [
+          "body-replacement-technique/listed"
+        ]
+      }
+    },
+    {
+      "prefix": {
+        "steps": [
+          "tiger"
+        ],
+        "variants": [
+          "beast-human-clone/reference",
+          "four-legs/tiger",
+          "earth-rampart/reported",
+          "fire-great-destruction/madara-tiger",
+          "body-flicker-technique/listed",
+          "bringer-of-darkness-technique/listed",
+          "nine-masked-beasts/reported",
+          "temple-of-nirvana-technique/listed"
+        ]
+      },
+      "continuation": {
+        "steps": [
+          "tiger",
+          "horse",
+          "hare",
+          "rat",
+          "dog"
+        ],
+        "variants": [
+          "chakra-scalpel/listed"
+        ]
+      }
+    },
+    {
+      "prefix": {
+        "steps": [
+          "tiger"
+        ],
+        "variants": [
+          "beast-human-clone/reference",
+          "four-legs/tiger",
+          "earth-rampart/reported",
+          "fire-great-destruction/madara-tiger",
+          "body-flicker-technique/listed",
+          "bringer-of-darkness-technique/listed",
+          "nine-masked-beasts/reported",
+          "temple-of-nirvana-technique/listed"
+        ]
+      },
+      "continuation": {
+        "steps": [
+          "tiger",
+          "snake",
+          "tiger"
+        ],
+        "variants": [
+          "shadow-clone-technique/anime-365"
+        ]
+      }
+    },
+    {
+      "prefix": {
+        "steps": [
+          "tiger"
+        ],
+        "variants": [
+          "beast-human-clone/reference",
+          "four-legs/tiger",
+          "earth-rampart/reported",
+          "fire-great-destruction/madara-tiger",
+          "body-flicker-technique/listed",
+          "bringer-of-darkness-technique/listed",
+          "nine-masked-beasts/reported",
+          "temple-of-nirvana-technique/listed"
+        ]
+      },
+      "continuation": {
+        "steps": [
+          "tiger",
+          "snake",
+          "dog",
+          "dragon",
+          "clap-hands"
+        ],
+        "variants": [
+          "summoning-impure-world-reincarnation/listed"
+        ]
+      }
+    },
+    {
+      "prefix": {
+        "steps": [
+          "ram"
+        ],
+        "variants": [
+          "mind-body-transmission/reference",
+          "heavenly-transfer-technique/listed"
+        ]
+      },
+      "continuation": {
+        "steps": [
+          "ram",
+          "akimichi-seal"
+        ],
+        "variants": [
+          "multi-size/reference"
+        ]
+      }
+    },
+    {
+      "prefix": {
+        "steps": [
+          "ram"
+        ],
+        "variants": [
+          "mind-body-transmission/reference",
+          "heavenly-transfer-technique/listed"
+        ]
+      },
+      "continuation": {
+        "steps": [
+          "ram",
+          "dog",
+          "ox",
+          "snake"
+        ],
+        "variants": [
+          "earth-wall/reported-snake-ending"
+        ]
+      }
+    },
+    {
+      "prefix": {
+        "steps": [
+          "ram"
+        ],
+        "variants": [
+          "mind-body-transmission/reference",
+          "heavenly-transfer-technique/listed"
+        ]
+      },
+      "continuation": {
+        "steps": [
+          "ram",
+          "snake"
+        ],
+        "variants": [
+          "wood-nativity-world-trees/anime-ram-snake"
+        ]
+      }
+    },
+    {
+      "prefix": {
+        "steps": [
+          "ram"
+        ],
+        "variants": [
+          "mind-body-transmission/reference",
+          "heavenly-transfer-technique/listed"
+        ]
+      },
+      "continuation": {
+        "steps": [
+          "ram",
+          "snake",
+          "tiger"
+        ],
+        "variants": [
+          "clone-technique/listed"
+        ]
+      }
+    },
+    {
+      "prefix": {
+        "steps": [
+          "rat"
+        ],
+        "variants": [
+          "shadow-clutch/reference",
+          "shadow-imitation/reference"
+        ]
+      },
+      "continuation": {
+        "steps": [
+          "rat",
+          "bird"
+        ],
+        "variants": [
+          "shadow-sewing/reference"
+        ]
+      }
+    },
+    {
+      "prefix": {
+        "steps": [
+          "rat"
+        ],
+        "variants": [
+          "shadow-clutch/reference",
+          "shadow-imitation/reference"
+        ]
+      },
+      "continuation": {
+        "steps": [
+          "rat",
+          "ox",
+          "dog",
+          "dog",
+          "clap-hands",
+          "boar",
+          "slam-surface"
+        ],
+        "variants": [
+          "uzumaki-sealing-technique/reported"
+        ]
+      }
+    },
+    {
+      "prefix": {
+        "steps": [
+          "rat"
+        ],
+        "variants": [
+          "shadow-clutch/reference",
+          "shadow-imitation/reference"
+        ]
+      },
+      "continuation": {
+        "steps": [
+          "rat",
+          "ox",
+          "dog",
+          "horse",
+          "monkey",
+          "boar",
+          "tiger"
+        ],
+        "variants": [
+          "fire-great-destruction/reported"
+        ]
+      }
+    },
+    {
+      "prefix": {
+        "steps": [
+          "rat"
+        ],
+        "variants": [
+          "shadow-clutch/reference",
+          "shadow-imitation/reference"
+        ]
+      },
+      "continuation": {
+        "steps": [
+          "rat",
+          "tiger",
+          "dog",
+          "ox",
+          "hare",
+          "tiger"
+        ],
+        "variants": [
+          "fire-phoenix-sage-fire/reported"
+        ]
+      }
+    },
+    {
+      "prefix": {
+        "steps": [
+          "rat"
+        ],
+        "variants": [
+          "shadow-clutch/reference",
+          "shadow-imitation/reference"
+        ]
+      },
+      "continuation": {
+        "steps": [
+          "rat",
+          "hare",
+          "dog"
+        ],
+        "variants": [
+          "wind-vacuum-sphere/reported"
+        ]
+      }
+    },
+    {
+      "prefix": {
+        "steps": [
+          "rat"
+        ],
+        "variants": [
+          "shadow-clutch/reference",
+          "shadow-imitation/reference"
+        ]
+      },
+      "continuation": {
+        "steps": [
+          "rat",
+          "snake",
+          "horse",
+          "dog"
+        ],
+        "variants": [
+          "wind-vacuum-wave/reported"
+        ]
+      }
+    },
+    {
+      "prefix": {
+        "steps": [
+          "rat"
+        ],
+        "variants": [
+          "shadow-clutch/reference",
+          "shadow-imitation/reference"
+        ]
+      },
+      "continuation": {
+        "steps": [
+          "rat",
+          "bird",
+          "fire-sealing-method-seal",
+          "tiger"
+        ],
+        "variants": [
+          "fire-sealing-method/listed"
+        ]
+      }
+    },
+    {
+      "prefix": {
+        "steps": [
+          "rat"
+        ],
+        "variants": [
+          "shadow-clutch/reference",
+          "shadow-imitation/reference"
+        ]
+      },
+      "continuation": {
+        "steps": [
+          "rat",
+          "ox",
+          "monkey",
+          "tiger",
+          "dragon",
+          "boar"
+        ],
+        "variants": [
+          "impure-world-reincarnation-release/listed"
+        ]
+      }
+    },
+    {
+      "prefix": {
+        "steps": [
+          "rat",
+          "bird"
+        ],
+        "variants": [
+          "shadow-sewing/reference"
+        ]
+      },
+      "continuation": {
+        "steps": [
+          "rat",
+          "bird",
+          "fire-sealing-method-seal",
+          "tiger"
+        ],
+        "variants": [
+          "fire-sealing-method/listed"
+        ]
+      }
+    },
+    {
+      "prefix": {
+        "steps": [
+          "snake"
+        ],
+        "variants": [
+          "lightning-false-darkness/reported",
+          "water-exploding-wave/reported",
+          "wood-dragon/reported",
+          "demonic-statue-chains/reported"
+        ]
+      },
+      "continuation": {
+        "steps": [
+          "snake",
+          "rat",
+          "snake",
+          "tiger"
+        ],
+        "variants": [
+          "fire-ash-pile-burning/reported"
+        ]
+      }
+    },
+    {
+      "prefix": {
+        "steps": [
+          "snake"
+        ],
+        "variants": [
+          "lightning-false-darkness/reported",
+          "water-exploding-wave/reported",
+          "wood-dragon/reported",
+          "demonic-statue-chains/reported"
+        ]
+      },
+      "continuation": {
+        "steps": [
+          "snake",
+          "dragon",
+          "hare",
+          "tiger"
+        ],
+        "variants": [
+          "fire-dragon-fire/reported"
+        ]
+      }
+    },
+    {
+      "prefix": {
+        "steps": [
+          "snake"
+        ],
+        "variants": [
+          "lightning-false-darkness/reported",
+          "water-exploding-wave/reported",
+          "wood-dragon/reported",
+          "demonic-statue-chains/reported"
+        ]
+      },
+      "continuation": {
+        "steps": [
+          "snake",
+          "ram",
+          "monkey",
+          "boar",
+          "horse",
+          "tiger"
+        ],
+        "variants": [
+          "fire-great-fireball/reported"
+        ]
+      }
+    },
+    {
+      "prefix": {
+        "steps": [
+          "snake"
+        ],
+        "variants": [
+          "lightning-false-darkness/reported",
+          "water-exploding-wave/reported",
+          "wood-dragon/reported",
+          "demonic-statue-chains/reported"
+        ]
+      },
+      "continuation": {
+        "steps": [
+          "snake",
+          "ram",
+          "horse",
+          "hare",
+          "ram",
+          "horse",
+          "hare",
+          "water-prison-palms-out"
+        ],
+        "variants": [
+          "water-prison/reported"
+        ]
+      }
+    },
+    {
+      "prefix": {
+        "steps": [
+          "snake"
+        ],
+        "variants": [
+          "lightning-false-darkness/reported",
+          "water-exploding-wave/reported",
+          "wood-dragon/reported",
+          "demonic-statue-chains/reported"
+        ]
+      },
+      "continuation": {
+        "steps": [
+          "snake",
+          "ox",
+          "clap-hands"
+        ],
+        "variants": [
+          "water-prison/reported-clap"
+        ]
+      }
+    },
+    {
+      "prefix": {
+        "steps": [
+          "snake"
+        ],
+        "variants": [
+          "lightning-false-darkness/reported",
+          "water-exploding-wave/reported",
+          "wood-dragon/reported",
+          "demonic-statue-chains/reported"
+        ]
+      },
+      "continuation": {
+        "steps": [
+          "snake",
+          "ram",
+          "boar",
+          "horse",
+          "bird",
+          "clap-hands"
+        ],
+        "variants": [
+          "wind-gale-palm/reported"
+        ]
+      }
+    },
+    {
+      "prefix": {
+        "steps": [
+          "snake"
+        ],
+        "variants": [
+          "lightning-false-darkness/reported",
+          "water-exploding-wave/reported",
+          "wood-dragon/reported",
+          "demonic-statue-chains/reported"
+        ]
+      },
+      "continuation": {
+        "steps": [
+          "snake",
+          "boar",
+          "ram",
+          "hare",
+          "dog",
+          "rat",
+          "bird",
+          "horse",
+          "snake",
+          "clap-hands"
+        ],
+        "variants": [
+          "dead-demon-consuming-seal/listed"
+        ]
+      }
+    },
+    {
+      "prefix": {
+        "steps": [
+          "snake"
+        ],
+        "variants": [
+          "lightning-false-darkness/reported",
+          "water-exploding-wave/reported",
+          "wood-dragon/reported",
+          "demonic-statue-chains/reported"
+        ]
+      },
+      "continuation": {
+        "steps": [
+          "snake",
+          "rat"
+        ],
+        "variants": [
+          "demonic-illusion-hell-viewing-technique/listed"
+        ]
+      }
+    },
+    {
+      "prefix": {
+        "steps": [
+          "snake"
+        ],
+        "variants": [
+          "lightning-false-darkness/reported",
+          "water-exploding-wave/reported",
+          "wood-dragon/reported",
+          "demonic-statue-chains/reported"
+        ]
+      },
+      "continuation": {
+        "steps": [
+          "snake",
+          "ram",
+          "boar",
+          "dog",
+          "tiger"
+        ],
+        "variants": [
+          "impure-world-reincarnation-contract-severing/listed"
+        ]
+      }
+    },
+    {
+      "prefix": {
+        "steps": [
+          "bird"
+        ],
+        "variants": [
+          "wind-great-breakthrough/kokage-manga"
+        ]
+      },
+      "continuation": {
+        "steps": [
+          "bird",
+          "hare",
+          "horse",
+          "ram"
+        ],
+        "variants": [
+          "wind-great-breakthrough/kokage-anime"
+        ]
+      }
+    },
+    {
+      "prefix": {
+        "steps": [
+          "tiger",
+          "snake"
+        ],
+        "variants": [
+          "wood-nativity-world-trees/reported"
+        ]
+      },
+      "continuation": {
+        "steps": [
+          "tiger",
+          "snake",
+          "rat",
+          "snake",
+          "tiger"
+        ],
+        "variants": [
+          "water-formation-wall/reported"
+        ]
+      }
+    },
+    {
+      "prefix": {
+        "steps": [
+          "tiger",
+          "snake"
+        ],
+        "variants": [
+          "wood-nativity-world-trees/reported"
+        ]
+      },
+      "continuation": {
+        "steps": [
+          "tiger",
+          "snake",
+          "tiger"
+        ],
+        "variants": [
+          "shadow-clone-technique/anime-365"
+        ]
+      }
+    },
+    {
+      "prefix": {
+        "steps": [
+          "tiger",
+          "snake"
+        ],
+        "variants": [
+          "wood-nativity-world-trees/reported"
+        ]
+      },
+      "continuation": {
+        "steps": [
+          "tiger",
+          "snake",
+          "dog",
+          "dragon",
+          "clap-hands"
+        ],
+        "variants": [
+          "summoning-impure-world-reincarnation/listed"
+        ]
+      }
+    },
+    {
+      "prefix": {
+        "steps": [
+          "ram",
+          "snake"
+        ],
+        "variants": [
+          "wood-nativity-world-trees/anime-ram-snake"
+        ]
+      },
+      "continuation": {
+        "steps": [
+          "ram",
+          "snake",
+          "tiger"
+        ],
+        "variants": [
+          "clone-technique/listed"
+        ]
+      }
+    },
+    {
+      "prefix": {
+        "steps": [
+          "snake",
+          "rat"
+        ],
+        "variants": [
+          "demonic-illusion-hell-viewing-technique/listed"
+        ]
+      },
+      "continuation": {
+        "steps": [
+          "snake",
+          "rat",
+          "snake",
+          "tiger"
+        ],
+        "variants": [
+          "fire-ash-pile-burning/reported"
+        ]
+      }
+    }
+  ],
+  "repeatedAdjacentSigns": [
+    {
+      "variant": "curse-mandala/reported",
+      "signId": "rat",
+      "stepIndices": [
+        2,
+        3
+      ]
+    },
+    {
+      "variant": "curse-mandala/reported",
+      "signId": "dog",
+      "stepIndices": [
+        6,
+        7
+      ]
+    },
+    {
+      "variant": "curse-mandala/reported",
+      "signId": "boar",
+      "stepIndices": [
+        10,
+        11
+      ]
+    },
+    {
+      "variant": "uzumaki-sealing-technique/reported",
+      "signId": "dog",
+      "stepIndices": [
+        2,
+        3
+      ]
+    }
+  ],
+  "unresolvedVariants": [
+    "adamantine-sealing-chains/reference",
+    "byakugan/reference",
+    "hydrification/reference",
+    "insect-clone/reference",
+    "sharingan/reference",
+    "shikotsumyaku/reference",
+    "water-dragon-bullet/tobirama-one-seal-unresolved",
+    "water-formation-wall/tobirama-anime-unresolved",
+    "wood-dragon/long-sequence-unresolved",
+    "shrine-seal/listed"
+  ],
+  "noSealVariants": [
+    "parasitic-destruction-insect/reference",
+    "shadow-gathering/reference",
+    "chidori/sasuke-part-ii-no-seals",
+    "rasengan/reported"
+  ],
+  "unusedSigns": [
+    "seal-of-reconciliation",
+    "shikamaru-bird",
+    "water-wall-thumb-cup"
+  ],
+  "instructions": [
+    "Shared and prefix sequences require selected-technique context or a deliberate completion rule.",
+    "No-seal and unresolved entries must never be registered as empty gesture matchers.",
+    "Repeated adjacent signs need a distinct release and re-entry event; do not deduplicate them.",
+    "Symbolic sequence availability is not camera recognition accuracy or primary verification."
+  ]
+}

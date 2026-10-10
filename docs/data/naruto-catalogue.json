@@ -1,0 +1,5005 @@
+{
+  "schemaVersion": "1.0.0",
+  "researchedOn": "2026-10-09",
+  "scope": {
+    "focus": [
+      "Naruto and Naruto Shippuden techniques",
+      "Twelve zodiac seals and selected special gestures",
+      "Selected anime, movie and later-era variants, labelled individually"
+    ],
+    "exhaustive": false,
+    "limitations": [
+      "This is a bounded research catalogue, not every hand sign or technique across the franchise.",
+      "Exact sequences are secondary-reported; original manga panels and anime footage have not been audited.",
+      "Source medium is unspecified when the accessed infobox combines media without identifying a scene.",
+      "Primary articles corroborate abilities and associations only unless a variant explicitly states otherwise.",
+      "Sign geometry, one-handed variants and model training remain separate work.",
+      "Effect suggestions are app design proposals, not canonical activation requirements."
+    ]
+  },
+  "recognition": {
+    "status": "untrained",
+    "rejectLabels": [
+      "unknown",
+      "transition",
+      "tracking_lost"
+    ],
+    "notes": [
+      "Ordered steps are symbolic IDs, not a trained classifier or landmark thresholds.",
+      "steps null means unresolved; an empty array is allowed only for an explicit no-seals report. Neither is a castable empty pattern.",
+      "Repeated steps and special variants must not be collapsed; shared and prefix sequences need explicit disambiguation.",
+      "Names and aliases do not establish mirroring equivalence, a particular hand count, or exact finger geometry."
+    ]
+  },
+  "sources": [
+    {
+      "id": "src-general-hand-seal",
+      "title": "Hand Seal — Narutopedia",
+      "url": "https://naruto.fandom.com/wiki/Hand_Seal",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed sections Basic Hand Seals, Clone Seal, Clap Hands, Jin Seal, Seal of Confrontation and Seal of Reconciliation inspected. Original panels not inspected; names and descriptions only, not classifier geometry. Indexed sections on special seals and reduced-seal usage were read. This is a secondary reference; cited manga panels and anime footage were not inspected. Indexed sections Akimichi Seal, Shikamaru’s Bird Seal, Yamanaka Seals, and Byakugan Seals. Provisional geometry reference, not a training dataset. Indexed reference field inspected; original scene not inspected.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-general-clone-technique",
+      "title": "Clone Technique — Narutopedia",
+      "url": "https://naruto.fandom.com/wiki/Clone_Technique",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia article excerpt inspected; direct page fetch was blocked. Sequence not checked against original manga/anime.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-general-shadow-clone-technique",
+      "title": "Shadow Clone Technique — Narutopedia",
+      "url": "https://naruto.fandom.com/wiki/Shadow_Clone_Technique",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia article excerpt inspected; direct page fetch was blocked. Sequence not checked against original manga/anime.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-general-multiple-shadow-clone-technique",
+      "title": "Multiple Shadow Clone Technique — Narutopedia",
+      "url": "https://naruto.fandom.com/wiki/Multiple_Shadow_Clone_Technique",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia article excerpt inspected; direct page fetch was blocked. Sequence not checked against original manga/anime.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-general-transformation-technique",
+      "title": "Transformation Technique — Narutopedia",
+      "url": "https://naruto.fandom.com/wiki/Transformation_Technique",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia article excerpt inspected; direct page fetch was blocked. Sequence not checked against original manga/anime.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-general-body-replacement-technique",
+      "title": "Body Replacement Technique — Narutopedia",
+      "url": "https://naruto.fandom.com/wiki/Body_Replacement_Technique",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia article excerpt inspected; direct page fetch was blocked. Sequence not checked against original manga/anime.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-general-body-flicker-technique",
+      "title": "Body Flicker Technique — Narutopedia",
+      "url": "https://naruto.fandom.com/wiki/Body_Flicker_Technique",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia article excerpt inspected; direct page fetch was blocked. Sequence not checked against original manga/anime.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-general-summoning-technique",
+      "title": "Summoning Technique — Narutopedia",
+      "url": "https://naruto.fandom.com/wiki/Summoning_Technique",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia article excerpt inspected; direct page fetch was blocked. Sequence not checked against original manga/anime.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-general-summoning-impure-world-reincarnation",
+      "title": "Summoning: Impure World Reincarnation — Narutopedia",
+      "url": "https://naruto.fandom.com/wiki/Summoning%3A_Impure_World_Reincarnation",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia article excerpt inspected; direct page fetch was blocked. Sequence not checked against original manga/anime.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-general-dead-demon-consuming-seal",
+      "title": "Dead Demon Consuming Seal — Narutopedia",
+      "url": "https://naruto.fandom.com/wiki/Dead_Demon_Consuming_Seal",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia article excerpt inspected; direct page fetch was blocked. Sequence not checked against original manga/anime.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-general-shuriken-shadow-clone-technique",
+      "title": "Shuriken Shadow Clone Technique — Narutopedia",
+      "url": "https://naruto.fandom.com/wiki/Shuriken_Shadow_Clone_Technique",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia article excerpt inspected; direct page fetch was blocked. Sequence not checked against original manga/anime.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-general-temple-of-nirvana-technique",
+      "title": "Temple of Nirvana Technique — Narutopedia",
+      "url": "https://naruto.fandom.com/wiki/Temple_of_Nirvana_Technique",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia article excerpt inspected; direct page fetch was blocked. Sequence not checked against original manga/anime.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-general-demonic-illusion-hell-viewing-technique",
+      "title": "Demonic Illusion: Hell Viewing Technique — Narutopedia",
+      "url": "https://naruto.fandom.com/wiki/Demonic_Illusion%3A_Hell_Viewing_Technique",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia article excerpt inspected; direct page fetch was blocked. Sequence not checked against original manga/anime.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-general-demonic-illusion-tree-binding-death",
+      "title": "Demonic Illusion: Tree Binding Death — Narutopedia",
+      "url": "https://naruto.fandom.com/wiki/Demonic_Illusion%3A_Tree_Binding_Death",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia article excerpt inspected; direct page fetch was blocked. Sequence not checked against original manga/anime.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-general-bringer-of-darkness-technique",
+      "title": "Bringer-of-Darkness Technique — Narutopedia",
+      "url": "https://naruto.fandom.com/wiki/Bringer-of-Darkness_Technique",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia article excerpt inspected; direct page fetch was blocked. Sequence not checked against original manga/anime.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-general-chakra-scalpel",
+      "title": "Chakra Scalpel — Narutopedia",
+      "url": "https://naruto.fandom.com/wiki/Chakra_Scalpel",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia article excerpt inspected; direct page fetch was blocked. Sequence not checked against original manga/anime.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-general-mystical-palm-technique",
+      "title": "Mystical Palm Technique — Narutopedia",
+      "url": "https://naruto.fandom.com/wiki/Mystical_Palm_Technique",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia article excerpt inspected; direct page fetch was blocked. Sequence not checked against original manga/anime.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-general-five-elements-seal",
+      "title": "Five Elements Seal — Narutopedia",
+      "url": "https://naruto.fandom.com/wiki/Five_Elements_Seal",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia article excerpt inspected; direct page fetch was blocked. Sequence not checked against original manga/anime.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-general-fire-sealing-method",
+      "title": "Fire Sealing Method — Narutopedia",
+      "url": "https://naruto.fandom.com/wiki/Fire_Sealing_Method",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia article excerpt inspected; direct page fetch was blocked. Sequence not checked against original manga/anime.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-general-heavenly-transfer-technique",
+      "title": "Heavenly Transfer Technique — Narutopedia",
+      "url": "https://naruto.fandom.com/wiki/Heavenly_Transfer_Technique",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia article excerpt inspected; direct page fetch was blocked. Sequence not checked against original manga/anime.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-general-four-corner-sealing-barrier",
+      "title": "Four-Corner Sealing Barrier — Narutopedia",
+      "url": "https://naruto.fandom.com/wiki/Four-Corner_Sealing_Barrier",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia article excerpt inspected; direct page fetch was blocked. Sequence not checked against original manga/anime.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-general-shrine-seal",
+      "title": "Shrine Seal — Narutopedia",
+      "url": "https://naruto.fandom.com/wiki/Shrine_Seal",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia article excerpt inspected; direct page fetch was blocked. Sequence not checked against original manga/anime.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-elemental-fire-great-fireball",
+      "title": "Narutopedia: Fire Release: Great Fireball Technique",
+      "url": "https://naruto.fandom.com/wiki/Fire_Release%3A_Great_Fireball_Technique",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia content was accessible through search; direct page retrieval was unavailable. Hand-seal orders are secondary reports, not independently verified original panels or footage.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-elemental-fire-phoenix-sage-fire",
+      "title": "Narutopedia: Fire Release: Phoenix Sage Fire Technique",
+      "url": "https://naruto.fandom.com/wiki/Fire_Release%3A_Phoenix_Sage_Fire_Technique",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia content was accessible through search; direct page retrieval was unavailable. Hand-seal orders are secondary reports, not independently verified original panels or footage.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-elemental-fire-dragon-fire",
+      "title": "Narutopedia: Fire Release: Dragon Fire Technique",
+      "url": "https://naruto.fandom.com/wiki/Fire_Release%3A_Dragon_Fire_Technique",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia content was accessible through search; direct page retrieval was unavailable. Hand-seal orders are secondary reports, not independently verified original panels or footage.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-elemental-fire-ash-pile-burning",
+      "title": "Narutopedia: Fire Release: Ash Pile Burning",
+      "url": "https://naruto.fandom.com/wiki/Fire_Release%3A_Ash_Pile_Burning",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia content was accessible through search; direct page retrieval was unavailable. Hand-seal orders are secondary reports, not independently verified original panels or footage.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-elemental-fire-great-annihilation",
+      "title": "Narutopedia: Fire Release: Great Fire Annihilation",
+      "url": "https://naruto.fandom.com/wiki/Fire_Release%3A_Great_Fire_Annihilation",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia content was accessible through search; direct page retrieval was unavailable. Hand-seal orders are secondary reports, not independently verified original panels or footage.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-elemental-fire-great-destruction",
+      "title": "Narutopedia: Fire Release: Great Fire Destruction",
+      "url": "https://naruto.fandom.com/wiki/Fire_Release%3A_Great_Fire_Destruction",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia content was accessible through search; direct page retrieval was unavailable. Hand-seal orders are secondary reports, not independently verified original panels or footage.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-elemental-water-dragon-bullet",
+      "title": "Narutopedia: Water Release: Water Dragon Bullet Technique",
+      "url": "https://naruto.fandom.com/wiki/Water_Release%3A_Water_Dragon_Bullet_Technique",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia content was accessible through search; direct page retrieval was unavailable. Hand-seal orders are secondary reports, not independently verified original panels or footage.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-elemental-water-shark-bullet",
+      "title": "Narutopedia: Water Release: Water Shark Bullet Technique",
+      "url": "https://naruto.fandom.com/wiki/Water_Release%3A_Water_Shark_Bullet_Technique",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia content was accessible through search; direct page retrieval was unavailable. Hand-seal orders are secondary reports, not independently verified original panels or footage.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-elemental-water-bullet",
+      "title": "Narutopedia: Water Release: Water Bullet Technique",
+      "url": "https://naruto.fandom.com/wiki/Water_Release%3A_Water_Bullet_Technique",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia content was accessible through search; direct page retrieval was unavailable. Hand-seal orders are secondary reports, not independently verified original panels or footage.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-elemental-water-exploding-wave",
+      "title": "Narutopedia: Water Release: Exploding Water Colliding Wave",
+      "url": "https://naruto.fandom.com/wiki/Water_Release%3A_Exploding_Water_Colliding_Wave",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia content was accessible through search; direct page retrieval was unavailable. Hand-seal orders are secondary reports, not independently verified original panels or footage.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-elemental-water-formation-wall",
+      "title": "Narutopedia: Water Release: Water Formation Wall",
+      "url": "https://naruto.fandom.com/wiki/Water_Release%3A_Water_Formation_Wall",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia content was accessible through search; direct page retrieval was unavailable. Hand-seal orders are secondary reports, not independently verified original panels or footage.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-elemental-water-prison",
+      "title": "Narutopedia: Water Prison Technique",
+      "url": "https://naruto.fandom.com/wiki/Water_Prison_Technique",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia content was accessible through search; direct page retrieval was unavailable. Hand-seal orders are secondary reports, not independently verified original panels or footage.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-elemental-water-wild-wave",
+      "title": "Narutopedia: Water Release: Wild Water Wave",
+      "url": "https://naruto.fandom.com/wiki/Water_Release%3A_Wild_Water_Wave",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia content was accessible through search; direct page retrieval was unavailable. Hand-seal orders are secondary reports, not independently verified original panels or footage.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-elemental-earth-rampart",
+      "title": "Narutopedia: Earth Release: Earth-Style Rampart",
+      "url": "https://naruto.fandom.com/wiki/Earth_Release%3A_Earth-Style_Rampart",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia content was accessible through search; direct page retrieval was unavailable. Hand-seal orders are secondary reports, not independently verified original panels or footage.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-elemental-earth-tearing-palm",
+      "title": "Narutopedia: Earth Release: Tearing Earth Turning Palm",
+      "url": "https://naruto.fandom.com/wiki/Earth_Release%3A_Tearing_Earth_Turning_Palm",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia content was accessible through search; direct page retrieval was unavailable. Hand-seal orders are secondary reports, not independently verified original panels or footage.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-elemental-earth-sandwich",
+      "title": "Narutopedia: Earth Release: Sandwich Technique",
+      "url": "https://naruto.fandom.com/wiki/Earth_Release%3A_Sandwich_Technique",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia content was accessible through search; direct page retrieval was unavailable. Hand-seal orders are secondary reports, not independently verified original panels or footage.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-elemental-earth-wall",
+      "title": "Narutopedia: Earth Release: Earth-Style Wall",
+      "url": "https://naruto.fandom.com/wiki/Earth_Release%3A_Earth-Style_Wall",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia content was accessible through search; direct page retrieval was unavailable. Hand-seal orders are secondary reports, not independently verified original panels or footage.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-elemental-wind-gale-palm",
+      "title": "Narutopedia: Wind Release: Gale Palm",
+      "url": "https://naruto.fandom.com/wiki/Wind_Release%3A_Gale_Palm",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia content was accessible through search; direct page retrieval was unavailable. Hand-seal orders are secondary reports, not independently verified original panels or footage.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-elemental-wind-great-breakthrough",
+      "title": "Narutopedia: Wind Release: Great Breakthrough",
+      "url": "https://naruto.fandom.com/wiki/Wind_Release%3A_Great_Breakthrough",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia content was accessible through search; direct page retrieval was unavailable. Hand-seal orders are secondary reports, not independently verified original panels or footage.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-elemental-wind-vacuum-wave",
+      "title": "Narutopedia: Wind Release: Vacuum Wave",
+      "url": "https://naruto.fandom.com/wiki/Wind_Release%3A_Vacuum_Wave",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia content was accessible through search; direct page retrieval was unavailable. Hand-seal orders are secondary reports, not independently verified original panels or footage.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-elemental-wind-vacuum-sphere",
+      "title": "Narutopedia: Wind Release: Vacuum Sphere",
+      "url": "https://naruto.fandom.com/wiki/Wind_Release%3A_Vacuum_Sphere",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia content was accessible through search; direct page retrieval was unavailable. Hand-seal orders are secondary reports, not independently verified original panels or footage.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-elemental-chidori",
+      "title": "Narutopedia: Chidori",
+      "url": "https://naruto.fandom.com/wiki/Chidori",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia content was accessible through search; direct page retrieval was unavailable. Hand-seal orders are secondary reports, not independently verified original panels or footage.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-elemental-lightning-false-darkness",
+      "title": "Narutopedia: Lightning Release: False Darkness",
+      "url": "https://naruto.fandom.com/wiki/Lightning_Release%3A_False_Darkness",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia content was accessible through search; direct page retrieval was unavailable. Hand-seal orders are secondary reports, not independently verified original panels or footage.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-elemental-wood-nativity-world-trees",
+      "title": "Narutopedia: Wood Release Secret Technique: Nativity of a World of Trees",
+      "url": "https://naruto.fandom.com/wiki/Wood_Release_Secret_Technique%3A_Nativity_of_a_World_of_Trees",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia content was accessible through search; direct page retrieval was unavailable. Hand-seal orders are secondary reports, not independently verified original panels or footage.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-elemental-wood-clone",
+      "title": "Narutopedia: Wood Clone Technique",
+      "url": "https://naruto.fandom.com/wiki/Wood_Clone_Technique",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia content was accessible through search; direct page retrieval was unavailable. Hand-seal orders are secondary reports, not independently verified original panels or footage.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-elemental-wood-multiple-clones",
+      "title": "Narutopedia: Multiple Wood Release Clone Technique",
+      "url": "https://naruto.fandom.com/wiki/Multiple_Wood_Release_Clone_Technique",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia content was accessible through search; direct page retrieval was unavailable. Hand-seal orders are secondary reports, not independently verified original panels or footage.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-elemental-wood-dragon",
+      "title": "Narutopedia: Wood Release: Wood Dragon Technique",
+      "url": "https://naruto.fandom.com/wiki/Wood_Release%3A_Wood_Dragon_Technique",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia content was accessible through search; direct page retrieval was unavailable. Hand-seal orders are secondary reports, not independently verified original panels or footage.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-elemental-ice-demonic-mirrors",
+      "title": "Narutopedia: Demonic Mirroring Ice Crystals",
+      "url": "https://naruto.fandom.com/wiki/Demonic_Mirroring_Ice_Crystals",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed Narutopedia content was accessible through search; direct page retrieval was unavailable. Hand-seal orders are secondary reports, not independently verified original panels or footage.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-clan-shikamaru-official",
+      "title": "Official Shikamaru birthday column",
+      "url": "https://naruto-official.com/en/news/01_1910",
+      "kind": "official",
+      "access": "full_page",
+      "notes": "Confirms Nara association and shadow effects; does not independently verify complete hand-seal sequences.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-clan-neji-official",
+      "title": "Official Neji birthday column",
+      "url": "https://naruto-official.com/en/news/01_1817",
+      "kind": "official",
+      "access": "full_page",
+      "notes": "Confirms Hyuga association with Byakugan and Gentle Fist; not an exact activation-sequence source.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-clan-shadow-imitation",
+      "title": "Shadow Imitation Technique — Narutopedia",
+      "url": "https://naruto.fandom.com/wiki/Shadow_Imitation_Technique",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed infobox explicitly lists Rat.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-clan-shadow-sewing",
+      "title": "Shadow Sewing Technique — Narutopedia",
+      "url": "https://naruto.fandom.com/wiki/Shadow_Sewing_Technique",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Infobox says Rat → Bird. Trivia distinguishes manga finger placement from the movie substitute and reports Naruto volume 36, chapter 325, page 7; original page not checked.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-clan-shadow-neck-binding",
+      "title": "Shadow–Neck Binding Technique — Narutopedia",
+      "url": "https://naruto.fandom.com/wiki/Shadow%E2%80%93Neck_Binding_Technique",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed infobox explicitly lists Dragon → Tiger → Rat.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-clan-shadow-clutch",
+      "title": "Shadow Clutch Technique — Narutopedia",
+      "url": "https://naruto.fandom.com/wiki/Shadow_Clutch_Technique",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed infobox explicitly lists Rat.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-clan-shadow-gathering",
+      "title": "Shadow Gathering Technique — Narutopedia",
+      "url": "https://naruto.fandom.com/wiki/Shadow_Gathering_Technique",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed prose explicitly states no hand seals; gestures control the tendrils.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-clan-mind-body-switch",
+      "title": "Mind Body Switch Technique — Narutopedia",
+      "url": "https://naruto.fandom.com/wiki/Mind_Body_Switch_Technique",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed infobox says technique-specific hand seal. Different movie seal is explicitly noted; no single geometry is established here.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-clan-mind-body-disturbance",
+      "title": "Mind Body Disturbance Technique — Narutopedia",
+      "url": "https://naruto.fandom.com/wiki/Mind_Body_Disturbance_Technique",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed infobox says technique-specific hand seal; kept separate from Mind Body Switch.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-clan-mind-body-transmission",
+      "title": "Mind Body Transmission Technique — Narutopedia",
+      "url": "https://naruto.fandom.com/wiki/Mind_Body_Transmission_Technique",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed infobox explicitly lists Ram.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-clan-multi-size",
+      "title": "Multi-Size Technique — Naruto Wiki",
+      "url": "https://naruto-wiki.com/wiki/multi-size-technique/",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Secondary wiki page infobox reports Ram → Special Seal; Hand Seal page identifies the Akimichi special seal. This may reproduce Narutopedia and is not independent corroboration.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-clan-beast-human-clone",
+      "title": "Beast Human Clone — Narutopedia",
+      "url": "https://naruto.fandom.com/wiki/Beast_Human_Clone",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed infobox explicitly lists Tiger; original action transforms the canine partner.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-clan-four-legs-pt",
+      "title": "Técnica das Quatro Pernas — Naruto Wiki (Portuguese)",
+      "url": "https://naruto.fandom.com/pt-br/wiki/T%C3%A9cnica_das_Quatro_Pernas",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Portuguese infobox explicitly lists Gasshou or Tiger. Gasshou normalized to palms-together/clap-hands, not a required dynamic clap. Variant-specific scenes not checked.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-clan-aburame-clan",
+      "title": "Aburame Clan — Narutopedia",
+      "url": "https://naruto.fandom.com/wiki/Aburame_Clan",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed overview explicitly says symbiotic insects permit techniques without hand seals or chakra conversion. This is a general clan mechanism, not proof of every derived technique.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-clan-parasitic-insects",
+      "title": "Parasitic Destruction Insect Technique — Narutopedia",
+      "url": "https://naruto.fandom.com/wiki/Parasitic_Destruction_Insect_Technique",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed overview describes symbiotic insects obeying commands and supporting the clan’s techniques.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-clan-insect-clone",
+      "title": "Insect Clone Technique — Narutopedia",
+      "url": "https://naruto.fandom.com/wiki/Insect_Clone_Technique",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed entry describes an insect-built replica; no technique-specific hand-seal field was present.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-clan-water-gun",
+      "title": "Water Gun Technique — Narutopedia",
+      "url": "https://naruto.fandom.com/wiki/Water_Gun_Technique",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed overview explicitly describes a finger-gun hand and water projected from the index finger.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-clan-hydrification",
+      "title": "Hydrification Technique — Narutopedia",
+      "url": "https://naruto.fandom.com/wiki/Hydrification_Technique",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed entry describes at-will and autonomous liquefaction. No exact activation seal sequence established.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-clan-sharingan",
+      "title": "Sharingan — Narutopedia",
+      "url": "https://naruto.fandom.com/wiki/Sharingan",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed article confirms Uchiha ocular ability and perception/genjutsu functions; no universal manual activation sequence verified.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-clan-byakugan",
+      "title": "Byakugan — Narutopedia",
+      "url": "https://naruto.fandom.com/wiki/Byakugan",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed trivia says users are sometimes shown performing seals to activate it; no universal ordered sequence established.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-clan-shikotsumyaku",
+      "title": "Shikotsumyaku — Narutopedia",
+      "url": "https://naruto.fandom.com/wiki/Shikotsumyaku",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed entry identifies Kaguya clan bone manipulation; no canonical universal activation gesture verified.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-clan-adamantine-sealing-chains",
+      "title": "Adamantine Sealing Chains — Narutopedia",
+      "url": "https://naruto.fandom.com/wiki/Adamantine_Sealing_Chains",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed entry identifies Uzumaki sealing technique and chakra chains emerging from the torso; exact manual activation not verified.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-clan-izanagi",
+      "title": "Izanagi — Narutopedia",
+      "url": "https://naruto.fandom.com/wiki/Izanagi",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed infobox explicitly lists Hare → Boar → Ram.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-supplement-rasengan",
+      "title": "Narutopedia: Rasengan",
+      "url": "https://naruto.fandom.com/wiki/Rasengan",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed reference field inspected; original scene not inspected.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-supplement-rasengan-official",
+      "title": "Boruto Database: Rasengan",
+      "url": "https://naruto-official.com/en/news/01_1802",
+      "kind": "official",
+      "access": "full_page",
+      "notes": "Official description corroborates the ability and wielders, not an exhaustive seal-free activation claim.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-supplement-hand-seals-official",
+      "title": "Official Naruto interview: zodiac hand signs",
+      "url": "https://naruto-official.com/en/news/01_1429",
+      "kind": "official",
+      "access": "full_page",
+      "notes": "Confirms twelve zodiac hand signs, not their complete geometry or all sequence orders.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-supplement-uzumaki-sealing",
+      "title": "Narutopedia: Uzumaki Sealing Technique",
+      "url": "https://naruto.fandom.com/wiki/Uzumaki_Sealing_Technique",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed reference field inspected; original scene not inspected.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-supplement-peacock",
+      "title": "Narutopedia: Mysterious Peacock Method",
+      "url": "https://naruto.fandom.com/wiki/Mysterious_Peacock_Method",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed reference field inspected; original scene not inspected.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-supplement-mandala",
+      "title": "Narutopedia: Curse Mandala",
+      "url": "https://naruto.fandom.com/wiki/Curse_Mandala",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed reference field inspected; original scene not inspected.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-supplement-tearing-torrent",
+      "title": "Narutopedia: Water Release: Tearing Torrent",
+      "url": "https://naruto.fandom.com/wiki/Water_Release%3A_Tearing_Torrent",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed reference field inspected; original scene not inspected.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-supplement-coffin-seal",
+      "title": "Narutopedia: Six Paths Ten-Tails Coffin Seal",
+      "url": "https://naruto.fandom.com/wiki/Six_Paths_Ten-Tails_Coffin_Seal",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed reference field inspected; original scene not inspected.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-supplement-hyuga-juinjutsu",
+      "title": "Narutopedia: Hyuga Main Family Juinjutsu",
+      "url": "https://naruto.fandom.com/wiki/Hy%C5%ABga_Main_Family%27s_Juinjutsu",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed reference field inspected; original scene not inspected.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-supplement-nine-masked",
+      "title": "Narutopedia: Nine Masked Beasts",
+      "url": "https://naruto.fandom.com/wiki/Nine_Masked_Beasts",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed reference field inspected; original scene not inspected.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-supplement-statue-chains",
+      "title": "Narutopedia: Demonic Statue Chains",
+      "url": "https://naruto.fandom.com/wiki/Demonic_Statue_Chains",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed reference field inspected; original scene not inspected.",
+      "accessedOn": "2026-10-09"
+    },
+    {
+      "id": "src-supplement-strife-spheres",
+      "title": "Narutopedia: Spiralling Strife Spheres",
+      "url": "https://naruto.fandom.com/wiki/Spiralling_Strife_Spheres",
+      "kind": "secondary_reference",
+      "access": "search_excerpt",
+      "notes": "Indexed reference field inspected; original scene not inspected.",
+      "accessedOn": "2026-10-09"
+    }
+  ],
+  "signs": [
+    {
+      "id": "rat",
+      "name": "Rat",
+      "kind": "basic",
+      "aliases": [
+        "Ne",
+        "子"
+      ],
+      "description": "Named basic zodiac seal. Pose geometry requires an inspected visual reference before illustration or classifier training.",
+      "sourceIds": [
+        "src-general-hand-seal"
+      ],
+      "geometryStatus": "reference_required",
+      "recognitionStatus": "untrained"
+    },
+    {
+      "id": "ox",
+      "name": "Ox",
+      "kind": "basic",
+      "aliases": [
+        "Ushi",
+        "丑"
+      ],
+      "description": "Named basic zodiac seal. Pose geometry requires an inspected visual reference before illustration or classifier training.",
+      "sourceIds": [
+        "src-general-hand-seal"
+      ],
+      "geometryStatus": "reference_required",
+      "recognitionStatus": "untrained"
+    },
+    {
+      "id": "tiger",
+      "name": "Tiger",
+      "kind": "basic",
+      "aliases": [
+        "Tora",
+        "寅"
+      ],
+      "description": "Named basic zodiac seal. Pose geometry requires an inspected visual reference before illustration or classifier training.",
+      "sourceIds": [
+        "src-general-hand-seal"
+      ],
+      "geometryStatus": "reference_required",
+      "recognitionStatus": "untrained"
+    },
+    {
+      "id": "hare",
+      "name": "Hare",
+      "kind": "basic",
+      "aliases": [
+        "U",
+        "卯",
+        "Rabbit"
+      ],
+      "description": "Named basic zodiac seal. Pose geometry requires an inspected visual reference before illustration or classifier training.",
+      "sourceIds": [
+        "src-general-hand-seal"
+      ],
+      "geometryStatus": "reference_required",
+      "recognitionStatus": "untrained"
+    },
+    {
+      "id": "dragon",
+      "name": "Dragon",
+      "kind": "basic",
+      "aliases": [
+        "Tatsu",
+        "辰"
+      ],
+      "description": "Named basic zodiac seal. Pose geometry requires an inspected visual reference before illustration or classifier training.",
+      "sourceIds": [
+        "src-general-hand-seal"
+      ],
+      "geometryStatus": "reference_required",
+      "recognitionStatus": "untrained"
+    },
+    {
+      "id": "snake",
+      "name": "Snake",
+      "kind": "basic",
+      "aliases": [
+        "Mi",
+        "巳",
+        "Serpent"
+      ],
+      "description": "Named basic zodiac seal. Pose geometry requires an inspected visual reference before illustration or classifier training.",
+      "sourceIds": [
+        "src-general-hand-seal"
+      ],
+      "geometryStatus": "reference_required",
+      "recognitionStatus": "untrained"
+    },
+    {
+      "id": "horse",
+      "name": "Horse",
+      "kind": "basic",
+      "aliases": [
+        "Uma",
+        "午"
+      ],
+      "description": "Named basic zodiac seal. Pose geometry requires an inspected visual reference before illustration or classifier training.",
+      "sourceIds": [
+        "src-general-hand-seal"
+      ],
+      "geometryStatus": "reference_required",
+      "recognitionStatus": "untrained"
+    },
+    {
+      "id": "ram",
+      "name": "Ram",
+      "kind": "basic",
+      "aliases": [
+        "Hitsuji",
+        "未",
+        "Sheep"
+      ],
+      "description": "Named basic zodiac seal. Pose geometry requires an inspected visual reference before illustration or classifier training.",
+      "sourceIds": [
+        "src-general-hand-seal"
+      ],
+      "geometryStatus": "reference_required",
+      "recognitionStatus": "untrained"
+    },
+    {
+      "id": "monkey",
+      "name": "Monkey",
+      "kind": "basic",
+      "aliases": [
+        "Saru",
+        "申"
+      ],
+      "description": "Named basic zodiac seal. Pose geometry requires an inspected visual reference before illustration or classifier training.",
+      "sourceIds": [
+        "src-general-hand-seal"
+      ],
+      "geometryStatus": "reference_required",
+      "recognitionStatus": "untrained"
+    },
+    {
+      "id": "bird",
+      "name": "Bird",
+      "kind": "basic",
+      "aliases": [
+        "Tori",
+        "酉",
+        "Rooster"
+      ],
+      "description": "Named basic zodiac seal. Pose geometry requires an inspected visual reference before illustration or classifier training.",
+      "sourceIds": [
+        "src-general-hand-seal"
+      ],
+      "geometryStatus": "reference_required",
+      "recognitionStatus": "untrained"
+    },
+    {
+      "id": "dog",
+      "name": "Dog",
+      "kind": "basic",
+      "aliases": [
+        "Inu",
+        "戌"
+      ],
+      "description": "Named basic zodiac seal. Pose geometry requires an inspected visual reference before illustration or classifier training.",
+      "sourceIds": [
+        "src-general-hand-seal"
+      ],
+      "geometryStatus": "reference_required",
+      "recognitionStatus": "untrained"
+    },
+    {
+      "id": "boar",
+      "name": "Boar",
+      "kind": "basic",
+      "aliases": [
+        "I",
+        "亥",
+        "Pig"
+      ],
+      "description": "Named basic zodiac seal. Pose geometry requires an inspected visual reference before illustration or classifier training.",
+      "sourceIds": [
+        "src-general-hand-seal"
+      ],
+      "geometryStatus": "reference_required",
+      "recognitionStatus": "untrained"
+    },
+    {
+      "id": "akimichi-seal",
+      "name": "Akimichi Seal",
+      "kind": "special",
+      "aliases": [],
+      "description": "Raise index and little fingers; fold and interlock middle/ring fingers against the opposite hand and join thumbs. Provisional secondary description; anime drawings vary.",
+      "sourceIds": [
+        "src-general-hand-seal"
+      ],
+      "geometryStatus": "reference_required",
+      "recognitionStatus": "untrained"
+    },
+    {
+      "id": "clap-hands",
+      "name": "Clap Hands",
+      "kind": "action",
+      "aliases": [
+        "Hands clapped"
+      ],
+      "description": "Palms-together action or held posture, as specified by the technique. Do not require a clap motion for every occurrence.",
+      "sourceIds": [
+        "src-general-hand-seal"
+      ],
+      "geometryStatus": "reference_required",
+      "recognitionStatus": "untrained"
+    },
+    {
+      "id": "clone-seal",
+      "name": "Clone Seal",
+      "kind": "special",
+      "aliases": [
+        "Cross seal"
+      ],
+      "description": "Cross the paired index and middle fingers of both hands. Exact pose reference still required.",
+      "sourceIds": [
+        "src-general-hand-seal"
+      ],
+      "geometryStatus": "reference_required",
+      "recognitionStatus": "untrained"
+    },
+    {
+      "id": "crossed-tiger",
+      "name": "Crossed Tiger",
+      "kind": "variant",
+      "aliases": [
+        "Haku's ice-mirror seal"
+      ],
+      "description": "A Tiger-like pose with middle fingers crossed over the index fingers, according to the reference. Exact original-panel geometry remains to be checked.",
+      "sourceIds": [
+        "src-general-hand-seal",
+        "src-elemental-ice-demonic-mirrors"
+      ],
+      "geometryStatus": "reference_required",
+      "recognitionStatus": "untrained"
+    },
+    {
+      "id": "finger-gun",
+      "name": "Finger Gun",
+      "kind": "action",
+      "aliases": [],
+      "description": "Aim the index finger in a finger-gun pose. Gesture geometry is provisional; the source describes this action as directing Water Gun.",
+      "sourceIds": [
+        "src-clan-water-gun"
+      ],
+      "geometryStatus": "reference_required",
+      "recognitionStatus": "untrained"
+    },
+    {
+      "id": "fire-sealing-method-seal",
+      "name": "Fire Sealing Method Special Seal",
+      "kind": "special",
+      "aliases": [],
+      "description": "Unnamed intermediate seal; exact geometry unresolved.",
+      "sourceIds": [
+        "src-general-fire-sealing-method"
+      ],
+      "geometryStatus": "reference_required",
+      "recognitionStatus": "untrained"
+    },
+    {
+      "id": "five-elements-seal",
+      "name": "Five Elements Seal",
+      "kind": "special",
+      "aliases": [],
+      "description": "Technique-specific hand pose. Original visual reference required.",
+      "sourceIds": [
+        "src-general-hand-seal",
+        "src-general-five-elements-seal"
+      ],
+      "geometryStatus": "reference_required",
+      "recognitionStatus": "untrained"
+    },
+    {
+      "id": "hoshigakure-peacock-seal",
+      "name": "Hoshigakure Peacock Seal",
+      "kind": "special",
+      "aliases": [],
+      "description": "Technique-specific pose resembling Bird from some angles; visual reference required.",
+      "sourceIds": [
+        "src-supplement-peacock",
+        "src-general-hand-seal"
+      ],
+      "geometryStatus": "reference_required",
+      "recognitionStatus": "untrained"
+    },
+    {
+      "id": "hyuga-juinjutsu-seal",
+      "name": "Hyuga Juinjutsu Seal",
+      "kind": "special",
+      "aliases": [],
+      "description": "Technique-specific symbolic label; finger geometry has not been verified.",
+      "sourceIds": [
+        "src-supplement-hyuga-juinjutsu"
+      ],
+      "geometryStatus": "reference_required",
+      "recognitionStatus": "untrained"
+    },
+    {
+      "id": "mind-body-disturbance-seal",
+      "name": "Mind Body Disturbance Seal",
+      "kind": "special",
+      "aliases": [],
+      "description": "Technique-specific symbolic class; exact finger geometry requires image references before training. Kept separate from the Mind Body Switch seal.",
+      "sourceIds": [
+        "src-clan-mind-body-disturbance"
+      ],
+      "geometryStatus": "reference_required",
+      "recognitionStatus": "untrained"
+    },
+    {
+      "id": "mind-body-switch-seal",
+      "name": "Mind Body Switch Seal",
+      "kind": "special",
+      "aliases": [],
+      "description": "Technique-specific symbolic class; exact finger geometry and performer variants require image references before training. The source explicitly names a special seal but this dataset does not yet specify its shape.",
+      "sourceIds": [
+        "src-clan-mind-body-switch"
+      ],
+      "geometryStatus": "reference_required",
+      "recognitionStatus": "untrained"
+    },
+    {
+      "id": "mirrored-ram",
+      "name": "Mirrored Ram",
+      "kind": "variant",
+      "aliases": [],
+      "description": "A distinct Ram variant named by the technique reference; original pose image required.",
+      "sourceIds": [
+        "src-supplement-coffin-seal"
+      ],
+      "geometryStatus": "reference_required",
+      "recognitionStatus": "untrained"
+    },
+    {
+      "id": "modified-ox-mystical-palm",
+      "name": "Modified Ox for Mystical Palm",
+      "kind": "variant",
+      "aliases": [],
+      "description": "Modified Ox referenced for Mystical Palm; exact modification unresolved.",
+      "sourceIds": [
+        "src-general-mystical-palm-technique"
+      ],
+      "geometryStatus": "reference_required",
+      "recognitionStatus": "untrained"
+    },
+    {
+      "id": "seal-of-confrontation",
+      "name": "Seal of Confrontation",
+      "kind": "special",
+      "aliases": [
+        "Tairitsu no In",
+        "Spar Sign"
+      ],
+      "description": "One-handed half-seal used for engagement and chakra focus. Pose reference required.",
+      "sourceIds": [
+        "src-general-hand-seal"
+      ],
+      "geometryStatus": "reference_required",
+      "recognitionStatus": "untrained"
+    },
+    {
+      "id": "seal-of-reconciliation",
+      "name": "Seal of Reconciliation",
+      "kind": "special",
+      "aliases": [
+        "Wakai no In",
+        "Unison Sign"
+      ],
+      "description": "Post-sparring paired gesture; not a jutsu trigger. Pose reference required.",
+      "sourceIds": [
+        "src-general-hand-seal"
+      ],
+      "geometryStatus": "reference_required",
+      "recognitionStatus": "untrained"
+    },
+    {
+      "id": "shikamaru-bird",
+      "name": "Shikamaru Bird Variant",
+      "kind": "variant",
+      "aliases": [],
+      "description": "Raise ring and little fingers; interlock index and middle fingers, with thumbs facing the performer. Distinct from basic Bird. No additional ordered sequence is inferred here.",
+      "sourceIds": [
+        "src-general-hand-seal"
+      ],
+      "geometryStatus": "reference_required",
+      "recognitionStatus": "untrained"
+    },
+    {
+      "id": "slam-surface",
+      "name": "Slam surface",
+      "kind": "action",
+      "aliases": [
+        "Slam hands on the ground"
+      ],
+      "description": "Place the hand or hands against the affected surface. Sandwich specifically lists both hands on the ground; this is an action, not a zodiac seal.",
+      "sourceIds": [
+        "src-general-hand-seal",
+        "src-elemental-earth-sandwich"
+      ],
+      "geometryStatus": "reference_required",
+      "recognitionStatus": "untrained"
+    },
+    {
+      "id": "tearing-earth-palm",
+      "name": "Tearing Earth Turning Palm seal",
+      "kind": "special",
+      "aliases": [],
+      "description": "Reference describes a downward-facing cupped left hand beside a right hand with index and middle fingers raised. Geometry remains secondary-reported.",
+      "sourceIds": [
+        "src-general-hand-seal",
+        "src-elemental-earth-tearing-palm"
+      ],
+      "geometryStatus": "reference_required",
+      "recognitionStatus": "untrained"
+    },
+    {
+      "id": "water-prison-palms-out",
+      "name": "Water Prison palms-out gesture",
+      "kind": "special",
+      "aliases": [],
+      "description": "Hands extended forward, palms facing outward, with thumbs and index fingers meeting, as described by the reference. Original pose image not inspected.",
+      "sourceIds": [
+        "src-elemental-water-prison"
+      ],
+      "geometryStatus": "reference_required",
+      "recognitionStatus": "untrained"
+    },
+    {
+      "id": "water-wall-thumb-cup",
+      "name": "Water Formation Wall anime cupping seal",
+      "kind": "variant",
+      "aliases": [],
+      "description": "Reference describes the right hand cupping the left hand with a thumbs-up. The complete anime sequence around it remains unresolved.",
+      "sourceIds": [
+        "src-elemental-water-formation-wall"
+      ],
+      "geometryStatus": "reference_required",
+      "recognitionStatus": "untrained"
+    },
+    {
+      "id": "yang-water",
+      "name": "Yang Water (Jin)",
+      "kind": "special",
+      "aliases": [
+        "Yang Water",
+        "壬",
+        "Jin"
+      ],
+      "description": "Non-zodiac seal also called Jin. It is distinct from similarly named movie invocations; visual reference required.",
+      "sourceIds": [
+        "src-general-hand-seal",
+        "src-elemental-water-dragon-bullet"
+      ],
+      "geometryStatus": "reference_required",
+      "recognitionStatus": "untrained"
+    }
+  ],
+  "techniques": [
+    {
+      "id": "adamantine-sealing-chains",
+      "name": "Adamantine Sealing Chains",
+      "aliases": [
+        "Kongo Fusa",
+        "Vajra Sealing Chains"
+      ],
+      "associations": [
+        {
+          "id": "uzumaki",
+          "kind": "clan",
+          "name": "Uzumaki"
+        }
+      ],
+      "category": "clan",
+      "nature": [],
+      "variants": [
+        {
+          "id": "reference",
+          "label": "Exact activation unresolved",
+          "triggerKind": "unresolved",
+          "steps": null,
+          "verificationStatus": "unresolved",
+          "sourceIds": [
+            "src-clan-adamantine-sealing-chains"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Overview; no hand-seal sequence verified.",
+          "notes": [
+            "Do not substitute Reaper Death Seal or a generic sealing sequence."
+          ]
+        }
+      ],
+      "effectSuggestion": "Extend luminous chakra chains from behind the torso.",
+      "notes": []
+    },
+    {
+      "id": "beast-human-clone",
+      "name": "Beast Human Clone",
+      "aliases": [
+        "Beast Mimicry: Man Beast Clone",
+        "Jujin Bunshin"
+      ],
+      "associations": [
+        {
+          "id": "inuzuka",
+          "kind": "clan",
+          "name": "Inuzuka"
+        }
+      ],
+      "category": "clan",
+      "nature": [],
+      "variants": [
+        {
+          "id": "reference",
+          "label": "Indexed reference sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "tiger"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-clan-beast-human-clone"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Infobox: Hand seals; not independently checked against an original scene.",
+          "notes": []
+        }
+      ],
+      "effectSuggestion": "Create a companion silhouette that transforms into a copy.",
+      "notes": [
+        "Requires a ninken in the fiction. A single-person camera effect would be an adaptation."
+      ]
+    },
+    {
+      "id": "byakugan",
+      "name": "Byakugan",
+      "aliases": [
+        "White Eye"
+      ],
+      "associations": [
+        {
+          "id": "hyuga",
+          "kind": "clan",
+          "name": "Hyuga"
+        }
+      ],
+      "category": "clan",
+      "nature": [],
+      "variants": [
+        {
+          "id": "reference",
+          "label": "User-specific activation unresolved",
+          "triggerKind": "unresolved",
+          "steps": null,
+          "verificationStatus": "unresolved",
+          "sourceIds": [
+            "src-clan-byakugan",
+            "src-general-hand-seal",
+            "src-clan-neji-official"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Byakugan trivia and Hand Seal / Byakugan Seals section.",
+          "notes": [
+            "Some activations use seals and some do not. Do not promote a generic Tiger or internet tutorial sequence to a universal rule.",
+            "Official Neji column supports ability and clan association, not activation order."
+          ]
+        }
+      ],
+      "effectSuggestion": "Render pale irises and subtle temple veins.",
+      "notes": []
+    },
+    {
+      "id": "curse-mandala",
+      "name": "Curse Mandala",
+      "aliases": [],
+      "associations": [
+        {
+          "id": "fuma-land-of-sound",
+          "kind": "clan",
+          "name": "Fuma (Land of Sound)"
+        },
+        {
+          "id": "arashi",
+          "kind": "character",
+          "name": "Arashi"
+        }
+      ],
+      "category": "clan",
+      "nature": [],
+      "variants": [
+        {
+          "id": "reported",
+          "label": "Source-reported activation",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "boar",
+            "dog",
+            "rat",
+            "rat",
+            "snake",
+            "bird",
+            "dog",
+            "dog",
+            "monkey",
+            "dragon",
+            "boar",
+            "boar",
+            "rat",
+            "boar",
+            "dragon",
+            "clap-hands"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-supplement-mandala",
+            "src-general-hand-seal"
+          ],
+          "medium": "anime",
+          "sourceLocator": "Indexed Hand seals field; original scene not inspected.",
+          "notes": [
+            "Reference debut: Naruto episode 141, not independently inspected.",
+            "The technique article says a triangular hold maintains the effect; the general seal article describes different Fuma geometry. Maintenance pose remains unresolved and is not appended to the activation sequence."
+          ]
+        }
+      ],
+      "effectSuggestion": "A triangular chakra frame surrounds the user.",
+      "notes": []
+    },
+    {
+      "id": "four-legs",
+      "name": "Four Legs Technique",
+      "aliases": [
+        "All-Fours Jutsu",
+        "Shikyaku no Jutsu"
+      ],
+      "associations": [
+        {
+          "id": "inuzuka",
+          "kind": "clan",
+          "name": "Inuzuka"
+        }
+      ],
+      "category": "clan",
+      "nature": [],
+      "variants": [
+        {
+          "id": "palms-together",
+          "label": "Palms-together variant",
+          "triggerKind": "special_gesture",
+          "steps": [
+            "clap-hands"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-clan-four-legs-pt"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Infobox: Hand seals; not independently checked against an original scene.",
+          "notes": [
+            "Source says Gasshou; recognition should use the held palms-together posture, not require clap motion."
+          ]
+        },
+        {
+          "id": "tiger",
+          "label": "Tiger variant",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "tiger"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-clan-four-legs-pt"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Infobox: Hand seals; not independently checked against an original scene.",
+          "notes": []
+        }
+      ],
+      "effectSuggestion": "Add feral eyes and subtle claws; optional Inuzuka markings are a costume layer.",
+      "notes": [
+        "Clap-hands and Tiger are alternatives, not a two-step sequence."
+      ]
+    },
+    {
+      "id": "hydrification",
+      "name": "Hydrification Technique",
+      "aliases": [
+        "Liquefy Jutsu",
+        "Suika no Jutsu"
+      ],
+      "associations": [
+        {
+          "id": "hozuki",
+          "kind": "clan",
+          "name": "Hozuki"
+        }
+      ],
+      "category": "clan",
+      "nature": [
+        "water"
+      ],
+      "variants": [
+        {
+          "id": "reference",
+          "label": "No fixed camera gesture established",
+          "triggerKind": "unresolved",
+          "steps": null,
+          "verificationStatus": "unresolved",
+          "sourceIds": [
+            "src-clan-hydrification"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Overview: autonomous/at-will bodily ability.",
+          "notes": [
+            "The source describes autonomous liquefaction but does not explicitly supply an exhaustive hand-seal rule. Do not invent a universal trigger."
+          ]
+        }
+      ],
+      "effectSuggestion": "Apply a watery refraction and dissolution effect to the person.",
+      "notes": []
+    },
+    {
+      "id": "hyuga-main-family-juinjutsu",
+      "name": "Hyuga Main Family Juinjutsu",
+      "aliases": [],
+      "associations": [
+        {
+          "id": "hyuga",
+          "kind": "clan",
+          "name": "Hyuga"
+        },
+        {
+          "id": "hiashi-hyuga",
+          "kind": "character",
+          "name": "Hiashi Hyuga"
+        }
+      ],
+      "category": "clan",
+      "nature": [],
+      "variants": [
+        {
+          "id": "reported",
+          "label": "Source-reported activation",
+          "triggerKind": "special_gesture",
+          "steps": [
+            "hyuga-juinjutsu-seal"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-supplement-hyuga-juinjutsu"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Indexed Hand seals field; original scene not inspected.",
+          "notes": [
+            "This is a separate technique from Byakugan activation. Symbolic special-seal label needs original visual reference."
+          ]
+        }
+      ],
+      "effectSuggestion": "A stylized forehead mark glows.",
+      "notes": []
+    },
+    {
+      "id": "insect-clone",
+      "name": "Insect Clone Technique",
+      "aliases": [
+        "Mushi Bunshin no Jutsu"
+      ],
+      "associations": [
+        {
+          "id": "aburame",
+          "kind": "clan",
+          "name": "Aburame"
+        }
+      ],
+      "category": "clan",
+      "nature": [],
+      "variants": [
+        {
+          "id": "reference",
+          "label": "Exact activation unresolved",
+          "triggerKind": "unresolved",
+          "steps": null,
+          "verificationStatus": "unresolved",
+          "sourceIds": [
+            "src-clan-insect-clone",
+            "src-clan-aburame-clan"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Overview and clan context; no technique-specific trigger verified.",
+          "notes": [
+            "General clan evidence suggests seal-free insect control, but no exact activation sequence for this technique was verified."
+          ]
+        }
+      ],
+      "effectSuggestion": "Form a copy that dissolves into insect particles.",
+      "notes": []
+    },
+    {
+      "id": "izanagi",
+      "name": "Izanagi",
+      "aliases": [],
+      "associations": [
+        {
+          "id": "uchiha",
+          "kind": "clan",
+          "name": "Uchiha"
+        }
+      ],
+      "category": "clan",
+      "nature": [
+        "yin",
+        "yang"
+      ],
+      "variants": [
+        {
+          "id": "reference",
+          "label": "Indexed reference sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "hare",
+            "boar",
+            "ram"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-clan-izanagi"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Infobox: Hand seals; not independently checked against an original scene.",
+          "notes": [
+            "Seal sequence does not describe all fictional prerequisites or establish a universal Sharingan activation."
+          ]
+        }
+      ],
+      "effectSuggestion": "Play a short rewind-like distortion and restore the current camera image.",
+      "notes": [
+        "Associated with Sharingan; users are not limited to Uchiha birth."
+      ]
+    },
+    {
+      "id": "mind-body-disturbance",
+      "name": "Mind Body Disturbance Technique",
+      "aliases": [
+        "Mind Destruction Jutsu",
+        "Shinranshin no Jutsu"
+      ],
+      "associations": [
+        {
+          "id": "yamanaka",
+          "kind": "clan",
+          "name": "Yamanaka"
+        }
+      ],
+      "category": "clan",
+      "nature": [],
+      "variants": [
+        {
+          "id": "reference",
+          "label": "Technique-specific activation seal",
+          "triggerKind": "special_gesture",
+          "steps": [
+            "mind-body-disturbance-seal"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-clan-mind-body-disturbance"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Infobox: Hand seals; not independently checked against an original scene.",
+          "notes": [
+            "Symbolic label only; gesture geometry requires visual reference capture. Do not merge this class with Mind Body Switch."
+          ]
+        }
+      ],
+      "effectSuggestion": "Use a ghosted body outline and a brief control-wave effect.",
+      "notes": []
+    },
+    {
+      "id": "mind-body-switch",
+      "name": "Mind Body Switch Technique",
+      "aliases": [
+        "Mind Transfer Jutsu",
+        "Shintenshin no Jutsu"
+      ],
+      "associations": [
+        {
+          "id": "yamanaka",
+          "kind": "clan",
+          "name": "Yamanaka"
+        }
+      ],
+      "category": "clan",
+      "nature": [],
+      "variants": [
+        {
+          "id": "reference",
+          "label": "Technique-specific activation seal",
+          "triggerKind": "special_gesture",
+          "steps": [
+            "mind-body-switch-seal"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-clan-mind-body-switch"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Infobox: Hand seals; not independently checked against an original scene.",
+          "notes": [
+            "Symbolic label only; geometry and user-specific variants require visual reference capture before recognition training.",
+            "The Will of Fire uses a different seal; that movie variant is not encoded."
+          ]
+        }
+      ],
+      "effectSuggestion": "Show a translucent spirit silhouette leaving the body.",
+      "notes": []
+    },
+    {
+      "id": "mind-body-transmission",
+      "name": "Mind Body Transmission Technique",
+      "aliases": [
+        "Mind Transmission Jutsu",
+        "Shindenshin no Jutsu"
+      ],
+      "associations": [
+        {
+          "id": "yamanaka",
+          "kind": "clan",
+          "name": "Yamanaka"
+        }
+      ],
+      "category": "clan",
+      "nature": [],
+      "variants": [
+        {
+          "id": "reference",
+          "label": "Indexed reference sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "ram"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-clan-mind-body-transmission"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Infobox: Hand seals; not independently checked against an original scene.",
+          "notes": []
+        }
+      ],
+      "effectSuggestion": "Send luminous communication rings from the head.",
+      "notes": []
+    },
+    {
+      "id": "multi-size",
+      "name": "Multi-Size Technique",
+      "aliases": [
+        "Expansion Jutsu",
+        "Baika no Jutsu"
+      ],
+      "associations": [
+        {
+          "id": "akimichi",
+          "kind": "clan",
+          "name": "Akimichi"
+        }
+      ],
+      "category": "clan",
+      "nature": [
+        "yang"
+      ],
+      "variants": [
+        {
+          "id": "reference",
+          "label": "Indexed reference sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "ram",
+            "akimichi-seal"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-clan-multi-size",
+            "src-general-hand-seal"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Infobox: Hand seals; not independently checked against an original scene.",
+          "notes": [
+            "Special Seal normalized to the explicitly described Akimichi seal. Distinct from Bird; anime geometry varies."
+          ]
+        }
+      ],
+      "effectSuggestion": "Expand the segmented body with a controlled scale distortion.",
+      "notes": []
+    },
+    {
+      "id": "parasitic-destruction-insect",
+      "name": "Parasitic Destruction Insect Technique",
+      "aliases": [
+        "Kikaichu Technique"
+      ],
+      "associations": [
+        {
+          "id": "aburame",
+          "kind": "clan",
+          "name": "Aburame"
+        }
+      ],
+      "category": "clan",
+      "nature": [],
+      "variants": [
+        {
+          "id": "reference",
+          "label": "Seal-free insect control",
+          "triggerKind": "no_seals",
+          "steps": [],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-clan-parasitic-insects",
+            "src-clan-aburame-clan"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Aburame Clan overview: explicitly describes the insect mechanism as requiring no hand seals.",
+          "notes": [
+            "Applies to the general insect-control mechanism. Do not infer the inputs of every derived technique."
+          ]
+        }
+      ],
+      "effectSuggestion": "Release a lightweight insect particle swarm from the silhouette.",
+      "notes": []
+    },
+    {
+      "id": "shadow-clutch",
+      "name": "Shadow Clutch Technique",
+      "aliases": [
+        "Shadow Grasping Jutsu",
+        "Kagezukami no Jutsu"
+      ],
+      "associations": [
+        {
+          "id": "nara",
+          "kind": "clan",
+          "name": "Nara"
+        }
+      ],
+      "category": "clan",
+      "nature": [
+        "yin"
+      ],
+      "variants": [
+        {
+          "id": "reference",
+          "label": "Indexed reference sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "rat"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-clan-shadow-clutch"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Infobox: Hand seals; not independently checked against an original scene.",
+          "notes": []
+        }
+      ],
+      "effectSuggestion": "Form a large shadow hand near the user.",
+      "notes": [
+        "Shares the Rat trigger with Shadow Imitation; technique selection or another explicitly non-canonical app control must disambiguate."
+      ]
+    },
+    {
+      "id": "shadow-gathering",
+      "name": "Shadow Gathering Technique",
+      "aliases": [
+        "Shadow Hand Jutsu",
+        "Shadow Pinning Technique"
+      ],
+      "associations": [
+        {
+          "id": "nara",
+          "kind": "clan",
+          "name": "Nara"
+        }
+      ],
+      "category": "clan",
+      "nature": [],
+      "variants": [
+        {
+          "id": "reference",
+          "label": "Explicitly seal-free technique",
+          "triggerKind": "no_seals",
+          "steps": [],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-clan-shadow-gathering"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Overview: explicit statement that no hand seals are used.",
+          "notes": [
+            "No seals does not mean no movement. Source describes hand movements; exact gesture geometry remains unencoded."
+          ]
+        }
+      ],
+      "effectSuggestion": "Control animated shadow tendrils with hand motion.",
+      "notes": []
+    },
+    {
+      "id": "shadow-imitation",
+      "name": "Shadow Imitation Technique",
+      "aliases": [
+        "Shadow Possession Jutsu",
+        "Kagemane no Jutsu"
+      ],
+      "associations": [
+        {
+          "id": "nara",
+          "kind": "clan",
+          "name": "Nara"
+        }
+      ],
+      "category": "clan",
+      "nature": [
+        "yin"
+      ],
+      "variants": [
+        {
+          "id": "reference",
+          "label": "Indexed reference sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "rat"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-clan-shadow-imitation",
+            "src-clan-shikamaru-official"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Infobox: Hand seals; not independently checked against an original scene.",
+          "notes": [
+            "Official column supports association/effect only; seal evidence is the secondary infobox."
+          ]
+        }
+      ],
+      "effectSuggestion": "Extend an animated shadow from the person silhouette.",
+      "notes": []
+    },
+    {
+      "id": "shadow-neck-binding",
+      "name": "Shadow–Neck Binding Technique",
+      "aliases": [
+        "Shadow Strangle Jutsu",
+        "Kage–Kubishibari no Jutsu"
+      ],
+      "associations": [
+        {
+          "id": "nara",
+          "kind": "clan",
+          "name": "Nara"
+        }
+      ],
+      "category": "clan",
+      "nature": [
+        "yin"
+      ],
+      "variants": [
+        {
+          "id": "reference",
+          "label": "Indexed reference sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "dragon",
+            "tiger",
+            "rat"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-clan-shadow-neck-binding"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Infobox: Hand seals; not independently checked against an original scene.",
+          "notes": []
+        }
+      ],
+      "effectSuggestion": "Animate shadow ribbons rising around the silhouette.",
+      "notes": []
+    },
+    {
+      "id": "shadow-sewing",
+      "name": "Shadow Sewing Technique",
+      "aliases": [
+        "Shadow Stitching Jutsu",
+        "Kage Nui no Jutsu"
+      ],
+      "associations": [
+        {
+          "id": "nara",
+          "kind": "clan",
+          "name": "Nara"
+        }
+      ],
+      "category": "clan",
+      "nature": [
+        "yin"
+      ],
+      "variants": [
+        {
+          "id": "reference",
+          "label": "Indexed reference sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "rat",
+            "bird"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-clan-shadow-sewing",
+            "src-general-hand-seal"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Infobox: Hand seals; not independently checked against an original scene.",
+          "notes": [
+            "This preserves the infobox labels. The Hand Seal article separately describes a Shikamaru Bird variant; do not assume the canonical bird classifier covers it.",
+            "Movie trivia describes replacing Bird with the Multi-Size special seal. Full movie sequence and geometry require scene review."
+          ]
+        }
+      ],
+      "effectSuggestion": "Grow thin shadow tendrils around the silhouette.",
+      "notes": []
+    },
+    {
+      "id": "sharingan",
+      "name": "Sharingan",
+      "aliases": [
+        "Copy Wheel Eye"
+      ],
+      "associations": [
+        {
+          "id": "uchiha",
+          "kind": "clan",
+          "name": "Uchiha"
+        }
+      ],
+      "category": "clan",
+      "nature": [],
+      "variants": [
+        {
+          "id": "reference",
+          "label": "Ocular activation; no verified hand sequence",
+          "triggerKind": "unresolved",
+          "steps": null,
+          "verificationStatus": "unresolved",
+          "sourceIds": [
+            "src-clan-sharingan"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Ability overview, not a hand-seal sequence source.",
+          "notes": [
+            "Awakening, voluntary use, and individual ocular techniques are different events. A manual app trigger must be labelled a shortcut."
+          ]
+        }
+      ],
+      "effectSuggestion": "Attach a red iris and configurable tomoe to each eye.",
+      "notes": []
+    },
+    {
+      "id": "shikotsumyaku",
+      "name": "Shikotsumyaku",
+      "aliases": [
+        "Dead Bone Pulse",
+        "Macabre Bone Pulse"
+      ],
+      "associations": [
+        {
+          "id": "kaguya",
+          "kind": "clan",
+          "name": "Kaguya"
+        }
+      ],
+      "category": "clan",
+      "nature": [],
+      "variants": [
+        {
+          "id": "reference",
+          "label": "Bodily ability; gesture unresolved",
+          "triggerKind": "unresolved",
+          "steps": null,
+          "verificationStatus": "unresolved",
+          "sourceIds": [
+            "src-clan-shikotsumyaku"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Ability overview; no hand-seal sequence listed.",
+          "notes": [
+            "A bloodline ability supporting multiple named techniques, not one shared clan seal."
+          ]
+        }
+      ],
+      "effectSuggestion": "Add stylized bone armor projections with no gore.",
+      "notes": []
+    },
+    {
+      "id": "uzumaki-sealing-technique",
+      "name": "Uzumaki Sealing Technique",
+      "aliases": [],
+      "associations": [
+        {
+          "id": "uzumaki",
+          "kind": "clan",
+          "name": "Uzumaki"
+        },
+        {
+          "id": "ashina-uzumaki",
+          "kind": "character",
+          "name": "Ashina Uzumaki"
+        }
+      ],
+      "category": "clan",
+      "nature": [],
+      "variants": [
+        {
+          "id": "reported",
+          "label": "Source-reported activation",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "rat",
+            "ox",
+            "dog",
+            "dog",
+            "clap-hands",
+            "boar",
+            "slam-surface"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-supplement-uzumaki-sealing"
+          ],
+          "medium": "anime",
+          "sourceLocator": "Indexed Hand seals field; original scene not inspected.",
+          "notes": [
+            "Retain both adjacent Dog events. The listed final action uses one hand on the ground.",
+            "The source distinguishes a brief manga depiction from the anime demonstration; exact timecode remains unchecked."
+          ]
+        }
+      ],
+      "effectSuggestion": "A seal pattern expands beneath the user.",
+      "notes": []
+    },
+    {
+      "id": "water-gun",
+      "name": "Water Gun Technique",
+      "aliases": [
+        "Mizudeppo no Jutsu"
+      ],
+      "associations": [
+        {
+          "id": "hozuki",
+          "kind": "clan",
+          "name": "Hozuki"
+        }
+      ],
+      "category": "clan",
+      "nature": [
+        "water"
+      ],
+      "variants": [
+        {
+          "id": "reference",
+          "label": "Finger-gun action",
+          "triggerKind": "special_gesture",
+          "steps": [
+            "finger-gun"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-clan-water-gun"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Overview: finger gun used to fire compressed water.",
+          "notes": [
+            "An aiming action, not one of the zodiac seals. Exact finger-angle training examples still required."
+          ]
+        }
+      ],
+      "effectSuggestion": "Shoot a stylized water streak from the index fingertip.",
+      "notes": []
+    },
+    {
+      "id": "chidori",
+      "name": "Chidori",
+      "aliases": [
+        "Lightning Release: Chidori",
+        "One Thousand Birds"
+      ],
+      "associations": [
+        {
+          "id": "kakashi-hatake",
+          "kind": "character",
+          "name": "Kakashi Hatake"
+        },
+        {
+          "id": "sasuke-uchiha",
+          "kind": "character",
+          "name": "Sasuke Uchiha"
+        }
+      ],
+      "category": "elemental",
+      "nature": [
+        "lightning"
+      ],
+      "variants": [
+        {
+          "id": "reported",
+          "label": "Reported three-seal sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "ox",
+            "hare",
+            "monkey"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-elemental-chidori"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Narutopedia Hand seals field, accessed through indexed search content",
+          "notes": []
+        },
+        {
+          "id": "reported-nine-seal",
+          "label": "Reported nine-seal alternative",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "monkey",
+            "dragon",
+            "rat",
+            "bird",
+            "ox",
+            "snake",
+            "dog",
+            "tiger",
+            "monkey"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-elemental-chidori"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Narutopedia Hand seals field, accessed through indexed search content",
+          "notes": []
+        },
+        {
+          "id": "sasuke-part-ii-no-seals",
+          "label": "Sasuke's reported Part II seal-free use",
+          "triggerKind": "no_seals",
+          "steps": [],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-general-hand-seal"
+          ],
+          "medium": "mixed",
+          "sourceLocator": "Narutopedia Hand Seal overview",
+          "notes": [
+            "The source explicitly reports Sasuke's Part II Chidori without seals. An app must use a separately labelled interaction to activate this variant; [] must never be an automatic camera trigger."
+          ]
+        }
+      ],
+      "effectSuggestion": "Blue-white lightning wrapped around the hand.",
+      "notes": [
+        "Both ordered sequences are explicitly listed by the reference; a shorter list is not assumed to be a universal mastery shortcut.",
+        "The effects suggestion is a visual adaptation and does not grant a fictional lineage to the user."
+      ]
+    },
+    {
+      "id": "earth-rampart",
+      "name": "Earth Release: Earth-Style Rampart",
+      "aliases": [
+        "Earth Style: Rampart of Flowing Soil"
+      ],
+      "associations": [
+        {
+          "id": "yamato",
+          "kind": "character",
+          "name": "Yamato"
+        }
+      ],
+      "category": "elemental",
+      "nature": [
+        "earth"
+      ],
+      "variants": [
+        {
+          "id": "reported",
+          "label": "Reported sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "tiger"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-elemental-earth-rampart"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Narutopedia Hand seals field, accessed through indexed search content",
+          "notes": []
+        }
+      ],
+      "effectSuggestion": "Rock strata lifting into a tall rampart.",
+      "notes": [
+        "Reference lists Naruto chapter 316 / Shippuden episode 55."
+      ]
+    },
+    {
+      "id": "earth-sandwich",
+      "name": "Earth Release: Sandwich Technique",
+      "aliases": [
+        "Earth Style: Mountain Jutsu"
+      ],
+      "associations": [
+        {
+          "id": "kitsuchi",
+          "kind": "character",
+          "name": "Kitsuchi"
+        }
+      ],
+      "category": "elemental",
+      "nature": [
+        "earth"
+      ],
+      "variants": [
+        {
+          "id": "reported",
+          "label": "Reported sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "tiger",
+            "ram",
+            "rat",
+            "slam-surface"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-elemental-earth-sandwich"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Narutopedia Hand seals field, accessed through indexed search content",
+          "notes": []
+        }
+      ],
+      "effectSuggestion": "Two rock walls moving inward at the edges of the view.",
+      "notes": [
+        "The last step is the explicit ground-contact action, not a hand seal. For a camera app, any substitute action must be labelled as an adaptation."
+      ]
+    },
+    {
+      "id": "earth-tearing-palm",
+      "name": "Earth Release: Tearing Earth Turning Palm",
+      "aliases": [
+        "Earth Style: Earthquake Slam",
+        "Earth Style: Rupturing Earth Palm"
+      ],
+      "associations": [
+        {
+          "id": "sumashi",
+          "kind": "character",
+          "name": "Sumashi"
+        },
+        {
+          "id": "fudo",
+          "kind": "character",
+          "name": "Fudo"
+        }
+      ],
+      "category": "elemental",
+      "nature": [
+        "earth"
+      ],
+      "variants": [
+        {
+          "id": "reported",
+          "label": "Reported sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "boar",
+            "ox",
+            "tearing-earth-palm"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-elemental-earth-tearing-palm",
+            "src-general-hand-seal"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Narutopedia Hand seals field, accessed through indexed search content",
+          "notes": []
+        }
+      ],
+      "effectSuggestion": "Cracks spreading over a virtual ground plane.",
+      "notes": [
+        "The technique-specific final pose is described separately in the Hand Seal reference. It is not silently mapped to a zodiac seal.",
+        "The prose describes ground contact to affect the earth; the infobox order ends at the special seal, so contact is not appended as an invented additional seal."
+      ]
+    },
+    {
+      "id": "earth-wall",
+      "name": "Earth Release: Earth-Style Wall",
+      "aliases": [
+        "Earth Style: Mud Wall"
+      ],
+      "associations": [
+        {
+          "id": "hiruzen-sarutobi",
+          "kind": "character",
+          "name": "Hiruzen Sarutobi"
+        },
+        {
+          "id": "kakashi-hatake",
+          "kind": "character",
+          "name": "Kakashi Hatake"
+        }
+      ],
+      "category": "elemental",
+      "nature": [
+        "earth"
+      ],
+      "variants": [
+        {
+          "id": "reported",
+          "label": "Reported sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "tiger",
+            "hare",
+            "boar",
+            "dog"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-elemental-earth-wall"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Narutopedia Hand seals field, accessed through indexed search content",
+          "notes": []
+        },
+        {
+          "id": "reported-snake-ending",
+          "label": "Reported Snake-ending alternative",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "ram",
+            "dog",
+            "ox",
+            "snake"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-elemental-earth-wall"
+          ],
+          "medium": "anime",
+          "sourceLocator": "Narutopedia Hand seals field cites Boruto episode 181; episode not inspected.",
+          "notes": [
+            "Later-era source: the hand-seal field points to Boruto episode 181. Do not label this variant as a verified Naruto/Shippuden scene."
+          ]
+        }
+      ],
+      "effectSuggestion": "A stone wall rising in front of the camera.",
+      "notes": [
+        "The reference lists two alternatives. Media/user assignments for the orders are not established in the accessed excerpt."
+      ]
+    },
+    {
+      "id": "fire-ash-pile-burning",
+      "name": "Fire Release: Ash Pile Burning",
+      "aliases": [
+        "Fire Style: Burning Ash"
+      ],
+      "associations": [
+        {
+          "id": "asuma-sarutobi",
+          "kind": "character",
+          "name": "Asuma Sarutobi"
+        }
+      ],
+      "category": "elemental",
+      "nature": [
+        "fire"
+      ],
+      "variants": [
+        {
+          "id": "reported",
+          "label": "Reported sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "snake",
+            "rat",
+            "snake",
+            "tiger"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-elemental-fire-ash-pile-burning"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Narutopedia Hand seals field, accessed through indexed search content",
+          "notes": []
+        }
+      ],
+      "effectSuggestion": "An ash cloud with a brief stylized ignition.",
+      "notes": [
+        "Secondary reference lists Naruto chapter 323 and Shippuden episode 77 as debuts."
+      ]
+    },
+    {
+      "id": "fire-dragon-fire",
+      "name": "Fire Release: Dragon Fire Technique",
+      "aliases": [
+        "Fire Style: Dragon Flame Jutsu"
+      ],
+      "associations": [
+        {
+          "id": "sasuke-uchiha",
+          "kind": "character",
+          "name": "Sasuke Uchiha"
+        },
+        {
+          "id": "jiraiya",
+          "kind": "character",
+          "name": "Jiraiya"
+        }
+      ],
+      "category": "elemental",
+      "nature": [
+        "fire"
+      ],
+      "variants": [
+        {
+          "id": "reported",
+          "label": "Reported sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "snake",
+            "dragon",
+            "hare",
+            "tiger"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-elemental-fire-dragon-fire"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Narutopedia Hand seals field, accessed through indexed search content",
+          "notes": []
+        }
+      ],
+      "effectSuggestion": "A narrow stream of flame extending from the mouth.",
+      "notes": [
+        "Rabbit normalized to hare. Reference cites Naruto chapter 49 for the technique; the exact ordered signs were not checked in that chapter."
+      ]
+    },
+    {
+      "id": "fire-great-annihilation",
+      "name": "Fire Release: Great Fire Annihilation",
+      "aliases": [
+        "Fire Style: Majestic Destroyer Flame"
+      ],
+      "associations": [
+        {
+          "id": "madara-uchiha",
+          "kind": "character",
+          "name": "Madara Uchiha"
+        },
+        {
+          "id": "uchiha",
+          "kind": "clan",
+          "name": "Uchiha"
+        }
+      ],
+      "category": "elemental",
+      "nature": [
+        "fire"
+      ],
+      "variants": [
+        {
+          "id": "reported",
+          "label": "Reported sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "horse"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-elemental-fire-great-annihilation"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Narutopedia Hand seals field, accessed through indexed search content",
+          "notes": []
+        }
+      ],
+      "effectSuggestion": "A broad wall of orange flame.",
+      "notes": [
+        "Single Horse is source-reported for this technique, not a universal Fire Release trigger. Distinct from Great Fire Destruction."
+      ]
+    },
+    {
+      "id": "fire-great-destruction",
+      "name": "Fire Release: Great Fire Destruction",
+      "aliases": [
+        "Fire Style: Majestic Demolisher Flame"
+      ],
+      "associations": [
+        {
+          "id": "madara-uchiha",
+          "kind": "character",
+          "name": "Madara Uchiha"
+        }
+      ],
+      "category": "elemental",
+      "nature": [
+        "fire"
+      ],
+      "variants": [
+        {
+          "id": "reported",
+          "label": "Reported sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "rat",
+            "ox",
+            "dog",
+            "horse",
+            "monkey",
+            "boar",
+            "tiger"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-elemental-fire-great-destruction"
+          ],
+          "medium": "anime",
+          "sourceLocator": "Narutopedia Hand seals field, accessed through indexed search content",
+          "notes": [
+            "The source explicitly identifies the seven-seal order as Madara's first anime use."
+          ]
+        },
+        {
+          "id": "madara-tiger",
+          "label": "Madara's later Tiger-only use",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "tiger"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-elemental-fire-great-destruction"
+          ],
+          "medium": "anime",
+          "sourceLocator": "Narutopedia Trivia: second anime use against Tsunade",
+          "notes": [
+            "The source explicitly reports Tiger alone on that occasion. Exact episode/timecode not established."
+          ]
+        }
+      ],
+      "effectSuggestion": "A wide sustained flame plume.",
+      "notes": []
+    },
+    {
+      "id": "fire-great-fireball",
+      "name": "Fire Release: Great Fireball Technique",
+      "aliases": [
+        "Fire Style: Fireball Jutsu",
+        "Fire Style: Great Fireball Jutsu"
+      ],
+      "associations": [
+        {
+          "id": "uchiha",
+          "kind": "clan",
+          "name": "Uchiha"
+        },
+        {
+          "id": "sasuke-uchiha",
+          "kind": "character",
+          "name": "Sasuke Uchiha"
+        },
+        {
+          "id": "itachi-uchiha",
+          "kind": "character",
+          "name": "Itachi Uchiha"
+        }
+      ],
+      "category": "elemental",
+      "nature": [
+        "fire"
+      ],
+      "variants": [
+        {
+          "id": "reported",
+          "label": "Reported sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "snake",
+            "ram",
+            "monkey",
+            "boar",
+            "horse",
+            "tiger"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-elemental-fire-great-fireball"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Narutopedia Hand seals field, accessed through indexed search content",
+          "notes": []
+        }
+      ],
+      "effectSuggestion": "Mouth-anchored fireball and warm facial light.",
+      "notes": [
+        "A Uchiha signature, not an exclusive user restriction. The six-seal order is the reference infobox order; this record does not claim it is universal across adaptations."
+      ]
+    },
+    {
+      "id": "fire-phoenix-sage-fire",
+      "name": "Fire Release: Phoenix Sage Fire Technique",
+      "aliases": [
+        "Phoenix Flower Jutsu"
+      ],
+      "associations": [
+        {
+          "id": "sasuke-uchiha",
+          "kind": "character",
+          "name": "Sasuke Uchiha"
+        },
+        {
+          "id": "itachi-uchiha",
+          "kind": "character",
+          "name": "Itachi Uchiha"
+        }
+      ],
+      "category": "elemental",
+      "nature": [
+        "fire"
+      ],
+      "variants": [
+        {
+          "id": "reported",
+          "label": "Reported sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "rat",
+            "tiger",
+            "dog",
+            "ox",
+            "hare",
+            "tiger"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-elemental-fire-phoenix-sage-fire"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Narutopedia Hand seals field, accessed through indexed search content",
+          "notes": []
+        }
+      ],
+      "effectSuggestion": "Several small guided flame sprites.",
+      "notes": [
+        "Reference uses Rabbit; normalized to the standard hare ID."
+      ]
+    },
+    {
+      "id": "ice-demonic-mirrors",
+      "name": "Demonic Mirroring Ice Crystals",
+      "aliases": [
+        "Secret Jutsu: Crystal Ice Mirrors"
+      ],
+      "associations": [
+        {
+          "id": "haku",
+          "kind": "character",
+          "name": "Haku"
+        },
+        {
+          "id": "yuki",
+          "kind": "clan",
+          "name": "Yuki"
+        }
+      ],
+      "category": "elemental",
+      "nature": [
+        "ice"
+      ],
+      "variants": [
+        {
+          "id": "reported",
+          "label": "Reported sequence",
+          "triggerKind": "special_gesture",
+          "steps": [
+            "crossed-tiger"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-elemental-ice-demonic-mirrors",
+            "src-general-hand-seal"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Narutopedia Hand seals field, accessed through indexed search content",
+          "notes": []
+        }
+      ],
+      "effectSuggestion": "Floating ice mirrors reflecting repeated camera cutouts.",
+      "notes": [
+        "The technique page says a technique-specific seal; the Hand Seal page identifies Crossed Tiger. Both sources are required for the mapping.",
+        "No ordinary Tiger substitution is claimed."
+      ]
+    },
+    {
+      "id": "lightning-false-darkness",
+      "name": "Lightning Release: False Darkness",
+      "aliases": [
+        "Lightning Style: False Darkness"
+      ],
+      "associations": [
+        {
+          "id": "kakuzu",
+          "kind": "character",
+          "name": "Kakuzu"
+        }
+      ],
+      "category": "elemental",
+      "nature": [
+        "lightning"
+      ],
+      "variants": [
+        {
+          "id": "reported",
+          "label": "Reported sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "snake"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-elemental-lightning-false-darkness"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Narutopedia Hand seals field, accessed through indexed search content",
+          "notes": []
+        }
+      ],
+      "effectSuggestion": "A narrow branching lightning beam.",
+      "notes": [
+        "A game-only Tiger variation mentioned by the source is deliberately excluded from Naruto/Shippuden sequence coverage."
+      ]
+    },
+    {
+      "id": "water-bullet",
+      "name": "Water Release: Water Bullet Technique",
+      "aliases": [
+        "Water Style: Water Bomb Jutsu"
+      ],
+      "associations": [
+        {
+          "id": "allied-shinobi-forces",
+          "kind": "group",
+          "name": "Allied Shinobi Forces"
+        },
+        {
+          "id": "tobirama-senju",
+          "kind": "character",
+          "name": "Tobirama Senju"
+        },
+        {
+          "id": "kisame-hoshigaki",
+          "kind": "character",
+          "name": "Kisame Hoshigaki"
+        }
+      ],
+      "category": "elemental",
+      "nature": [
+        "water"
+      ],
+      "variants": [
+        {
+          "id": "reported",
+          "label": "Reported sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "tiger",
+            "ox",
+            "tiger",
+            "rat"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-elemental-water-bullet"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Narutopedia Hand seals field, accessed through indexed search content",
+          "notes": []
+        }
+      ],
+      "effectSuggestion": "A compact burst of water from the mouth.",
+      "notes": [
+        "The reference describes many variations; the listed infobox sequence is not claimed for every user."
+      ]
+    },
+    {
+      "id": "water-dragon-bullet",
+      "name": "Water Release: Water Dragon Bullet Technique",
+      "aliases": [
+        "Water Style: Water Dragon Jutsu"
+      ],
+      "associations": [
+        {
+          "id": "zabuza-momochi",
+          "kind": "character",
+          "name": "Zabuza Momochi"
+        },
+        {
+          "id": "kakashi-hatake",
+          "kind": "character",
+          "name": "Kakashi Hatake"
+        },
+        {
+          "id": "tobirama-senju",
+          "kind": "character",
+          "name": "Tobirama Senju"
+        }
+      ],
+      "category": "elemental",
+      "nature": [
+        "water"
+      ],
+      "variants": [
+        {
+          "id": "reported",
+          "label": "Reported sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "ox",
+            "monkey",
+            "hare",
+            "rat",
+            "boar",
+            "bird",
+            "ox",
+            "horse",
+            "bird",
+            "rat",
+            "tiger",
+            "dog",
+            "tiger",
+            "snake",
+            "ox",
+            "ram",
+            "snake",
+            "boar",
+            "ram",
+            "rat",
+            "yang-water",
+            "monkey",
+            "bird",
+            "dragon",
+            "bird",
+            "ox",
+            "horse",
+            "ram",
+            "tiger",
+            "snake",
+            "rat",
+            "monkey",
+            "hare",
+            "boar",
+            "dragon",
+            "ram",
+            "rat",
+            "ox",
+            "monkey",
+            "bird",
+            "yang-water",
+            "rat",
+            "boar",
+            "bird"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-elemental-water-dragon-bullet",
+            "src-general-hand-seal"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Narutopedia Hand seals field, accessed through indexed search content",
+          "notes": []
+        },
+        {
+          "id": "tobirama-one-seal-unresolved",
+          "label": "Tobirama's reported one-seal performance; identity unresolved",
+          "triggerKind": "unresolved",
+          "steps": null,
+          "verificationStatus": "unresolved",
+          "sourceIds": [
+            "src-general-hand-seal"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Narutopedia Hand Seal overview; cites Naruto chapter 120, page 4",
+          "notes": [
+            "The reference says Tobirama uses one seal but the accessed passage does not identify it. No seal identity is inferred."
+          ]
+        }
+      ],
+      "effectSuggestion": "A translucent water dragon curling around the camera subject.",
+      "notes": [
+        "The source lists 44 steps, including two Yang Water seals. Yang Water is not one of the twelve zodiac seals.",
+        "Long sequences are research data, not a recommendation to require every step in the app. Any app shortcut must be labelled as such."
+      ]
+    },
+    {
+      "id": "water-exploding-wave",
+      "name": "Water Release: Exploding Water Colliding Wave",
+      "aliases": [
+        "Water Style: Exploding Water Shock Wave"
+      ],
+      "associations": [
+        {
+          "id": "kisame-hoshigaki",
+          "kind": "character",
+          "name": "Kisame Hoshigaki"
+        }
+      ],
+      "category": "elemental",
+      "nature": [
+        "water"
+      ],
+      "variants": [
+        {
+          "id": "reported",
+          "label": "Reported sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "snake"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-elemental-water-exploding-wave"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Narutopedia Hand seals field, accessed through indexed search content",
+          "notes": []
+        }
+      ],
+      "effectSuggestion": "A rising waterline and an outward moving wave.",
+      "notes": [
+        "Reference lists chapter 256 / Shippuden episode 13; the exact activation shot was not inspected."
+      ]
+    },
+    {
+      "id": "water-formation-wall",
+      "name": "Water Release: Water Formation Wall",
+      "aliases": [
+        "Water Style: Water Wall",
+        "Water Style: Water Barrier"
+      ],
+      "associations": [
+        {
+          "id": "tobirama-senju",
+          "kind": "character",
+          "name": "Tobirama Senju"
+        },
+        {
+          "id": "kakashi-hatake",
+          "kind": "character",
+          "name": "Kakashi Hatake"
+        },
+        {
+          "id": "darui",
+          "kind": "character",
+          "name": "Darui"
+        }
+      ],
+      "category": "elemental",
+      "nature": [
+        "water"
+      ],
+      "variants": [
+        {
+          "id": "reported",
+          "label": "Reported sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "tiger",
+            "snake",
+            "rat",
+            "snake",
+            "tiger"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-elemental-water-formation-wall"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Narutopedia Hand seals field, accessed through indexed search content",
+          "notes": []
+        },
+        {
+          "id": "tobirama-anime-unresolved",
+          "label": "Tobirama anime variant; full order unresolved",
+          "triggerKind": "unresolved",
+          "steps": null,
+          "verificationStatus": "unresolved",
+          "sourceIds": [
+            "src-elemental-water-formation-wall"
+          ],
+          "medium": "anime",
+          "sourceLocator": "Narutopedia Trivia: anime hand-seal variation",
+          "notes": [
+            "Reference describes a special thumbs-up cupping seal but does not provide a complete ordered sequence in the accessed text. Do not substitute the five-seal infobox list."
+          ]
+        }
+      ],
+      "effectSuggestion": "A transparent water barrier rising around the subject.",
+      "notes": [
+        "Infobox order is retained provisionally. The same page's trivia distinguishes a manga ending seal and a more elaborate anime sequence, so this is not asserted as a universal order."
+      ]
+    },
+    {
+      "id": "water-prison",
+      "name": "Water Prison Technique",
+      "aliases": [
+        "Water Prison Jutsu"
+      ],
+      "associations": [
+        {
+          "id": "zabuza-momochi",
+          "kind": "character",
+          "name": "Zabuza Momochi"
+        },
+        {
+          "id": "kisame-hoshigaki",
+          "kind": "character",
+          "name": "Kisame Hoshigaki"
+        }
+      ],
+      "category": "elemental",
+      "nature": [
+        "water"
+      ],
+      "variants": [
+        {
+          "id": "reported",
+          "label": "Reported palms-out sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "snake",
+            "ram",
+            "horse",
+            "hare",
+            "ram",
+            "horse",
+            "hare",
+            "water-prison-palms-out"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-elemental-water-prison"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Narutopedia Hand seals field, accessed through indexed search content",
+          "notes": []
+        },
+        {
+          "id": "reported-clap",
+          "label": "Reported clap-ending alternative",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "snake",
+            "ox",
+            "clap-hands"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-elemental-water-prison"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Narutopedia Hand seals field, accessed through indexed search content",
+          "notes": []
+        }
+      ],
+      "effectSuggestion": "A spherical water enclosure composited around the user.",
+      "notes": [
+        "Both orders are listed as alternatives, but the infobox does not assign them to a character or medium."
+      ]
+    },
+    {
+      "id": "water-shark-bullet",
+      "name": "Water Release: Water Shark Bullet Technique",
+      "aliases": [
+        "Water Style: Water Shark Bomb Jutsu"
+      ],
+      "associations": [
+        {
+          "id": "kisame-hoshigaki",
+          "kind": "character",
+          "name": "Kisame Hoshigaki"
+        },
+        {
+          "id": "kakashi-hatake",
+          "kind": "character",
+          "name": "Kakashi Hatake"
+        }
+      ],
+      "category": "elemental",
+      "nature": [
+        "water"
+      ],
+      "variants": [
+        {
+          "id": "reported",
+          "label": "Reported sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "tiger",
+            "ox",
+            "dragon",
+            "hare",
+            "dog",
+            "bird",
+            "rat",
+            "clone-seal",
+            "dragon",
+            "ram"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-elemental-water-shark-bullet"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Narutopedia Hand seals field, accessed through indexed search content",
+          "notes": []
+        }
+      ],
+      "effectSuggestion": "A water shark emerging beside the hands.",
+      "notes": [
+        "The clone seal here is one step in this water technique, not a Shadow Clone command."
+      ]
+    },
+    {
+      "id": "water-tearing-torrent",
+      "name": "Water Release: Tearing Torrent",
+      "aliases": [
+        "Water Style: Ripping Torrent"
+      ],
+      "associations": [
+        {
+          "id": "yamato",
+          "kind": "character",
+          "name": "Yamato"
+        }
+      ],
+      "category": "elemental",
+      "nature": [
+        "water"
+      ],
+      "variants": [
+        {
+          "id": "reported",
+          "label": "Source-reported activation",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "boar",
+            "dog",
+            "ram"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-supplement-tearing-torrent"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Indexed Hand seals field; original scene not inspected.",
+          "notes": []
+        }
+      ],
+      "effectSuggestion": "A water spiral forms at the palm.",
+      "notes": []
+    },
+    {
+      "id": "water-wild-wave",
+      "name": "Water Release: Wild Water Wave",
+      "aliases": [],
+      "associations": [
+        {
+          "id": "yahiko",
+          "kind": "character",
+          "name": "Yahiko"
+        },
+        {
+          "id": "nagato",
+          "kind": "character",
+          "name": "Nagato"
+        }
+      ],
+      "category": "elemental",
+      "nature": [
+        "water"
+      ],
+      "variants": [
+        {
+          "id": "reported",
+          "label": "Reported sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "dragon",
+            "tiger",
+            "hare"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-elemental-water-wild-wave"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Narutopedia Hand seals field, accessed through indexed search content",
+          "notes": []
+        }
+      ],
+      "effectSuggestion": "A forward waterfall-like stream.",
+      "notes": [
+        "The reference explicitly says Water Trumpet shares the same seals. This is a recognition collision, not sufficient evidence to merge the technique identities."
+      ]
+    },
+    {
+      "id": "wind-gale-palm",
+      "name": "Wind Release: Gale Palm",
+      "aliases": [
+        "Wind Style: Gale Palm"
+      ],
+      "associations": [
+        {
+          "id": "nagato",
+          "kind": "character",
+          "name": "Nagato"
+        }
+      ],
+      "category": "elemental",
+      "nature": [
+        "wind"
+      ],
+      "variants": [
+        {
+          "id": "reported",
+          "label": "Reported sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "snake",
+            "ram",
+            "boar",
+            "horse",
+            "bird",
+            "clap-hands"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-elemental-wind-gale-palm"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Narutopedia Hand seals field, accessed through indexed search content",
+          "notes": []
+        }
+      ],
+      "effectSuggestion": "A compressed air ring released from the palms.",
+      "notes": [
+        "The technique appears in Naruto/Shippuden, but the mixed-era page also includes Boruto uses. The exact provenance of the infobox order remains unverified; do not present it as a confirmed Shippuden sequence."
+      ]
+    },
+    {
+      "id": "wind-great-breakthrough",
+      "name": "Wind Release: Great Breakthrough",
+      "aliases": [
+        "Wind Style: Great Breach"
+      ],
+      "associations": [
+        {
+          "id": "orochimaru",
+          "kind": "character",
+          "name": "Orochimaru"
+        },
+        {
+          "id": "kokage-yanagikage",
+          "kind": "character",
+          "name": "Kokage Yanagikage"
+        }
+      ],
+      "category": "elemental",
+      "nature": [
+        "wind"
+      ],
+      "variants": [
+        {
+          "id": "reported",
+          "label": "Reported sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "tiger",
+            "ox",
+            "dog",
+            "hare",
+            "snake"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-elemental-wind-great-breakthrough"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Narutopedia Hand seals field, accessed through indexed search content",
+          "notes": []
+        },
+        {
+          "id": "kokage-manga",
+          "label": "Kokage's reported manga use",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "bird"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-elemental-wind-great-breakthrough"
+          ],
+          "medium": "manga",
+          "sourceLocator": "Narutopedia Trivia cites Naruto chapter 423, page 2",
+          "notes": [
+            "Original page not inspected."
+          ]
+        },
+        {
+          "id": "kokage-anime",
+          "label": "Kokage's reported anime use",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "bird",
+            "hare",
+            "horse",
+            "ram"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-elemental-wind-great-breakthrough"
+          ],
+          "medium": "anime",
+          "sourceLocator": "Narutopedia Trivia cites Naruto Shippuden episode 159",
+          "notes": [
+            "The source says Hare, Horse and Ram follow Bird in the anime. Original footage not inspected."
+          ]
+        }
+      ],
+      "effectSuggestion": "A strong gust with leaves, dust and mild image distortion.",
+      "notes": [
+        "Rabbit normalized to hare. Different character/media uses are explicitly documented by the reference."
+      ]
+    },
+    {
+      "id": "wind-vacuum-sphere",
+      "name": "Wind Release: Vacuum Sphere",
+      "aliases": [
+        "Wind Style: Vacuum Bullets"
+      ],
+      "associations": [
+        {
+          "id": "danzo-shimura",
+          "kind": "character",
+          "name": "Danzo Shimura"
+        }
+      ],
+      "category": "elemental",
+      "nature": [
+        "wind"
+      ],
+      "variants": [
+        {
+          "id": "reported",
+          "label": "Reported sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "rat",
+            "hare",
+            "dog"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-elemental-wind-vacuum-sphere"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Narutopedia Hand seals field, accessed through indexed search content",
+          "notes": []
+        }
+      ],
+      "effectSuggestion": "Several compact wind projectiles.",
+      "notes": [
+        "Rabbit normalized to hare."
+      ]
+    },
+    {
+      "id": "wind-vacuum-wave",
+      "name": "Wind Release: Vacuum Wave",
+      "aliases": [
+        "Wind Style: Vacuum Blast"
+      ],
+      "associations": [
+        {
+          "id": "danzo-shimura",
+          "kind": "character",
+          "name": "Danzo Shimura"
+        }
+      ],
+      "category": "elemental",
+      "nature": [
+        "wind"
+      ],
+      "variants": [
+        {
+          "id": "reported",
+          "label": "Reported sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "rat",
+            "snake",
+            "horse",
+            "dog"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-elemental-wind-vacuum-wave"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Narutopedia Hand seals field, accessed through indexed search content",
+          "notes": []
+        }
+      ],
+      "effectSuggestion": "A curved blade of translucent compressed air.",
+      "notes": []
+    },
+    {
+      "id": "wood-clone",
+      "name": "Wood Clone Technique",
+      "aliases": [
+        "Wood Style: Wood Clone Jutsu"
+      ],
+      "associations": [
+        {
+          "id": "hashirama-senju",
+          "kind": "character",
+          "name": "Hashirama Senju"
+        },
+        {
+          "id": "madara-uchiha",
+          "kind": "character",
+          "name": "Madara Uchiha"
+        },
+        {
+          "id": "yamato",
+          "kind": "character",
+          "name": "Yamato"
+        }
+      ],
+      "category": "elemental",
+      "nature": [
+        "wood"
+      ],
+      "variants": [
+        {
+          "id": "reported",
+          "label": "Reported sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "tiger",
+            "dog",
+            "snake"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-elemental-wood-clone"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Narutopedia Hand seals field, accessed through indexed search content",
+          "notes": []
+        }
+      ],
+      "effectSuggestion": "A wood-textured cutout duplicate growing beside the user.",
+      "notes": []
+    },
+    {
+      "id": "wood-dragon",
+      "name": "Wood Release: Wood Dragon Technique",
+      "aliases": [
+        "Wood Style: Wood Dragon Jutsu"
+      ],
+      "associations": [
+        {
+          "id": "hashirama-senju",
+          "kind": "character",
+          "name": "Hashirama Senju"
+        },
+        {
+          "id": "madara-uchiha",
+          "kind": "character",
+          "name": "Madara Uchiha"
+        },
+        {
+          "id": "obito-uchiha",
+          "kind": "character",
+          "name": "Obito Uchiha"
+        }
+      ],
+      "category": "elemental",
+      "nature": [
+        "wood"
+      ],
+      "variants": [
+        {
+          "id": "reported",
+          "label": "Reported Snake-only alternative",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "snake"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-elemental-wood-dragon"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Narutopedia Hand seals field, accessed through indexed search content",
+          "notes": []
+        },
+        {
+          "id": "long-sequence-unresolved",
+          "label": "Reported longer variant; final special seal unresolved",
+          "triggerKind": "unresolved",
+          "steps": null,
+          "verificationStatus": "unresolved",
+          "sourceIds": [
+            "src-elemental-wood-dragon"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Narutopedia Hand seals field, accessed through indexed search content",
+          "notes": [
+            "Source gives Snake, Ram, Hare, Dog, then a technique-specific seal. Its geometry and identity were not established, so no executable sequence is supplied."
+          ]
+        }
+      ],
+      "effectSuggestion": "A wooden dragon spiralling behind the subject.",
+      "notes": []
+    },
+    {
+      "id": "wood-multiple-clones",
+      "name": "Multiple Wood Release Clone Technique",
+      "aliases": [
+        "Wood Style: Multi Wood Clone Jutsu"
+      ],
+      "associations": [
+        {
+          "id": "madara-uchiha",
+          "kind": "character",
+          "name": "Madara Uchiha"
+        }
+      ],
+      "category": "elemental",
+      "nature": [
+        "wood"
+      ],
+      "variants": [
+        {
+          "id": "reported",
+          "label": "Reported sequence",
+          "triggerKind": "special_gesture",
+          "steps": [
+            "clone-seal"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-elemental-wood-multiple-clones"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Narutopedia Hand seals field, accessed through indexed search content",
+          "notes": []
+        }
+      ],
+      "effectSuggestion": "Several wood-textured user cutouts appearing together.",
+      "notes": [
+        "Shares a clone seal with other clone techniques; technique selection/context is necessary."
+      ]
+    },
+    {
+      "id": "wood-nativity-world-trees",
+      "name": "Wood Release Secret Technique: Nativity of a World of Trees",
+      "aliases": [
+        "Wood Style: Deep Forest Emergence",
+        "Secret Earth Jutsu: Deep Forest Creation"
+      ],
+      "associations": [
+        {
+          "id": "hashirama-senju",
+          "kind": "character",
+          "name": "Hashirama Senju"
+        },
+        {
+          "id": "madara-uchiha",
+          "kind": "character",
+          "name": "Madara Uchiha"
+        }
+      ],
+      "category": "elemental",
+      "nature": [
+        "wood"
+      ],
+      "variants": [
+        {
+          "id": "reported",
+          "label": "Reported sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "tiger",
+            "snake"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-elemental-wood-nativity-world-trees"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Narutopedia Hand seals field, accessed through indexed search content",
+          "notes": []
+        },
+        {
+          "id": "anime-ram-snake",
+          "label": "Reported anime Ram–Snake alternative",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "ram",
+            "snake"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-elemental-wood-nativity-world-trees"
+          ],
+          "medium": "anime",
+          "sourceLocator": "Narutopedia Hand seals field footnote 2: Naruto Shippuden episode 322",
+          "notes": [
+            "Episode citation is secondary; footage was not inspected."
+          ]
+        }
+      ],
+      "effectSuggestion": "Branches growing into a dense forest behind the user.",
+      "notes": [
+        "Association with Hashirama/Senju does not imply that every Senju has Wood Release."
+      ]
+    },
+    {
+      "id": "body-flicker-technique",
+      "name": "Body Flicker Technique",
+      "aliases": [
+        "Shunshin no Jutsu",
+        "Teleportation Jutsu"
+      ],
+      "associations": [
+        {
+          "id": "shared-shinobi-skills",
+          "kind": "group",
+          "name": "Shared shinobi skills"
+        }
+      ],
+      "category": "general",
+      "nature": [],
+      "variants": [
+        {
+          "id": "listed",
+          "label": "Reference-listed sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "tiger"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-general-body-flicker-technique"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": null,
+          "notes": []
+        }
+      ],
+      "effectSuggestion": "Short motion echo and smoke.",
+      "notes": [
+        "High-speed movement, distinct from space-time teleportation."
+      ]
+    },
+    {
+      "id": "body-replacement-technique",
+      "name": "Body Replacement Technique",
+      "aliases": [
+        "Kawarimi no Jutsu",
+        "Substitution Jutsu"
+      ],
+      "associations": [
+        {
+          "id": "shared-shinobi-skills",
+          "kind": "group",
+          "name": "Shared shinobi skills"
+        }
+      ],
+      "category": "general",
+      "nature": [],
+      "variants": [
+        {
+          "id": "listed",
+          "label": "Reference-listed sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "tiger",
+            "boar",
+            "ox",
+            "dog",
+            "snake"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-general-body-replacement-technique"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": null,
+          "notes": []
+        }
+      ],
+      "effectSuggestion": "Smoke obscures person, briefly revealing a log silhouette.",
+      "notes": []
+    },
+    {
+      "id": "bringer-of-darkness-technique",
+      "name": "Bringer-of-Darkness Technique",
+      "aliases": [
+        "Kokuangyo no Jutsu",
+        "Genjutsu: Infinite Darkness Jutsu"
+      ],
+      "associations": [
+        {
+          "id": "hashirama-senju",
+          "kind": "character",
+          "name": "Hashirama Senju"
+        },
+        {
+          "id": "tobirama-senju",
+          "kind": "character",
+          "name": "Tobirama Senju"
+        }
+      ],
+      "category": "general",
+      "nature": [
+        "yin"
+      ],
+      "variants": [
+        {
+          "id": "listed",
+          "label": "Reference-listed sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "tiger"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-general-bringer-of-darkness-technique"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": null,
+          "notes": []
+        }
+      ],
+      "effectSuggestion": "Dark mist around the segmented subject.",
+      "notes": [
+        "Source assigns Hashirama the manga use and Tobirama the anime use."
+      ]
+    },
+    {
+      "id": "chakra-scalpel",
+      "name": "Chakra Scalpel",
+      "aliases": [
+        "Chakura no Mesu"
+      ],
+      "associations": [
+        {
+          "id": "kabuto-yakushi",
+          "kind": "character",
+          "name": "Kabuto Yakushi"
+        },
+        {
+          "id": "sakura-haruno",
+          "kind": "character",
+          "name": "Sakura Haruno"
+        },
+        {
+          "id": "tsunade",
+          "kind": "character",
+          "name": "Tsunade"
+        }
+      ],
+      "category": "general",
+      "nature": [],
+      "variants": [
+        {
+          "id": "listed",
+          "label": "Reference-listed sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "tiger",
+            "horse",
+            "hare",
+            "rat",
+            "dog"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-general-chakra-scalpel"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": null,
+          "notes": []
+        }
+      ],
+      "effectSuggestion": "Thin glowing blade-like aura around the hands.",
+      "notes": []
+    },
+    {
+      "id": "clone-technique",
+      "name": "Clone Technique",
+      "aliases": [
+        "Bunshin no Jutsu",
+        "Clone Jutsu"
+      ],
+      "associations": [
+        {
+          "id": "shared-shinobi-skills",
+          "kind": "group",
+          "name": "Shared shinobi skills"
+        }
+      ],
+      "category": "general",
+      "nature": [],
+      "variants": [
+        {
+          "id": "listed",
+          "label": "Reference-listed sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "ram",
+            "snake",
+            "tiger"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-general-clone-technique"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": null,
+          "notes": []
+        }
+      ],
+      "effectSuggestion": "Translucent duplicate silhouettes.",
+      "notes": [
+        "Distinct from Shadow Clone Technique."
+      ]
+    },
+    {
+      "id": "dead-demon-consuming-seal",
+      "name": "Dead Demon Consuming Seal",
+      "aliases": [
+        "Shiki Fūjin",
+        "Reaper Death Seal"
+      ],
+      "associations": [
+        {
+          "id": "uzumaki",
+          "kind": "clan",
+          "name": "Uzumaki"
+        },
+        {
+          "id": "hiruzen-sarutobi",
+          "kind": "character",
+          "name": "Hiruzen Sarutobi"
+        },
+        {
+          "id": "minato-namikaze",
+          "kind": "character",
+          "name": "Minato Namikaze"
+        }
+      ],
+      "category": "general",
+      "nature": [],
+      "variants": [
+        {
+          "id": "listed",
+          "label": "Reference-listed sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "snake",
+            "boar",
+            "ram",
+            "hare",
+            "dog",
+            "rat",
+            "bird",
+            "horse",
+            "snake",
+            "clap-hands"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-general-dead-demon-consuming-seal"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": null,
+          "notes": []
+        }
+      ],
+      "effectSuggestion": "Spectral shinigami silhouette behind the person and flowing seals.",
+      "notes": [
+        "Reference spelling Rabbit is normalized to hare."
+      ]
+    },
+    {
+      "id": "demonic-illusion-hell-viewing-technique",
+      "name": "Demonic Illusion: Hell Viewing Technique",
+      "aliases": [
+        "Magen: Narakumi no Jutsu",
+        "Demonic Illusion: Death Mirage Jutsu"
+      ],
+      "associations": [
+        {
+          "id": "kakashi-hatake",
+          "kind": "character",
+          "name": "Kakashi Hatake"
+        }
+      ],
+      "category": "general",
+      "nature": [
+        "yin"
+      ],
+      "variants": [
+        {
+          "id": "listed",
+          "label": "Reference-listed sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "snake",
+            "rat"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-general-demonic-illusion-hell-viewing-technique"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": null,
+          "notes": []
+        }
+      ],
+      "effectSuggestion": "Brief leaf swirl and distorted background silhouette.",
+      "notes": []
+    },
+    {
+      "id": "demonic-illusion-tree-binding-death",
+      "name": "Demonic Illusion: Tree Binding Death",
+      "aliases": [
+        "Magen: Jubaku Satsu",
+        "Tree Bind Death"
+      ],
+      "associations": [
+        {
+          "id": "kurenai-yuhi",
+          "kind": "character",
+          "name": "Kurenai Yūhi"
+        },
+        {
+          "id": "mirai-sarutobi",
+          "kind": "character",
+          "name": "Mirai Sarutobi"
+        }
+      ],
+      "category": "general",
+      "nature": [
+        "yin"
+      ],
+      "variants": [
+        {
+          "id": "listed",
+          "label": "Reference-listed sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "dog",
+            "snake",
+            "monkey",
+            "ox",
+            "tiger"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-general-demonic-illusion-tree-binding-death"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": null,
+          "notes": []
+        }
+      ],
+      "effectSuggestion": "Illusory branches frame the person.",
+      "notes": []
+    },
+    {
+      "id": "demonic-statue-chains",
+      "name": "Demonic Statue Chains",
+      "aliases": [],
+      "associations": [
+        {
+          "id": "obito-uchiha",
+          "kind": "character",
+          "name": "Obito Uchiha"
+        }
+      ],
+      "category": "general",
+      "nature": [],
+      "variants": [
+        {
+          "id": "reported",
+          "label": "Source-reported activation",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "snake"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-supplement-statue-chains"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Indexed Hand seals field; original scene not inspected.",
+          "notes": [
+            "Separate from Uzumaki Adamantine Sealing Chains; a shared visual motif is not evidence of shared activation."
+          ]
+        }
+      ],
+      "effectSuggestion": "Spectral chains sweep outward from the camera frame.",
+      "notes": []
+    },
+    {
+      "id": "fire-sealing-method",
+      "name": "Fire Sealing Method",
+      "aliases": [
+        "Fūka Hōin",
+        "Sealing Jutsu: Fire Seal"
+      ],
+      "associations": [
+        {
+          "id": "jiraiya",
+          "kind": "character",
+          "name": "Jiraiya"
+        }
+      ],
+      "category": "general",
+      "nature": [],
+      "variants": [
+        {
+          "id": "listed",
+          "label": "Reference-listed sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "rat",
+            "bird",
+            "fire-sealing-method-seal",
+            "tiger"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-general-fire-sealing-method"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": null,
+          "notes": []
+        }
+      ],
+      "effectSuggestion": "Black flame particles collapse into a floating scroll glyph.",
+      "notes": [
+        "Contains an unnamed technique-specific seal; label alone is insufficient to train recognition."
+      ]
+    },
+    {
+      "id": "five-elements-seal",
+      "name": "Five Elements Seal",
+      "aliases": [
+        "Gogyō Fūin",
+        "Five Pronged Seal"
+      ],
+      "associations": [
+        {
+          "id": "orochimaru",
+          "kind": "character",
+          "name": "Orochimaru"
+        }
+      ],
+      "category": "general",
+      "nature": [],
+      "variants": [
+        {
+          "id": "listed",
+          "label": "Reference-listed sequence",
+          "triggerKind": "special_gesture",
+          "steps": [
+            "five-elements-seal"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-general-five-elements-seal"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": null,
+          "notes": []
+        }
+      ],
+      "effectSuggestion": "Five glowing fingertips and a sealing glyph.",
+      "notes": []
+    },
+    {
+      "id": "four-corner-sealing-barrier",
+      "name": "Four-Corner Sealing Barrier",
+      "aliases": [
+        "Kekkai Shihō Fūjin"
+      ],
+      "associations": [
+        {
+          "id": "sakura-haruno",
+          "kind": "character",
+          "name": "Sakura Haruno"
+        },
+        {
+          "id": "ino-yamanaka",
+          "kind": "character",
+          "name": "Ino Yamanaka"
+        },
+        {
+          "id": "hinata-hyuga",
+          "kind": "character",
+          "name": "Hinata Hyūga"
+        },
+        {
+          "id": "shizune",
+          "kind": "character",
+          "name": "Shizune"
+        },
+        {
+          "id": "tsunade",
+          "kind": "character",
+          "name": "Tsunade"
+        }
+      ],
+      "category": "general",
+      "nature": [],
+      "variants": [
+        {
+          "id": "listed",
+          "label": "Reference-listed sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "dog",
+            "snake",
+            "boar",
+            "tiger"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-general-four-corner-sealing-barrier"
+          ],
+          "medium": "anime",
+          "sourceLocator": "Naruto Shippūden episode 103 is listed as debut; sequence not independently viewed.",
+          "notes": []
+        }
+      ],
+      "effectSuggestion": "Four corner pillars form a translucent barrier.",
+      "notes": [
+        "Cooperative technique; solo camera rendering is an app adaptation."
+      ]
+    },
+    {
+      "id": "heavenly-transfer-technique",
+      "name": "Heavenly Transfer Technique",
+      "aliases": [
+        "Tensō no Jutsu",
+        "Ethereal Transmission Jutsu"
+      ],
+      "associations": [
+        {
+          "id": "mabui",
+          "kind": "character",
+          "name": "Mabui"
+        }
+      ],
+      "category": "general",
+      "nature": [],
+      "variants": [
+        {
+          "id": "listed",
+          "label": "Reference-listed sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "ram"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-general-heavenly-transfer-technique"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": null,
+          "notes": []
+        }
+      ],
+      "effectSuggestion": "Vertical light column and transport shimmer.",
+      "notes": []
+    },
+    {
+      "id": "impure-world-reincarnation-contract-severing",
+      "name": "Impure World Reincarnation: Contract Severing",
+      "aliases": [],
+      "associations": [
+        {
+          "id": "madara-uchiha",
+          "kind": "character",
+          "name": "Madara Uchiha"
+        }
+      ],
+      "category": "general",
+      "nature": [],
+      "variants": [
+        {
+          "id": "listed",
+          "label": "Reference-listed sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "snake",
+            "ram",
+            "boar",
+            "dog",
+            "tiger"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-general-summoning-impure-world-reincarnation"
+          ],
+          "medium": "anime",
+          "sourceLocator": null,
+          "notes": [
+            "Source reports this sequence for a reincarnated person breaking the summoner's control, not for cancelling reanimation."
+          ]
+        }
+      ],
+      "effectSuggestion": "Snap animated binding lines while retaining reanimation appearance.",
+      "notes": [
+        "Descriptive catalogue title for an operation of Impure World Reincarnation, not an independently verified official technique name."
+      ]
+    },
+    {
+      "id": "impure-world-reincarnation-release",
+      "name": "Impure World Reincarnation: Release",
+      "aliases": [
+        "Edo Tensei release"
+      ],
+      "associations": [
+        {
+          "id": "kabuto-yakushi",
+          "kind": "character",
+          "name": "Kabuto Yakushi"
+        }
+      ],
+      "category": "general",
+      "nature": [],
+      "variants": [
+        {
+          "id": "listed",
+          "label": "Reference-listed sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "rat",
+            "ox",
+            "monkey",
+            "tiger",
+            "dragon",
+            "boar"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-general-summoning-impure-world-reincarnation"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": null,
+          "notes": [
+            "Spoken release follows the hand sequence.",
+            "Dog → Horse → Tiger is reported as Kabuto's false explanation; do not register it as a valid sequence."
+          ]
+        }
+      ],
+      "effectSuggestion": "Reanimation markings dissolve into drifting light.",
+      "notes": [
+        "Operational release of a parent technique; separate from casting and from severing the summoning contract."
+      ]
+    },
+    {
+      "id": "multiple-shadow-clone-technique",
+      "name": "Multiple Shadow Clone Technique",
+      "aliases": [
+        "Tajū Kage Bunshin no Jutsu",
+        "Multi Shadow Clone Jutsu"
+      ],
+      "associations": [
+        {
+          "id": "naruto-uzumaki",
+          "kind": "character",
+          "name": "Naruto Uzumaki"
+        }
+      ],
+      "category": "general",
+      "nature": [],
+      "variants": [
+        {
+          "id": "listed",
+          "label": "Reference-listed sequence",
+          "triggerKind": "special_gesture",
+          "steps": [
+            "clone-seal"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-general-multiple-shadow-clone-technique"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": null,
+          "notes": []
+        }
+      ],
+      "effectSuggestion": "Larger fan of duplicate person cutouts with smoke.",
+      "notes": [
+        "Shares clone seal with standard Shadow Clone Technique; select desired mode in app."
+      ]
+    },
+    {
+      "id": "mysterious-peacock-method",
+      "name": "Mysterious Peacock Method",
+      "aliases": [],
+      "associations": [
+        {
+          "id": "hoshigakure",
+          "kind": "village",
+          "name": "Hoshigakure"
+        },
+        {
+          "id": "sumaru",
+          "kind": "character",
+          "name": "Sumaru"
+        }
+      ],
+      "category": "general",
+      "nature": [],
+      "variants": [
+        {
+          "id": "reported",
+          "label": "Source-reported activation",
+          "triggerKind": "special_gesture",
+          "steps": [
+            "hoshigakure-peacock-seal"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-supplement-peacock",
+            "src-general-hand-seal"
+          ],
+          "medium": "anime",
+          "sourceLocator": "Indexed Hand seals field; original scene not inspected.",
+          "notes": [
+            "Village association is not a clan identity. Exact geometry requires a visual reference."
+          ]
+        }
+      ],
+      "effectSuggestion": "Chakra feathers fan out behind the user.",
+      "notes": []
+    },
+    {
+      "id": "mystical-palm-technique",
+      "name": "Mystical Palm Technique",
+      "aliases": [
+        "Shōsen Jutsu",
+        "Healing Jutsu"
+      ],
+      "associations": [],
+      "category": "general",
+      "nature": [],
+      "variants": [
+        {
+          "id": "listed",
+          "label": "Reference-listed sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "modified-ox-mystical-palm",
+            "tiger"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-general-mystical-palm-technique"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": null,
+          "notes": []
+        }
+      ],
+      "effectSuggestion": "Soft green light and particles attached to palms.",
+      "notes": [
+        "Source explicitly qualifies sequence as varies. Modified Ox needs original visual reference before training."
+      ]
+    },
+    {
+      "id": "nine-masked-beasts",
+      "name": "Nine Masked Beasts",
+      "aliases": [],
+      "associations": [
+        {
+          "id": "menma-uzumaki",
+          "kind": "character",
+          "name": "Menma Uzumaki"
+        }
+      ],
+      "category": "general",
+      "nature": [],
+      "variants": [
+        {
+          "id": "reported",
+          "label": "Source-reported activation",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "tiger"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-supplement-nine-masked"
+          ],
+          "medium": "movie",
+          "sourceLocator": "Indexed Hand seals field; original scene not inspected.",
+          "notes": [
+            "Road to Ninja movie variant. Source describes speech/chanting in addition to Tiger; the catalogue stores the hand-sign component only."
+          ]
+        }
+      ],
+      "effectSuggestion": "Nine spectral emblems appear around the user.",
+      "notes": []
+    },
+    {
+      "id": "rasengan",
+      "name": "Rasengan",
+      "aliases": [
+        "Spiral Chakra Sphere"
+      ],
+      "associations": [
+        {
+          "id": "minato-namikaze",
+          "kind": "character",
+          "name": "Minato Namikaze"
+        },
+        {
+          "id": "jiraiya",
+          "kind": "character",
+          "name": "Jiraiya"
+        },
+        {
+          "id": "naruto-uzumaki",
+          "kind": "character",
+          "name": "Naruto Uzumaki"
+        }
+      ],
+      "category": "general",
+      "nature": [],
+      "variants": [
+        {
+          "id": "reported",
+          "label": "Source-reported activation",
+          "triggerKind": "no_seals",
+          "steps": [],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-supplement-rasengan",
+            "src-supplement-rasengan-official"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Indexed Overview explicitly describes no hand seals; official entry supports effect only.",
+          "notes": [
+            "The secondary source explicitly says no hand seals are involved. Palm charging would be a separately designed app gesture."
+          ]
+        }
+      ],
+      "effectSuggestion": "A rotating chakra sphere above the palm.",
+      "notes": []
+    },
+    {
+      "id": "shadow-clone-technique",
+      "name": "Shadow Clone Technique",
+      "aliases": [
+        "Kage Bunshin no Jutsu"
+      ],
+      "associations": [
+        {
+          "id": "tobirama-senju",
+          "kind": "character",
+          "name": "Tobirama Senju"
+        },
+        {
+          "id": "naruto-uzumaki",
+          "kind": "character",
+          "name": "Naruto Uzumaki"
+        }
+      ],
+      "category": "general",
+      "nature": [],
+      "variants": [
+        {
+          "id": "listed",
+          "label": "Reference-listed sequence",
+          "triggerKind": "special_gesture",
+          "steps": [
+            "clone-seal"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-general-shadow-clone-technique"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": null,
+          "notes": []
+        },
+        {
+          "id": "anime-365",
+          "label": "Naruto, episode 365 variant",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "tiger",
+            "snake",
+            "tiger"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-general-shadow-clone-technique"
+          ],
+          "medium": "anime",
+          "sourceLocator": "Naruto Shippūden episode 365, 03:05 (reported by source; not viewed).",
+          "notes": []
+        }
+      ],
+      "effectSuggestion": "Two opaque person cutouts appear with smoke.",
+      "notes": [
+        "Same common trigger as Multiple Shadow Clone Technique: a sign alone cannot select clone count.",
+        "A one-handed novel variant is reported, but novel gesture geometry is outside this initial recognition set."
+      ]
+    },
+    {
+      "id": "shrine-seal",
+      "name": "Shrine Seal",
+      "aliases": [
+        "Yashiro no Fūin"
+      ],
+      "associations": [
+        {
+          "id": "shion",
+          "kind": "character",
+          "name": "Shion"
+        },
+        {
+          "id": "miroku",
+          "kind": "character",
+          "name": "Miroku"
+        }
+      ],
+      "category": "general",
+      "nature": [],
+      "variants": [
+        {
+          "id": "listed",
+          "label": "Reference-listed sequence",
+          "triggerKind": "unresolved",
+          "steps": null,
+          "verificationStatus": "unresolved",
+          "sourceIds": [
+            "src-general-shrine-seal"
+          ],
+          "medium": "movie",
+          "sourceLocator": "Naruto Shippūden the Movie",
+          "notes": [
+            "Indexed sequence: Hatsu, Jin, Kai, Min, Shin, Gan, Reppyo, Shōzen, Mika, Dan, Raku, Shō, Fu, Sai, Dan, Gik, Ragu, Bagi.",
+            "Hand Seal article uses Gika where technique page uses Gik and reports some names spoken while holding an earlier pose. A name list is not a verified visual gesture sequence.",
+            "Movie Jin must not be equated automatically to the Jin / Yang Water sign."
+          ]
+        }
+      ],
+      "effectSuggestion": "Shrine rings and layered sealing geometry.",
+      "notes": [
+        "Movie-specific sequence names do not map cleanly to distinct observed poses. Keep disabled until the movie is inspected."
+      ]
+    },
+    {
+      "id": "shuriken-shadow-clone-technique",
+      "name": "Shuriken Shadow Clone Technique",
+      "aliases": [
+        "Shuriken Kage Bunshin no Jutsu"
+      ],
+      "associations": [
+        {
+          "id": "hiruzen-sarutobi",
+          "kind": "character",
+          "name": "Hiruzen Sarutobi"
+        }
+      ],
+      "category": "general",
+      "nature": [],
+      "variants": [
+        {
+          "id": "listed",
+          "label": "Reference-listed sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "ox",
+            "dog",
+            "dragon",
+            "rat",
+            "dog",
+            "boar",
+            "snake",
+            "tiger"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-general-shuriken-shadow-clone-technique"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": null,
+          "notes": []
+        },
+        {
+          "id": "naruto-anime",
+          "label": "Naruto anime variant",
+          "triggerKind": "special_gesture",
+          "steps": [
+            "clone-seal"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-general-shuriken-shadow-clone-technique"
+          ],
+          "medium": "anime",
+          "sourceLocator": null,
+          "notes": [
+            "Source explicitly describes Naruto using the Shadow Clone seal for this technique."
+          ]
+        }
+      ],
+      "effectSuggestion": "Multiply animated shuriken around the person.",
+      "notes": []
+    },
+    {
+      "id": "six-paths-ten-tails-coffin-seal",
+      "name": "Six Paths Ten-Tails Coffin Seal",
+      "aliases": [],
+      "associations": [
+        {
+          "id": "obito-uchiha",
+          "kind": "character",
+          "name": "Obito Uchiha"
+        },
+        {
+          "id": "madara-uchiha",
+          "kind": "character",
+          "name": "Madara Uchiha"
+        }
+      ],
+      "category": "general",
+      "nature": [],
+      "variants": [
+        {
+          "id": "reported",
+          "label": "Source-reported activation",
+          "triggerKind": "special_gesture",
+          "steps": [
+            "mirrored-ram"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-supplement-coffin-seal"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Indexed Hand seals field; original scene not inspected.",
+          "notes": [
+            "Mirrored Ram is a named pose variant, not permission to mirror every gesture or camera coordinate indiscriminately."
+          ]
+        }
+      ],
+      "effectSuggestion": "A pale chakra cloak and floating dark orbs appear.",
+      "notes": []
+    },
+    {
+      "id": "spiralling-strife-spheres",
+      "name": "Spiralling Strife Spheres",
+      "aliases": [
+        "Rasengan Barrage",
+        "Rasen-Rampage"
+      ],
+      "associations": [
+        {
+          "id": "naruto-uzumaki",
+          "kind": "character",
+          "name": "Naruto Uzumaki"
+        }
+      ],
+      "category": "general",
+      "nature": [],
+      "variants": [
+        {
+          "id": "reported",
+          "label": "Source-reported activation",
+          "triggerKind": "special_gesture",
+          "steps": [
+            "seal-of-confrontation"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-supplement-strife-spheres"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": "Indexed Hand seals field; original scene not inspected.",
+          "notes": [
+            "This derived technique has a reported seal despite ordinary Rasengan requiring none."
+          ]
+        }
+      ],
+      "effectSuggestion": "Several chakra spheres hover around the user.",
+      "notes": []
+    },
+    {
+      "id": "summoning-impure-world-reincarnation",
+      "name": "Summoning: Impure World Reincarnation",
+      "aliases": [
+        "Kuchiyose: Edo Tensei",
+        "Summoning: Reanimation"
+      ],
+      "associations": [
+        {
+          "id": "tobirama-senju",
+          "kind": "character",
+          "name": "Tobirama Senju"
+        },
+        {
+          "id": "orochimaru",
+          "kind": "character",
+          "name": "Orochimaru"
+        },
+        {
+          "id": "kabuto-yakushi",
+          "kind": "character",
+          "name": "Kabuto Yakushi"
+        }
+      ],
+      "category": "general",
+      "nature": [],
+      "variants": [
+        {
+          "id": "listed",
+          "label": "Reference-listed sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "tiger",
+            "snake",
+            "dog",
+            "dragon",
+            "clap-hands"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-general-summoning-impure-world-reincarnation"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": null,
+          "notes": []
+        }
+      ],
+      "effectSuggestion": "Ash particles, cracked face markings, and dark sclera.",
+      "notes": [
+        "The complete fictional ritual has other prerequisites; sequence is only its hand-seal component."
+      ]
+    },
+    {
+      "id": "summoning-technique",
+      "name": "Summoning Technique",
+      "aliases": [
+        "Kuchiyose no Jutsu",
+        "Summoning Jutsu"
+      ],
+      "associations": [],
+      "category": "general",
+      "nature": [],
+      "variants": [
+        {
+          "id": "listed",
+          "label": "Reference-listed sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "boar",
+            "dog",
+            "bird",
+            "monkey",
+            "ram"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-general-summoning-technique"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": null,
+          "notes": []
+        }
+      ],
+      "effectSuggestion": "Ground-ring glyph and selected creature silhouette.",
+      "notes": [
+        "The lore also includes a contract and hand placement; steps encode only named hand seals. App adaptation should use the seal sequence and a benign confirmation gesture."
+      ]
+    },
+    {
+      "id": "temple-of-nirvana-technique",
+      "name": "Temple of Nirvana Technique",
+      "aliases": [
+        "Nehan Shōja no Jutsu",
+        "Nirvana Temple Jutsu"
+      ],
+      "associations": [
+        {
+          "id": "kabuto-yakushi",
+          "kind": "character",
+          "name": "Kabuto Yakushi"
+        }
+      ],
+      "category": "general",
+      "nature": [
+        "yin"
+      ],
+      "variants": [
+        {
+          "id": "listed",
+          "label": "Reference-listed sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "tiger"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-general-temple-of-nirvana-technique"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": null,
+          "notes": []
+        }
+      ],
+      "effectSuggestion": "Falling white feathers with gentle background desaturation.",
+      "notes": []
+    },
+    {
+      "id": "transformation-technique",
+      "name": "Transformation Technique",
+      "aliases": [
+        "Henge no Jutsu",
+        "Transformation Jutsu"
+      ],
+      "associations": [
+        {
+          "id": "shared-shinobi-skills",
+          "kind": "group",
+          "name": "Shared shinobi skills"
+        }
+      ],
+      "category": "general",
+      "nature": [],
+      "variants": [
+        {
+          "id": "listed",
+          "label": "Reference-listed sequence",
+          "triggerKind": "seal_sequence",
+          "steps": [
+            "dog",
+            "boar",
+            "ram"
+          ],
+          "verificationStatus": "secondary_reported",
+          "sourceIds": [
+            "src-general-transformation-technique"
+          ],
+          "medium": "unspecified",
+          "sourceLocator": null,
+          "notes": []
+        }
+      ],
+      "effectSuggestion": "Smoke transition into a selected costume or face overlay.",
+      "notes": []
+    }
+  ]
+}

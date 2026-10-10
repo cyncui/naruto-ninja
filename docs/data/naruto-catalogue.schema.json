@@ -1,0 +1,467 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Naruto Ninja research catalogue",
+  "description": "Symbolic gesture and technique research; not trained recognition data.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "researchedOn",
+    "scope",
+    "recognition",
+    "sources",
+    "signs",
+    "techniques"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "researchedOn": {
+      "type": "string",
+      "format": "date"
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "focus",
+        "exhaustive",
+        "limitations"
+      ],
+      "properties": {
+        "focus": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "exhaustive": {
+          "const": false
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "recognition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "rejectLabels",
+        "notes"
+      ],
+      "properties": {
+        "status": {
+          "const": "untrained"
+        },
+        "rejectLabels": {
+          "const": [
+            "unknown",
+            "transition",
+            "tracking_lost"
+          ]
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/source"
+      },
+      "minItems": 1
+    },
+    "signs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/sign"
+      },
+      "minItems": 12
+    },
+    "techniques": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/technique"
+      },
+      "minItems": 1
+    }
+  },
+  "$defs": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "url",
+        "kind",
+        "access",
+        "accessedOn",
+        "notes"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://"
+        },
+        "kind": {
+          "enum": [
+            "official",
+            "secondary_reference",
+            "creator_demonstration"
+          ]
+        },
+        "access": {
+          "enum": [
+            "full_page",
+            "search_excerpt",
+            "primary_image"
+          ]
+        },
+        "accessedOn": {
+          "type": "string",
+          "format": "date"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "sign": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name",
+        "kind",
+        "aliases",
+        "description",
+        "sourceIds",
+        "geometryStatus",
+        "recognitionStatus"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "enum": [
+            "basic",
+            "special",
+            "variant",
+            "action"
+          ]
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sourceIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "geometryStatus": {
+          "const": "reference_required"
+        },
+        "recognitionStatus": {
+          "const": "untrained"
+        }
+      }
+    },
+    "variant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "label",
+        "triggerKind",
+        "steps",
+        "verificationStatus",
+        "sourceIds",
+        "medium",
+        "sourceLocator",
+        "notes"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "triggerKind": {
+          "enum": [
+            "seal_sequence",
+            "special_gesture",
+            "no_seals",
+            "unresolved"
+          ]
+        },
+        "steps": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "verificationStatus": {
+          "enum": [
+            "secondary_reported",
+            "primary_verified",
+            "unresolved"
+          ]
+        },
+        "sourceIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "medium": {
+          "enum": [
+            "manga",
+            "anime",
+            "movie",
+            "mixed",
+            "unspecified"
+          ]
+        },
+        "sourceLocator": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "triggerKind": {
+                "const": "unresolved"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "steps": {
+                "type": "null"
+              },
+              "verificationStatus": {
+                "const": "unresolved"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "verificationStatus": {
+                "enum": [
+                  "secondary_reported",
+                  "primary_verified"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "triggerKind": {
+                "const": "no_seals"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "steps": {
+                "type": "array",
+                "maxItems": 0
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "triggerKind": {
+                "enum": [
+                  "seal_sequence",
+                  "special_gesture"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "steps": {
+                "type": "array",
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "technique": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name",
+        "aliases",
+        "associations",
+        "category",
+        "nature",
+        "variants",
+        "effectSuggestion",
+        "notes"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "associations": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "kind",
+              "name"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+              },
+              "kind": {
+                "enum": [
+                  "clan",
+                  "character",
+                  "group",
+                  "village"
+                ]
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "category": {
+          "enum": [
+            "elemental",
+            "clan",
+            "general"
+          ]
+        },
+        "nature": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "variants": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/variant"
+          },
+          "minItems": 1
+        },
+        "effectSuggestion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      }
+    }
+  }
+}
