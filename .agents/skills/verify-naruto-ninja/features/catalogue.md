@@ -15,3 +15,5 @@ Run `npm run test:e2e -- --grep "catalogue search" --trace on`. Fill the searchb
 ## Gotchas
 
 Unresolved records intentionally have no invented sequence. A preview is illustrative. Search inputs can consume native Escape, so the explicit dialog dismissal behavior is covered.
+
+For techniques with multiple reported variants, open Source & notes to use the labeled Sequence picker. The long-technique browser case checks that a 44-step sequence keeps feedback visible, then selects the unresolved alternative.

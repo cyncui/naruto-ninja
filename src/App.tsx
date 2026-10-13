@@ -14,10 +14,12 @@ import { useCamera } from "./runtime/useCamera";
 import type { TrackingFrame } from "./runtime/useCamera";
 import Stage, { effectFor } from "./runtime/Stage";
 
-const seals = catalogue.signs.map(({ id, name, aliases }) => ({
+const seals = catalogue.signs.map(({ id, name, aliases, sourceIds }) => ({
   id,
   name,
   aliases,
+  sourceUrl:
+    catalogue.sources.find((source) => source.id === sourceIds[0])?.url ?? "",
 }));
 const staticSeals = new Set(
   catalogue.signs
@@ -71,7 +73,7 @@ export default function App() {
     () => matchMedia("(prefers-reduced-motion: reduce)").matches,
   );
   const [status, setStatus] = useState(
-    "Practice the seals in order, or preview the effect.",
+    "Untimed rehearsal. Tap the numbered seals in order.",
   );
   const [templates, setTemplates] = useState<Templates>(loadCalibration);
   const templatesRef = useRef(templates);
@@ -130,14 +132,19 @@ export default function App() {
     setProgress(next.progress);
     if (next.complete) {
       previewEffect();
-      setStatus(`${selected.name} — sequence complete. Effect playing.`);
+      setStatus(`${selected.name}: sequence complete. Effect playing.`);
     } else {
       setStatus(
-        next.correct
+        (next.correct
           ? `${seals.find((s) => s.id === id)?.name} accepted. Next: ${sequence[next.progress].name}.`
-          : `Out of order. ${next.progress ? "First seal accepted." : "Start again."} Next: ${sequence[next.progress].name}.`,
+          : `Out of order. ${next.progress ? "First seal accepted." : "Start again."} Next: ${sequence[next.progress].name}.`) +
+          (next.progress
+            ? mode === "demo"
+              ? " Untimed rehearsal."
+              : " An 8-second pause resets practice."
+            : ""),
       );
-      if (next.progress)
+      if (next.progress && mode === "camera")
         sequenceTimer.current = setTimeout(() => {
           progressRef.current = 0;
           setProgress(0);
@@ -291,6 +298,11 @@ export default function App() {
       if (next === "demo") camera.stopCamera();
       resetSequence();
       setMode(next);
+      setStatus(
+        next === "demo"
+          ? "Untimed rehearsal. Tap the numbered seals in order."
+          : "Start the camera, then use Calibration to teach each seal.",
+      );
     },
     selectTechnique: (id) => {
       const next = techniques.find((t) => t.id === id);
@@ -299,7 +311,9 @@ export default function App() {
       setSelected(next);
       setVariantId(next.variants[0].id);
       setStatus(
-        `Selected ${next.name}. ${next.variants[0].steps?.length ? "Practice its seals in order." : "Effect preview is available."}`,
+        next.variants[0].steps?.length
+          ? "Technique selected. Tap the seals in order."
+          : "Technique selected. Preview its effect below.",
       );
     },
     selectVariant: (id) => {

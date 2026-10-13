@@ -6,3 +6,5 @@ public/models/*.task
 playwright-report/
 test-results/
 evidence/verification/
+
+.shots/

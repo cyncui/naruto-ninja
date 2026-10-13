@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { AppModel } from "./app-model";
 import FloatingPanel from "./FloatingPanel";
+import TrainingSeal from "./TrainingSeal";
 import "./view.css";
 
 const glyphs: Record<string, string> = {
@@ -20,17 +21,19 @@ const glyphs: Record<string, string> = {
 const shortName = (name: string) =>
   name
     .replace(/^(Fire|Water|Wind|Earth|Lightning|Wood|Ice) Release: /, "")
-    .replace(/ Technique$/, "");
+    .replace(/ Technique$/, "")
+    .replace(/[—–]/g, "-");
 
 export default function AppView({ model }: { model: AppModel }) {
   const sequenceRail = useRef<HTMLOListElement>(null);
   useEffect(() => {
     sequenceRail.current
       ?.querySelector('[aria-current="step"]')
-      ?.scrollIntoView({ block: "nearest", inline: "nearest" });
+      ?.scrollIntoView({ block: "nearest", inline: "center" });
   }, [model.progress, model.selected.id, model.variantId]);
   const catalogue = useRef<HTMLDialogElement>(null);
   const settings = useRef<HTMLDialogElement>(null);
+  const calibrationStarting = useRef(false);
   const [query, setQuery] = useState("");
   const [family, setFamily] = useState("all");
   const [calibrationSeal, setCalibrationSeal] = useState(model.seals[0].id);
@@ -49,6 +52,13 @@ export default function AppView({ model }: { model: AppModel }) {
   const currentSeal = model.sequence[model.progress];
   const ready =
     model.cameraStatus === "live" && model.trackerStatus === "ready";
+  useEffect(() => {
+    if (ready && calibrationStarting.current) {
+      calibrationStarting.current = false;
+      if (settings.current?.open)
+        settings.current.querySelector("select")?.focus();
+    }
+  }, [ready]);
   const completed =
     model.sequence.length > 0 && model.progress >= model.sequence.length;
   const cameraLabel =
@@ -68,13 +78,19 @@ export default function AppView({ model }: { model: AppModel }) {
             ? "CAMERA / ERROR"
             : "CAMERA / STANDBY";
   return (
-    <main className="ninja-screen">
+    <main
+      id="main"
+      tabIndex={-1}
+      className={`ninja-screen ${model.cameraStatus === "live" ? "camera-live" : ""}`}
+      data-reduced-motion={model.reducedMotion}
+    >
       <div
         className="full-camera"
         aria-label="Camera and visual effect viewfinder"
       >
         {model.stage}
       </div>
+      <TrainingSeal model={model} />
       <header className="masthead">
         <div className="brand">
           <span className="brand-seal" aria-hidden="true">
@@ -113,6 +129,30 @@ export default function AppView({ model }: { model: AppModel }) {
           </button>
         </div>
       </header>
+      <div className="practice-intro">
+        <p className="hero-statement">
+          Hands first.
+          <br />
+          <span>Chakra follows.</span>
+        </p>
+        <p className="hero-description">
+          Rehearse Naruto seal sequences.
+          <br />
+          Try local tracking and chakra previews.
+        </p>
+        <span className="practice-instruction">
+          Tap the seals in order. Try Camera after calibration.
+        </span>
+      </div>
+      <div className="room-colophon">
+        <a href="/guide">
+          Field guide <span aria-hidden="true">↗</span>
+        </a>
+        <span>Made for practice. Powered by your hands.</span>
+        <span className="privacy-note">
+          <i aria-hidden="true" /> Camera frames stay on your device.
+        </span>
+      </div>
       <div className="camera-readout">
         <span className="mobile-feed">{feedLabel}</span>
         <span>
@@ -150,7 +190,23 @@ export default function AppView({ model }: { model: AppModel }) {
           {model.trackerMessage && <p>{model.trackerMessage}</p>}
         </div>
       )}
-      <FloatingPanel title="HAND SEQUENCE">
+      <FloatingPanel
+        title="HAND SEQUENCE"
+        footer={
+          currentSeal?.sourceUrl ? (
+            <>
+              <a
+                href={currentSeal.sourceUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Seal reference ↗
+              </a>
+              <span>Secondary source</span>
+            </>
+          ) : undefined
+        }
+      >
         <div className="sequence-content">
           <div className="technique-heading">
             <div>
@@ -168,25 +224,11 @@ export default function AppView({ model }: { model: AppModel }) {
               className="change-technique"
               onClick={() => catalogue.current?.showModal()}
               aria-label="Change technique"
+              title="Change technique"
             >
               ↗
             </button>
           </div>
-          {model.selected.variants.length > 1 && (
-            <label className="variant-picker">
-              <span>Sequence</span>
-              <select
-                value={model.variantId}
-                onChange={(e) => model.selectVariant(e.target.value)}
-              >
-                {model.selected.variants.map((v) => (
-                  <option value={v.id} key={v.id}>
-                    {v.label}
-                  </option>
-                ))}
-              </select>
-            </label>
-          )}
           {model.sequence.length ? (
             <ol ref={sequenceRail} className="sequence-rail">
               {model.sequence.map((seal, index) => (
@@ -195,9 +237,9 @@ export default function AppView({ model }: { model: AppModel }) {
                     onClick={() => model.inputSeal(seal.id)}
                     className={`seal-step ${index < model.progress ? "complete" : ""} ${index === model.progress ? "current" : ""}`}
                     aria-current={index === model.progress ? "step" : undefined}
-                    aria-label={`Practice step ${index + 1}: ${seal.name}`}
+                    aria-label={`Practice step ${index + 1}: ${String(index + 1).padStart(2, "0")} ${glyphs[seal.id] ?? "印"} ${seal.name}`}
                   >
-                    <span>
+                    <span aria-hidden="true">
                       {index < model.progress
                         ? "✓"
                         : String(index + 1).padStart(2, "0")}
@@ -233,6 +275,9 @@ export default function AppView({ model }: { model: AppModel }) {
                 {model.sequence.length
                   ? `${Math.min(model.progress, model.sequence.length)} of ${model.sequence.length} signs`
                   : "No automatic casting"}
+                {model.sequence.length > 4 && (
+                  <span className={`rail-hint ${model.sequence.length > 6 ? "rail-hint-long" : ""}`}> · Scroll signs ↔</span>
+                )}
               </span>
             </div>
             <button onClick={model.resetSequence}>↺ Reset</button>
@@ -240,11 +285,41 @@ export default function AppView({ model }: { model: AppModel }) {
           <p className="runtime-status" role="status">
             {model.status}
           </p>
-          <details className="source-notes">
+          <details
+            className="source-notes"
+            onToggle={(event) => {
+              if (event.currentTarget.open)
+                event.currentTarget
+                  .querySelector("div")
+                  ?.scrollIntoView({ block: "start" });
+            }}
+          >
             <summary>
-              Source & notes <span>+</span>
+              Source & notes
+              <span className="source-extra">
+                {model.selected.variants.length > 1
+                  ? `${model.selected.variants.length} variants · `
+                  : ""}
+                <span aria-hidden="true">+</span>
+              </span>
             </summary>
             <div>
+              {model.selected.variants.length > 1 && (
+                <div className="variant-picker">
+                  <label htmlFor="variant-sequence">Sequence</label>
+                  <select
+                    id="variant-sequence"
+                    value={model.variantId}
+                    onChange={(e) => model.selectVariant(e.target.value)}
+                  >
+                    {model.selected.variants.map((v) => (
+                      <option value={v.id} key={v.id}>
+                        {v.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
               <p>
                 {variant.evidence === "primary_verified"
                   ? "Primary source verified."
@@ -252,13 +327,17 @@ export default function AppView({ model }: { model: AppModel }) {
                     ? "Activation unresolved. No sequence verified."
                     : "Secondary-reported sequence. Not primary-verified."}{" "}
                 {variant.sourceUrl && (
-                  <a href={variant.sourceUrl} target="_blank" rel="noreferrer">
+                  <a
+                    href={variant.sourceUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     View reference ↗
                   </a>
                 )}
               </p>
               {variant.notes.map((note, i) => (
-                <p key={i}>{note}</p>
+                <p key={i}>{note.replace(/[—–]/g, ", ")}</p>
               ))}
               <p>
                 Click numbered signs to rehearse. Repeated signs are separate
@@ -344,7 +423,7 @@ export default function AppView({ model }: { model: AppModel }) {
         aria-labelledby="catalogue-title"
       >
         <header className="dialog-header">
-          <span>01 / REFERENCE LIBRARY</span>
+          <span>REFERENCE LIBRARY</span>
           <button
             aria-label="Close technique catalogue"
             onClick={() => catalogue.current?.close()}
@@ -396,7 +475,7 @@ export default function AppView({ model }: { model: AppModel }) {
                 aria-pressed={t.id === model.selected.id}
               >
                 <span>
-                  <strong>{t.name}</strong>
+                  <strong>{t.name.replace(/[—–]/g, "-")}</strong>
                   <small>
                     {t.family}
                     {t.nature.length ? ` / ${t.nature.join(" + ")}` : ""}
@@ -425,7 +504,7 @@ export default function AppView({ model }: { model: AppModel }) {
         aria-labelledby="calibration-title"
       >
         <header className="dialog-header">
-          <span>02 / PERSONAL SETUP</span>
+          <span>PERSONAL SETUP</span>
           <button
             aria-label="Close calibration and settings"
             onClick={() => settings.current?.close()}
@@ -447,6 +526,22 @@ export default function AppView({ model }: { model: AppModel }) {
               tracked at capture.
             </p>
           </div>
+          {model.cameraStatus !== "live" && (
+            <div className="calibration-camera-start">
+              <button
+                className="preview-button"
+                disabled={model.cameraStatus === "requesting"}
+                onClick={() => {
+                  calibrationStarting.current = true;
+                  model.startCamera();
+                }}
+              >
+                {model.cameraStatus === "requesting"
+                  ? "Starting camera…"
+                  : "Start camera for calibration"}
+              </button>
+            </div>
+          )}
           <label className="calibration-choice">
             <span>Seal to teach</span>
             <select
@@ -476,7 +571,12 @@ export default function AppView({ model }: { model: AppModel }) {
           <p className="calibration-status" role="status">
             {ready
               ? model.status
-              : "Start the camera and wait for the hand tracker before capturing."}
+              : model.cameraStatus === "requesting" ||
+                  model.cameraStatus === "error"
+                ? model.cameraMessage
+                : model.cameraStatus === "live"
+                  ? model.trackerMessage
+                  : "Start the camera and wait for the hand tracker before capturing."}
           </p>
           <button
             className="clear-samples"

@@ -1,0 +1,120 @@
+import { useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import type { AppModel } from "./app-model";
+
+const glyphs: Record<string, string> = {
+  rat: "子",
+  ox: "丑",
+  tiger: "寅",
+  hare: "卯",
+  dragon: "辰",
+  snake: "巳",
+  horse: "午",
+  ram: "未",
+  monkey: "申",
+  bird: "酉",
+  dog: "戌",
+  boar: "亥",
+};
+
+export default function TrainingSeal({ model }: { model: AppModel }) {
+  const root = useRef<HTMLDivElement>(null);
+  const angle = useRef({ value: 0 });
+  useEffect(() => {
+    if (model.reducedMotion || model.cameraStatus === "live") return;
+    const context = gsap.context(() => {
+      const ring = root.current?.querySelector(".seal-orbit");
+      const tick = (time: number) => {
+        if (document.hidden || !ring) return;
+        gsap.set(ring, {
+          rotation: angle.current.value + Math.sin(time * 0.45) * 1.5,
+          svgOrigin: "200 200",
+        });
+      };
+      gsap.ticker.add(tick);
+      return () => gsap.ticker.remove(tick);
+    }, root);
+    return () => context.revert();
+  }, [model.reducedMotion, model.cameraStatus]);
+  useEffect(() => {
+    const tween = gsap.to(angle.current, {
+      value: model.progress * 3,
+      duration: model.reducedMotion ? 0 : 0.6,
+      ease: "power3.out",
+    });
+    return () => {
+      tween.kill();
+    };
+  }, [model.progress, model.reducedMotion]);
+  if (model.cameraStatus === "live") return null;
+  const steps = model.sequence.length
+    ? model.sequence
+    : [{ id: "seal", name: "Preview" }];
+  const compact = steps.length > 16;
+  const markerRadius = Math.min(18, 520 / steps.length);
+  return (
+    <div
+      className={`training-seal ${model.activeEffect ? "charged" : ""}`}
+      ref={root}
+      data-progress={model.progress}
+      aria-hidden="true"
+    >
+      <svg viewBox="0 0 400 400" fill="none">
+        <circle className="seal-track" cx="200" cy="200" r="188" />
+        <circle
+          className="seal-progress"
+          cx="200"
+          cy="200"
+          r="188"
+          pathLength="100"
+          strokeDasharray={`${model.sequence.length ? (model.progress / model.sequence.length) * 100 : 0} 100`}
+          transform="rotate(-90 200 200)"
+        />
+        <circle className="seal-inner" cx="200" cy="200" r="145" />
+        <g className="seal-orbit">
+          {steps.map((seal, index) => {
+            const angle = (index / steps.length) * Math.PI * 2 - Math.PI / 2;
+            const x = 200 + Math.cos(angle) * 188;
+            const y = 200 + Math.sin(angle) * 188;
+            return (
+              <g
+                key={`${index}-${seal.id}`}
+                className={
+                  index < model.progress
+                    ? "accepted"
+                    : index === model.progress
+                      ? "next"
+                      : ""
+                }
+              >
+                <circle
+                  cx={x}
+                  cy={y}
+                  r={
+                    compact ? (index === model.progress ? 18 : 3) : markerRadius
+                  }
+                />
+                {(!compact || index === model.progress) && (
+                  <text
+                    x={x}
+                    y={y + 1}
+                    textAnchor="middle"
+                    dominantBaseline="middle"
+                    style={{
+                      fontSize: compact ? 20 : Math.min(20, markerRadius * 1.1),
+                    }}
+                  >
+                    {glyphs[seal.id] ?? "印"}
+                  </text>
+                )}
+              </g>
+            );
+          })}
+        </g>
+      </svg>
+      <span className="seal-caption">
+        Original practice figure · not a pose reference
+      </span>
+    </div>
+  );
+}

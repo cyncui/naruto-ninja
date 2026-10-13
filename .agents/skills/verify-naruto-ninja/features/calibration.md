@@ -15,3 +15,5 @@ Run `npm run test:e2e -- --grep "calibration countdown" --trace on`. A controlle
 ## Gotchas
 
 The fixture proves storage and lifecycle behavior only. It does not prove valid Naruto poses or accuracy. Samples contain normalized vectors, never photos. Preferences are Mirror camera feed and Reduce effect motion; phone coverage checks the OS reduced-motion default.
+
+Calibration can start the camera in place using `Start camera for calibration`. Once tracking is ready, focus moves to `Seal to teach` and capture becomes enabled. The focused browser case `calibration starts the camera in place` exercises this path with the actual vision worker and synthetic media.

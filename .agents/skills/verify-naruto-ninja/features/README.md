@@ -6,4 +6,6 @@
 - [Camera lifecycle](camera.md): permissions, model loading and track cleanup.
 - [Personal calibration](calibration.md): capture countdown, stored vectors and cancellation.
 
-Run all seven browser cases for changes crossing these boundaries. The scripts use isolated contexts and a managed server on port 4173. No login or seed account is needed.
+Run all eleven browser cases for changes crossing these boundaries. The scripts use isolated contexts and a managed server on port 4173. No login or seed account is needed.
+
+- [Field guide and routing](routing.md): accessible help, route transitions, seal progress and real 404 recovery.

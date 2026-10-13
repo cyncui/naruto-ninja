@@ -9,11 +9,11 @@ description: Verify Naruto Ninja's browser camera, floating sequence panel, cata
 
 Run from the repository root with Node 24+. On a fresh checkout, run `npm ci` and `npx playwright install chromium`. Run `npm run build` before browser verification.
 
-For a complete drive, run `npm run test:e2e -- --trace on`. For one mapped feature, run `npm run test:e2e -- --grep "manual practice" --trace on`. The Playwright configuration launches Vite on `http://127.0.0.1:4173`, waits for HTTP readiness, and terminates its own server when finished. It refuses to reuse an occupied port. Initial setup downloads checksum-verified model assets; this is not an offline installation.
+For a complete drive, run `npm run test:e2e -- --trace on`. For one mapped feature, run `npm run test:e2e -- --grep "manual practice" --trace on`. The Playwright configuration launches the production preview on `http://127.0.0.1:4173`, waits for HTTP readiness, and terminates its own server when finished. It refuses to reuse an occupied port. Initial setup downloads checksum-verified model assets; this is not an offline installation.
 
 ## Doctor
 
-The manual-practice test first requests `/` and asserts that the visible level-one heading contains `Fireball` and the effect stage is inactive. This is the read-only identity/readiness check before any user actions. If driving an already-running instance manually, `curl -fsS http://127.0.0.1:4173/` must return the Vite app document; then check the same visible heading. A responding unrelated service is not permission to drive it. Do not stop or reuse a server another task owns.
+The manual-practice test first requests `/` and asserts that the visible level-one heading contains `Fireball` and the effect stage is inactive. This is the read-only identity/readiness check before any user actions. If driving an already-running instance manually, `curl -fsS http://127.0.0.1:4173/` must return the prerendered app document; then check the same visible heading. A responding unrelated service is not permission to drive it. Do not stop or reuse a server another task owns.
 
 ## Drive
 

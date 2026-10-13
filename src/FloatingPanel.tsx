@@ -9,13 +9,17 @@ interface Box {
 }
 const key = "naruto-ninja.panel.v1";
 function constrain(box: Box): Box {
+  const maxHeight = Math.min(
+    innerHeight - 158,
+    innerWidth <= 640 && innerHeight < 760 ? innerHeight * 0.4 : Infinity,
+  );
   const width = Math.max(
     Math.min(288, innerWidth - 24),
     Math.min(box.width, innerWidth - 24),
   );
   const height = Math.max(
-    Math.min(220, innerHeight - 158),
-    Math.min(box.height, innerHeight - 158),
+    Math.min(220, maxHeight),
+    Math.min(box.height, maxHeight),
   );
   return {
     width,
@@ -25,8 +29,7 @@ function constrain(box: Box): Box {
   };
 }
 function initial(): Box {
-  const width = Math.min(480, innerWidth - 24),
-    height = Math.min(320, innerHeight - 140);
+  const { width, height } = constrain({ x: 12, y: 64, width: 480, height: 320 });
   return constrain({
     x: innerWidth - width - 24,
     y: innerHeight - height - 86,
@@ -50,9 +53,11 @@ function load(): Box {
 export default function FloatingPanel({
   title,
   children,
+  footer,
 }: {
   title: string;
   children: ReactNode;
+  footer?: ReactNode;
 }) {
   const [box, setBox] = useState<Box>(load);
   const drag = useRef<{
@@ -122,7 +127,7 @@ export default function FloatingPanel({
       <header className="floating-panel-bar">
         <button
           className="panel-move"
-          aria-label="Move sequence panel"
+          aria-label={`Move sequence panel: ${title}`}
           title="Drag to move. Arrow keys move; Shift moves faster."
           onPointerDown={(e) => start(e, "move")}
           onPointerMove={move}
@@ -146,9 +151,9 @@ export default function FloatingPanel({
         </button>
       </header>
       <div className="floating-panel-content">{children}</div>
-      <span className="panel-hint">
-        Drag title · resize corner · scroll for more
-      </span>
+      <div className="panel-hint">
+        {footer ?? "Drag title · resize corner · scroll for more"}
+      </div>
       <button
         className="panel-resize"
         aria-label="Resize sequence panel"
