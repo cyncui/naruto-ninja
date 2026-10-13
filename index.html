@@ -3,14 +3,49 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#d44a26" />
+    <meta name="theme-color" content="#f3f2ec" />
     <meta
       name="description"
       content="A camera-powered Naruto hand-seal practice room. Learn sequences, calibrate your gestures and preview chakra effects locally."
     />
-    <title>Naruto Ninja — Hand Seal Practice</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link
+      rel="preload"
+      href="/fonts/display-700-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/text-400_800-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <meta property="og:title" content="Naruto Ninja | Hand seal practice" />
+    <meta
+      property="og:description"
+      content="Hands first. Chakra follows. Your own shinobi training room, with local camera tracking and a source-linked technique library."
+    />
+    <meta property="og:image" content="/og.png" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Naruto Ninja",
+        "applicationCategory": "GameApplication",
+        "operatingSystem": "Web browser",
+        "description": "A fan-made playground for rehearsing Naruto hand-seal sequences and experimenting with local camera tracking."
+      }
+    </script>
+    <title>Naruto Ninja | Hand seal practice</title>
   </head>
   <body>
+    <a class="skip-link" href="#main">Skip to content</a>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

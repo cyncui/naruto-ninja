@@ -4,6 +4,7 @@ export interface Seal {
   id: string;
   name: string;
   aliases: string[];
+  sourceUrl: string;
 }
 export interface TechniqueOption {
   id: string;

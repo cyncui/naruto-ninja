@@ -33,12 +33,15 @@ test("manual practice casts only after the sequence and loads no vision assets",
     path: "evidence/app-desktop-before.png",
     fullPage: true,
   });
-  await page
-    .getByRole("button", { name: "Practice step 2: Ram", exact: true })
-    .click();
+  await page.getByRole("button", { name: /^Practice step 2:.* Ram$/ }).click();
   await expect(
     page.getByRole("status").filter({ hasText: "Out of order" }),
   ).toBeVisible();
+  await page.getByRole("button", { name: /^Practice step 1:.* Snake$/ }).click();
+  await expect(page.locator(".runtime-status")).toContainText("Untimed rehearsal.");
+  await page.waitForTimeout(8300);
+  await expect(page.locator(".training-seal")).toHaveAttribute("data-progress", "1");
+  await page.getByRole("button", { name: "↺ Reset", exact: true }).click();
   for (const [index, name] of [
     "Snake",
     "Ram",
@@ -49,8 +52,7 @@ test("manual practice casts only after the sequence and loads no vision assets",
   ].entries()) {
     await page
       .getByRole("button", {
-        name: `Practice step ${index + 1}: ${name}`,
-        exact: true,
+        name: new RegExp(`^Practice step ${index + 1}:.* ${name}$`),
       })
       .click();
   }
@@ -101,10 +103,10 @@ test("catalogue search, unresolved powers and repeated seals retain their meanin
     page.getByRole("button", { name: /^Practice step/ }),
   ).toHaveCount(7);
   await expect(
-    page.getByRole("button", { name: "Practice step 3: Dog", exact: true }),
+    page.getByRole("button", { name: /^Practice step 3:.* Dog$/ }),
   ).toBeVisible();
   await expect(
-    page.getByRole("button", { name: "Practice step 4: Dog", exact: true }),
+    page.getByRole("button", { name: /^Practice step 4:.* Dog$/ }),
   ).toBeVisible();
   await page.getByRole("button", { name: /Techniques/ }).click();
   await page.getByRole("searchbox").fill("no-such-jutsu");
@@ -153,7 +155,10 @@ test("panel drag, resize, keyboard, reset and viewport persistence work", async 
   const panel = page.getByRole("region", { name: "Movable hand sequence" });
   const before = (await panel.boundingBox())!;
   const handle = await page
-    .getByRole("button", { name: "Move sequence panel", exact: true })
+    .getByRole("button", {
+      name: "Move sequence panel: HAND SEQUENCE",
+      exact: true,
+    })
     .boundingBox();
   await page.mouse.move(handle!.x + 80, handle!.y + 20);
   await page.mouse.down();
@@ -327,4 +332,118 @@ test("calibration countdown persists examples and clearing cancels pending captu
     ),
   ).toBe("{}");
   await page.screenshot({ path: "evidence/app-calibration.png" });
+});
+
+test("field guide navigation, reduced motion and missing routes work in production", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+  await page.getByRole("link", { name: "Field guide" }).click();
+  await expect(page).toHaveURL(/\/guide$/);
+  await expect(page.getByRole("heading", { level: 1 })).toContainText(
+    "A little training.",
+  );
+  await expect(page).toHaveTitle("Field guide | Naruto Ninja");
+  await expect(page.locator("#main")).toBeFocused();
+  await page.getByRole("link", { name: "Make your next move" }).click();
+  await expect(page.getByRole("heading", { level: 1 })).toContainText(
+    "Fireball",
+  );
+  await page
+    .getByRole("button", { name: /^Practice step 1:.* Snake$/ })
+    .click();
+  await expect(page.locator(".training-seal")).toHaveAttribute(
+    "data-progress",
+    "1",
+  );
+  const response = await page.goto("/missing-scroll");
+  expect(response?.status()).toBe(404);
+  await expect(page.getByRole("heading", { level: 1 })).toContainText(
+    "went missing",
+  );
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute(
+    "content",
+    "noindex",
+  );
+  await page.getByRole("link", { name: "Return to practice" }).click();
+  await expect(page.getByRole("heading", { level: 1 })).toContainText(
+    "Fireball",
+  );
+});
+
+test("short phone keeps the seal, instructions and guide outside the floating panel", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 667 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+  const panel = (await page
+    .getByRole("region", { name: "Movable hand sequence" })
+    .boundingBox())!;
+  const seal = (await page.locator(".training-seal").boundingBox())!;
+  expect(seal.y + seal.height).toBeLessThan(panel.y);
+  await page
+    .getByRole("button", { name: /^Practice step 1:.* Snake$/ })
+    .click();
+  const message = (await page.locator(".runtime-status").boundingBox())!;
+  const body = (await page.locator(".floating-panel-content").boundingBox())!;
+  expect(message.y).toBeGreaterThanOrEqual(body.y);
+  expect(message.y + message.height).toBeLessThanOrEqual(
+    panel.y + panel.height - 36,
+  );
+  await page.getByRole("link", { name: "Field guide" }).click();
+  await expect(page.getByRole("heading", { level: 1 })).toContainText(
+    "A little training.",
+  );
+});
+
+test("calibration starts the camera in place and focuses the seal picker when ready", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Calibration", exact: true }).click();
+  await page
+    .getByRole("button", { name: "Start camera for calibration", exact: true })
+    .click();
+  await expect(
+    page
+      .getByRole("dialog")
+      .getByRole("button", { name: /Capture in 3 seconds/ }),
+  ).toBeEnabled({ timeout: 45000 });
+  await expect(page.getByLabel("Seal to teach")).toBeFocused();
+  await page.keyboard.press("Escape");
+  await page.getByRole("button", { name: /End camera/ }).click();
+  await expect(
+    page.getByRole("button", { name: /Start camera/ }),
+  ).toBeVisible();
+});
+
+test("long techniques keep practice feedback visible and disclose reported variants", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await choose(
+    page,
+    "Water Dragon",
+    /Water Release: Water Dragon Bullet Technique/,
+  );
+  await expect(
+    page.getByRole("button", { name: /^Practice step/ }),
+  ).toHaveCount(44);
+  await expect(page.locator(".rail-hint")).toBeVisible();
+  const panel = (await page
+    .getByRole("region", { name: "Movable hand sequence" })
+    .boundingBox())!;
+  const feedback = (await page.locator(".runtime-status").boundingBox())!;
+  expect(feedback.y + feedback.height).toBeLessThanOrEqual(
+    panel.y + panel.height - 36,
+  );
+  await expect(page.getByLabel("Sequence", { exact: true })).toBeHidden();
+  await page.locator(".source-notes summary").click();
+  await expect(page.getByLabel("Sequence", { exact: true })).toBeVisible();
+  await page.getByLabel("Sequence", { exact: true }).selectOption({ index: 1 });
+  expect(
+    await page.getByRole("button", { name: /^Practice step/ }).count(),
+  ).toBeLessThan(44);
 });

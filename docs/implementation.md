@@ -10,7 +10,7 @@ Camera permission can be canceled. A generation token closes streams arriving af
 
 ## Recognition
 
-The catalogue's ordered symbolic IDs drive a selected-technique matcher. Wrong steps restart matching (retaining a matching first step); an 8-second gap resets partial progress. Empty/unresolved sequences never auto-cast. A held label emits once after 350 ms. Consecutive duplicate signs require a 180 ms release or a different stable sign.
+The catalogue's ordered symbolic IDs drive a selected-technique matcher. Wrong steps restart matching (retaining a matching first step); an 8-second gap resets partial progress in Camera mode. Manual Demo rehearsal is untimed. Empty/unresolved sequences never auto-cast. A held label emits once after 350 ms. Consecutive duplicate signs require a 180 ms release or a different stable sign.
 
 Calibration captures after 3 seconds. Each sample contains 84 normalized image-coordinate features from two 21-point hands. Joint centering/scaling preserves relative hand positions; per-hand world coordinates are intentionally not combined as a shared 3D coordinate system. Each label needs 3 examples; at most 12 are retained. A nearest-example RMS threshold 0.16 and a between-label margin 0.035 reject distant/ambiguous observations. These are provisional thresholds with no population validation. Corrupt stored samples are rejected, and action gestures cannot be calibrated as static poses.
 
