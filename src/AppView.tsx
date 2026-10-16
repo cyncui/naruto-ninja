@@ -6,6 +6,7 @@ import Icon from "./Icon";
 import Scramble from "./Scramble";
 import SevenSegment from "./SevenSegment";
 import TrainingSeal from "./TrainingSeal";
+import Arena from "./Arena";
 import { useTween } from "./useTween";
 import { sealGuides, sealGuideSource } from "./seal-guide";
 import { glyphFor } from "./seals";
@@ -102,13 +103,17 @@ export default function AppView({ model }: { model: AppModel }) {
   const feedLabel =
     model.mode === "demo"
       ? "DEMO / SIMULATION"
-      : model.cameraStatus === "live"
-        ? "CAMERA / LIVE"
-        : model.cameraStatus === "requesting"
-          ? "CAMERA / REQUESTING"
-          : model.cameraStatus === "error"
-            ? "CAMERA / ERROR"
-            : "CAMERA / STANDBY";
+      : model.mode === "arena"
+        ? model.cameraStatus === "live"
+          ? "ARENA / CAMERA"
+          : "ARENA / PRACTICE"
+        : model.cameraStatus === "live"
+          ? "CAMERA / LIVE"
+          : model.cameraStatus === "requesting"
+            ? "CAMERA / REQUESTING"
+            : model.cameraStatus === "error"
+              ? "CAMERA / ERROR"
+              : "CAMERA / STANDBY";
   const sealName = (id: string) =>
     model.seals.find((seal) => seal.id === id)?.name ?? id;
   const calibrated = (id: string) => (model.samples[id] ?? 0) >= TEACH_SAMPLES;
@@ -149,11 +154,13 @@ export default function AppView({ model }: { model: AppModel }) {
   const feedJp =
     model.mode === "demo"
       ? "模擬"
-      : model.cameraStatus === "live"
-        ? "稼働"
-        : model.cameraStatus === "error"
-          ? "警告"
-          : "待機";
+      : model.mode === "arena"
+        ? "演習"
+        : model.cameraStatus === "live"
+          ? "稼働"
+          : model.cameraStatus === "error"
+            ? "警告"
+            : "待機";
   const meters = [
     { id: "00", label: "SEALS", value: ratio },
     {
@@ -167,7 +174,7 @@ export default function AppView({ model }: { model: AppModel }) {
     <main
       id="main"
       tabIndex={-1}
-      className={`ninja-screen ${model.cameraStatus === "live" ? "camera-live" : ""} ${nextNeedsCalibration && !deviceMessage ? "needs-calibration" : ""}`}
+      className={`ninja-screen ${model.cameraStatus === "live" ? "camera-live" : ""} ${nextNeedsCalibration && !deviceMessage ? "needs-calibration" : ""} ${model.mode === "arena" ? "arena-mode" : ""}`}
       data-reduced-motion={model.reducedMotion}
     >
       <div
@@ -176,7 +183,11 @@ export default function AppView({ model }: { model: AppModel }) {
       >
         {model.stage}
       </div>
-      <TrainingSeal model={model} />
+      {model.mode === "arena" ? (
+        <Arena model={model} />
+      ) : (
+        <TrainingSeal model={model} />
+      )}
       <div className="ruler ruler-y" aria-hidden="true">
         {Array.from({ length: 12 }, (_, i) => (
           <span key={i}>+{String(12 - i).padStart(2, "0")}</span>
@@ -229,6 +240,12 @@ export default function AppView({ model }: { model: AppModel }) {
             onClick={() => model.setMode("camera")}
           >
             Camera
+          </button>
+          <button
+            aria-pressed={model.mode === "arena"}
+            onClick={() => model.setMode("arena")}
+          >
+            Arena
           </button>
         </div>
       </header>
@@ -629,6 +646,12 @@ export default function AppView({ model }: { model: AppModel }) {
             onClick={() => model.setMode("camera")}
           >
             Camera
+          </button>
+          <button
+            aria-pressed={model.mode === "arena"}
+            onClick={() => model.setMode("arena")}
+          >
+            Arena
           </button>
         </div>
         <button

@@ -31,7 +31,7 @@ export interface AppModel {
   variantId: string;
   sequence: Seal[];
   progress: number;
-  mode: "demo" | "camera";
+  mode: "demo" | "camera" | "arena";
   cameraStatus: "idle" | "requesting" | "live" | "error";
   cameraMessage: string;
   trackerStatus: "idle" | "loading" | "ready" | "error";
@@ -58,7 +58,9 @@ export interface AppModel {
   status: string;
   startCamera(): void;
   stopCamera(): void;
-  setMode(mode: "demo" | "camera"): void;
+  setMode(mode: "demo" | "camera" | "arena"): void;
+  /** Receive camera-recognized seals while in the arena. */
+  onArenaSeal(listener: (id: string) => void): () => void;
   selectTechnique(id: string): void;
   selectVariant(id: string): void;
   inputSeal(id: string): void;

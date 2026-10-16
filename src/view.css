@@ -611,6 +611,230 @@ summary:focus-visible {
   color: var(--muted);
 }
 
+/* Clickable ring markers (Demo practice and the arena) */
+.training-seal.pickable .seal-orbit > g {
+  pointer-events: auto;
+  cursor: pointer;
+}
+.seal-orbit > g:focus {
+  outline: none;
+}
+.seal-orbit > g:focus-visible rect {
+  stroke: var(--green);
+  stroke-width: 3;
+}
+.seal-orbit .right rect {
+  fill: var(--green);
+  stroke: var(--green);
+}
+.seal-orbit .right text {
+  fill: var(--void);
+}
+.seal-orbit .wrong rect {
+  fill: var(--red);
+  stroke: var(--red);
+}
+.seal-orbit .wrong text {
+  fill: var(--void);
+}
+.no-callouts .diagram-callout {
+  display: none;
+}
+
+/* Practice arena */
+.arena-mode .practice-intro,
+.arena-mode .floating-panel {
+  display: none;
+}
+.arena-panel {
+  position: absolute;
+  z-index: 6;
+  top: 146px;
+  left: 56px;
+  display: flex;
+  flex-direction: column;
+  width: min(520px, 40vw);
+  max-height: calc(100dvh - 420px);
+  min-height: 260px;
+  background: #050505f0;
+  border: 1.5px solid var(--amber);
+  box-shadow:
+    0 0 0 1px #000,
+    0 0 26px #ff8a1e26;
+}
+.arena-bar {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: stretch;
+  background: var(--amber);
+  color: var(--void);
+}
+.arena-title {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  font: 700 16px/1 var(--display);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.arena-title b {
+  font-size: 16px;
+  letter-spacing: 0.02em;
+}
+.arena-tabs {
+  display: flex;
+}
+.arena-tabs button {
+  min-height: 42px;
+  padding: 0 16px;
+  background: transparent;
+  border: 0;
+  border-left: 1.5px solid var(--void);
+  color: var(--void);
+  font: 700 15px/1 var(--display);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.arena-tabs button[aria-selected="true"] {
+  background: var(--void);
+  color: var(--amber);
+}
+.arena-tabs button:focus-visible {
+  outline-color: var(--void);
+  outline-offset: -4px;
+}
+.arena-body {
+  overflow: auto;
+  padding: 14px 16px 16px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--amber-dim) transparent;
+}
+.arena-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+.arena-tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  min-height: 64px;
+  padding: 8px;
+  text-align: left;
+  background: var(--plate);
+  border: 1.5px solid var(--amber-dim);
+  color: var(--amber);
+}
+.arena-tile b {
+  font: 800 22px/1 var(--jp);
+}
+.arena-tile span {
+  font: 700 13px/1 var(--display);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.arena-tile i {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  width: 8px;
+  height: 8px;
+  border: 1px solid var(--red);
+}
+.arena-tile i.cal-ok {
+  background: var(--green);
+  border-color: var(--green);
+}
+.arena-tile.selected {
+  background: var(--amber);
+  border-color: var(--amber-hi);
+  color: var(--void);
+}
+.arena-tile.right {
+  background: #03140a;
+  border-color: var(--green);
+  color: var(--green);
+}
+.arena-tile.wrong {
+  background: #170402;
+  border-color: var(--red);
+  color: var(--red);
+}
+.arena-howto {
+  margin-top: 14px;
+  padding: 10px 12px;
+  border-left: 3px solid var(--green);
+  background: #03140a;
+}
+.arena-howto b {
+  display: block;
+  font: 700 15px/1 var(--display);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--green);
+}
+.arena-howto p {
+  margin: 6px 0;
+  font-size: 15px;
+  line-height: 1.45;
+}
+.arena-howto small {
+  font: 11px/1.4 var(--mono);
+  color: var(--muted);
+}
+.arena-hud {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.arena-time {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  color: var(--amber);
+}
+.arena-time .seven-segment {
+  height: 46px;
+}
+.arena-time span {
+  font: 700 18px/1 var(--display);
+}
+.arena-hud dl {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  gap: 6px 18px;
+  margin: 0;
+}
+.arena-hud dt {
+  font: 9px/1 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--red);
+}
+.arena-hud dd {
+  margin: 2px 0 0;
+  font: 700 18px/1 var(--display);
+  color: var(--amber-hi);
+}
+.arena-prompt {
+  margin: 14px 0 12px;
+  font: 700 17px/1.2 var(--display);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--amber-hi);
+}
+.arena-begin {
+  width: 100%;
+}
+.camera-live .arena-panel {
+  background: #050505d8;
+}
+
 /* Lower-left plates */
 .room-colophon {
   position: fixed;
@@ -1738,6 +1962,17 @@ details[open] > summary .toggle-icon {
   .mode-switch button:not([aria-pressed="true"]):hover {
     background: #0b2a15;
   }
+  .arena-tile:not(.selected):not(.right):not(.wrong):hover {
+    background: #2a1300;
+    border-color: var(--amber);
+  }
+  .arena-tabs button[aria-selected="false"]:hover {
+    background: var(--amber-hi);
+  }
+  .training-seal.pickable .seal-orbit > g:hover rect {
+    stroke: var(--amber-hi);
+    stroke-width: 2.5;
+  }
   .technique-item:not(.selected):hover {
     background: #1c0e04;
   }
@@ -1847,13 +2082,13 @@ details[open] > summary .toggle-icon {
   }
   .mobile-mode {
     display: flex;
-    gap: 3px;
+    gap: 2px;
     margin-left: auto;
     flex-shrink: 0;
   }
   .mobile-mode button {
     min-height: 38px;
-    padding: 0 8px;
+    padding: 0 6px;
     background: transparent;
     border: 1.5px solid #2b7a45;
     color: var(--green);
@@ -1956,6 +2191,48 @@ details[open] > summary .toggle-icon {
   .callout-label,
   .diagram-callout {
     display: none;
+  }
+  .arena-panel {
+    position: fixed;
+    top: auto;
+    left: 12px;
+    right: 12px;
+    bottom: calc(max(12px, env(safe-area-inset-bottom)) + 66px);
+    width: auto;
+    max-height: 46dvh;
+    min-height: 0;
+  }
+  .arena-title {
+    padding: 0 10px;
+    font-size: 13px;
+  }
+  .arena-title b {
+    display: none;
+  }
+  .arena-tabs button {
+    padding: 0 12px;
+    font-size: 14px;
+  }
+  .arena-body {
+    padding: 10px 12px 12px;
+  }
+  .arena-tile {
+    min-height: 52px;
+    gap: 4px;
+    padding: 6px;
+  }
+  .arena-tile b {
+    font-size: 18px;
+  }
+  .arena-tile span {
+    font-size: 11px;
+  }
+  .arena-time .seven-segment {
+    height: 34px;
+  }
+  .arena-mode .training-seal {
+    top: 30%;
+    width: min(52vw, 22dvh, 220px);
   }
   .floating-panel.collapsed .panel-jp {
     display: none;

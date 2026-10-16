@@ -491,3 +491,51 @@ test("experimental image matcher embeds a crop and stores calibration samples", 
   });
   await expect(page.getByText(/IMAGE MATCHER/)).toHaveCount(0);
 });
+
+test("demo ring markers practise the sequence", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Seal ring step 1: Snake" }).click();
+  await page.getByRole("button", { name: "Seal ring step 2: Ram" }).click();
+  await expect(page.locator(".training-seal")).toHaveAttribute(
+    "data-progress",
+    "2",
+  );
+  await page.getByRole("button", { name: "Seal ring step 4: Boar" }).click();
+  await expect(page.locator(".runtime-status")).toContainText("Out of order");
+});
+
+test("arena library shows any seal and the drill scores a full round", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+  await page.getByRole("button", { name: "Arena", exact: true }).last().click();
+  await expect(page.getByRole("region", { name: "Seal arena" })).toBeVisible();
+  await expect(
+    page.getByRole("region", { name: "Movable hand sequence" }),
+  ).toBeHidden();
+  await page.getByRole("button", { name: "Tiger", exact: true }).click();
+  await expect(page.locator(".arena-howto")).toContainText("How to: Tiger");
+  await page.getByRole("button", { name: "Show Dog" }).click();
+  await expect(page.locator(".arena-howto")).toContainText("How to: Dog");
+  await page.getByRole("tab", { name: "Drill" }).click();
+  await page.getByRole("button", { name: "Begin sync test" }).click();
+  for (let i = 0; i < 10; i++) {
+    await expect(page.locator(".arena-prompt")).toContainText(
+      "Which seal is shown",
+    );
+    await page
+      .getByRole("button", { name: "Answer: Rat", exact: true })
+      .click();
+  }
+  await expect(page.locator(".arena-prompt")).toContainText("/10 in", {
+    timeout: 5000,
+  });
+  const best = await page.evaluate(() =>
+    JSON.parse(localStorage.getItem("naruto-ninja.arena-best.v1") ?? "null"),
+  );
+  expect(best.total).toBe(10);
+  await expect(
+    page.getByRole("button", { name: "Run it again" }),
+  ).toBeVisible();
+});

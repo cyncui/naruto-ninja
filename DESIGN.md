@@ -32,6 +32,15 @@ While a sequence is in progress, the reticle shows a schematic of the next seal 
 
 Guidance is paraphrased from the twelve-seal databook chart reproduced on Narutopedia's Hand Seal page and linked from Source & notes. The schematics are simplified; they are not traced artwork, and catalogue `geometryStatus` stays `reference_required` because they are not classifier geometry.
 
+## Practice arena
+
+Arena is a third mode next to Demo and Camera. It swaps the practice screen in place (`src/Arena.tsx`). The reticle becomes a wheel of the twelve zodiac seals (`src/SealRing.tsx`, shared with practice). A panel takes the left column on desktop and becomes a bottom sheet on phones, with two tabs:
+
+- **Library:** a 4 × 3 tile grid. Tiles show a green calibration mark once a seal is taught. Choosing a tile or a ring marker shows that seal's diagram with callouts and its how-to.
+- **Drill:** a 10-question sync test. The reticle shows a hand diagram without callouts, and you answer from the tiles or ring markers. With the camera live the seal is also named, and recognized seals count as answers. A seven-segment timer, round, streak, accuracy and best score are shown; the best score is kept in this browser. Markers flash green or red.
+
+Ring markers are buttons in Demo practice and in the arena. Clickable rings drop the idle sway so the targets stay still.
+
 ## Icons
 
 `src/Icon.tsx` replaces every Unicode arrow, check and box glyph with stroked glyphs on a 16-unit grid: square caps, mitred joins, and chamfered corners where a curve would be. They use `currentColor`. Native select arrows are replaced with the same chevron.
