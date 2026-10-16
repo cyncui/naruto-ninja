@@ -6,8 +6,13 @@ import Icon from "./Icon";
 import Scramble from "./Scramble";
 import SevenSegment from "./SevenSegment";
 import TrainingSeal from "./TrainingSeal";
+import { useTween } from "./useTween";
 import { sealGuides, sealGuideSource } from "./seal-guide";
 import { glyphFor } from "./seals";
+import { MATCH_LIMIT } from "./runtime/recognition";
+import { IMAGE_MATCH_LIMIT } from "./runtime/embedding";
+import { TEACH_SAMPLES } from "./runtime/teach";
+import type { Diagnosis } from "./runtime/recognition";
 import "./view.css";
 
 const shortName = (name: string) =>
@@ -16,6 +21,33 @@ const shortName = (name: string) =>
     .replace(/ Technique$/, "")
     .replace(/[—–]/g, "-");
 const pad = (n: number) => String(n).padStart(2, "0");
+const poseIssues = {
+  "no-hands": ["warn", "NO HANDS IN FRAME"],
+  "too-small": ["warn", "HANDS TOO SMALL · MOVE CLOSER"],
+  uncalibrated: ["alert", "NO SEALS CALIBRATED"],
+} as const;
+function describeMatch(
+  match: Diagnosis,
+  name: (id: string) => string,
+  limit: number,
+) {
+  if (match.reason === "hand-count")
+    return [
+      "warn",
+      `TRACKING ${match.hands} HAND${match.hands === 1 ? "" : "S"} · NO SAMPLES LIKE THIS · RECALIBRATE`,
+    ];
+  if (!("best" in match)) return poseIssues[match.reason];
+  const best = name(match.best).toUpperCase();
+  const distance = match.distance.toFixed(2);
+  if (match.reason === "no-match")
+    return ["warn", `NO MATCH · NEAREST ${best} ${distance} > ${limit}`];
+  if (match.reason === "ambiguous")
+    return [
+      "warn",
+      `UNSURE · ${best} OR ${name(match.runnerUp!).toUpperCase()}`,
+    ];
+  return ["ok", `MATCH · ${best} ${distance}`];
+}
 
 export default function AppView({ model }: { model: AppModel }) {
   const sequenceRail = useRef<HTMLOListElement>(null);
@@ -30,6 +62,13 @@ export default function AppView({ model }: { model: AppModel }) {
   const [query, setQuery] = useState("");
   const [family, setFamily] = useState("all");
   const [calibrationSeal, setCalibrationSeal] = useState(model.seals[0].id);
+  // The sequence panel folds to its title bar while the camera is live; the
+  // reticle and sync ratio carry progress. Each camera start folds it again.
+  const [panelOpenLive, setPanelOpenLive] = useState(false);
+  const cameraLive = model.cameraStatus === "live";
+  useEffect(() => {
+    if (cameraLive) setPanelOpenLive(false);
+  }, [cameraLive]);
   const variant = model.selected.variants.find(
     (v) => v.id === model.variantId,
   )!;
@@ -70,11 +109,42 @@ export default function AppView({ model }: { model: AppModel }) {
           : model.cameraStatus === "error"
             ? "CAMERA / ERROR"
             : "CAMERA / STANDBY";
+  const sealName = (id: string) =>
+    model.seals.find((seal) => seal.id === id)?.name ?? id;
+  const calibrated = (id: string) => (model.samples[id] ?? 0) >= TEACH_SAMPLES;
+  const cameraPractice = model.mode === "camera";
+  const sequenceSeals = [...new Set(model.sequence.map((seal) => seal.id))];
+  const calibratedCount = sequenceSeals.filter(calibrated).length;
+  const nextNeedsCalibration =
+    cameraPractice && !!currentSeal && !calibrated(currentSeal.id);
+  const [matchTone, matchText] = describeMatch(
+    model.match,
+    sealName,
+    model.matcher === "image" ? IMAGE_MATCH_LIMIT : MATCH_LIMIT,
+  );
+  const deviceMessage =
+    model.cameraStatus === "error" ||
+    model.trackerStatus === "error" ||
+    model.cameraStatus === "requesting" ||
+    model.trackerStatus === "loading";
+  const openCalibration = () => {
+    if (currentSeal) setCalibrationSeal(currentSeal.id);
+    model.setCalibrationOpen(true);
+    settings.current?.showModal();
+  };
+  const taught =
+    currentSeal && model.teaching?.seal === currentSeal.id
+      ? model.teaching
+      : {
+          count: currentSeal ? (model.samples[currentSeal.id] ?? 0) : 0,
+          hold: 0,
+        };
   const ratio = model.sequence.length
     ? Math.min(model.progress, model.sequence.length) / model.sequence.length
     : 0;
+  const shownRatio = useTween(ratio, model.reducedMotion);
   const syncValue = model.sequence.length
-    ? (ratio * 100).toFixed(1).padStart(5, "0")
+    ? (shownRatio * 100).toFixed(1).padStart(5, "0")
     : "---.-";
   const feedJp =
     model.mode === "demo"
@@ -97,7 +167,7 @@ export default function AppView({ model }: { model: AppModel }) {
     <main
       id="main"
       tabIndex={-1}
-      className={`ninja-screen ${model.cameraStatus === "live" ? "camera-live" : ""}`}
+      className={`ninja-screen ${model.cameraStatus === "live" ? "camera-live" : ""} ${nextNeedsCalibration && !deviceMessage ? "needs-calibration" : ""}`}
       data-reduced-motion={model.reducedMotion}
     >
       <div
@@ -174,7 +244,11 @@ export default function AppView({ model }: { model: AppModel }) {
             <span className="sync-label">
               <b lang="ja">同調率</b>SYNC RATIO
             </span>
-            <SevenSegment value={syncValue} label="Sync ratio" />
+            <SevenSegment
+              key={model.progress}
+              value={syncValue}
+              label="Sync ratio"
+            />
             <span className="sync-unit">%</span>
           </div>
           <p className="sync-lines">
@@ -250,29 +324,68 @@ export default function AppView({ model }: { model: AppModel }) {
       </div>
       <div className="camera-readout">
         <span className="mobile-feed">{feedLabel}</span>
-        <span>
+        <span className="tag-tracker">
           {model.mode === "demo"
             ? "MANUAL REHEARSAL"
             : `TRACKER: ${model.trackerStatus.toUpperCase()}`}
         </span>
-        {model.mode === "camera" && (
-          <span>
-            {model.handsDetected}/2 HANDS
-            {model.detectedSeal ? ` · ${model.detectedSeal}` : ""}
+        {cameraPractice && model.sequence.length > 0 && (
+          <span
+            className={
+              calibratedCount === sequenceSeals.length ? "tag-ok" : "tag-alert"
+            }
+          >
+            CALIBRATED {calibratedCount}/{sequenceSeals.length} SEALS
+          </span>
+        )}
+        {cameraPractice && ready && model.matcher === "image" && (
+          <span className="tag-warn">
+            IMAGE MATCHER · CROP {(model.crop ?? "center").toUpperCase()}
+          </span>
+        )}
+        {cameraPractice && ready && (
+          <span className={`tag-${matchTone}`}>
+            {model.handsDetected}/2 HANDS · {matchText}
           </span>
         )}
         {model.faceStatus === "loading" && <span>Loading face effects…</span>}
         {model.faceStatus === "error" && (
           <span>Face effects unavailable. Restart camera to retry.</span>
         )}
-        <span>
+        <span className={model.activeEffect ? "" : "tag-standby"}>
           {model.activeEffect ? "VISUAL SIMULATION ACTIVE" : "EFFECT STANDBY"}
         </span>
       </div>
-      {(model.cameraStatus === "error" ||
-        model.trackerStatus === "error" ||
-        model.cameraStatus === "requesting" ||
-        model.trackerStatus === "loading") && (
+      {nextNeedsCalibration && !deviceMessage && (
+        <div className="calibration-alert teaching-panel" role="status">
+          <span className="hazard" aria-hidden="true" />
+          <p>
+            <b>
+              <span lang="ja">教習</span> Teaching {currentSeal.name}
+            </b>
+            {!ready
+              ? "Start the camera to teach this seal hands-free."
+              : model.teaching?.waiting ||
+                  (model.teaching && model.teaching.seal !== currentSeal.id)
+                ? `Now switch to the ${currentSeal.name} seal.`
+                : "Make the seal and hold still. Samples are captured automatically, then practice carries on."}
+          </p>
+          <div className="teach-meter" aria-hidden="true">
+            <span className="teach-count">
+              {taught.count}/{TEACH_SAMPLES}
+            </span>
+            <span className="teach-pips">
+              {Array.from({ length: TEACH_SAMPLES }, (_, i) => (
+                <i key={i} className={i < taught.count ? "on" : ""} />
+              ))}
+            </span>
+            <span className="teach-hold">
+              <i style={{ width: `${taught.hold * 100}%` }} />
+            </span>
+          </div>
+        </div>
+      )}
+      {deviceMessage && (
         <div
           className="device-message"
           role={
@@ -293,6 +406,17 @@ export default function AppView({ model }: { model: AppModel }) {
       <FloatingPanel
         title="HAND SEQUENCE"
         jp="印契配列"
+        collapsed={cameraLive && !panelOpenLive}
+        onToggle={
+          cameraLive ? () => setPanelOpenLive((open) => !open) : undefined
+        }
+        summary={
+          !model.sequence.length
+            ? "PREVIEW ONLY"
+            : completed
+              ? `${model.sequence.length}/${model.sequence.length} · COMPLETE`
+              : `${model.progress}/${model.sequence.length} · NEXT ${currentSeal.name.toUpperCase()}`
+        }
         footer={
           currentSeal?.sourceUrl ? (
             <>
@@ -336,7 +460,7 @@ export default function AppView({ model }: { model: AppModel }) {
                 <li key={`${index}-${seal.id}`}>
                   <button
                     onClick={() => model.inputSeal(seal.id)}
-                    className={`seal-step ${index < model.progress ? "complete" : ""} ${index === model.progress ? "current" : ""}`}
+                    className={`seal-step ${index < model.progress ? "complete" : ""} ${index === model.progress ? "current" : ""} ${cameraPractice ? (calibrated(seal.id) ? "cal-ok" : "cal-missing") : ""}`}
                     aria-current={index === model.progress ? "step" : undefined}
                     aria-label={`Practice step ${index + 1}: ${String(index + 1).padStart(2, "0")} ${glyphFor(seal.id)} ${seal.name}`}
                   >
@@ -532,7 +656,7 @@ export default function AppView({ model }: { model: AppModel }) {
         <button
           className="settings-button"
           aria-label="Calibration"
-          onClick={() => settings.current?.showModal()}
+          onClick={openCalibration}
         >
           <span className="desktop-label">Calibration</span>
           <Icon name="calibrate" className="settings-icon" />
@@ -631,6 +755,7 @@ export default function AppView({ model }: { model: AppModel }) {
         }}
         className="lab-dialog calibration-dialog"
         ref={settings}
+        onClose={() => model.setCalibrationOpen(false)}
         aria-labelledby="calibration-title"
       >
         <header className="dialog-header">
@@ -654,9 +779,10 @@ export default function AppView({ model }: { model: AppModel }) {
           <div className="calibration-instruction">
             <strong>3 seconds to get ready. 3 samples per pose.</strong>
             <p>
-              Choose a seal, press capture, then put both hands back in view.
-              Hold the pose until the countdown finishes. Both hands must be
-              tracked at capture.
+              Choose a seal, press capture, then make the seal in view. Hold it
+              until the countdown finishes. Clasped hands often track as one
+              hand, and hidden fingers are estimated. That is fine: hold the
+              seal the same way when you practise and it will match.
             </p>
           </div>
           {model.cameraStatus !== "live" && (

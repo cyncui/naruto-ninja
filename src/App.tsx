@@ -3,12 +3,24 @@ import AppView from "./AppView";
 import { catalogue } from "../docs/data/catalogue";
 import type { AppModel, TechniqueOption } from "./app-model";
 import {
-  classify,
+  diagnose,
   features,
+  MATCH_LIMIT,
   readTemplates,
+  sameDiagnosis,
   STORAGE_KEY,
 } from "./runtime/recognition";
-import type { Templates } from "./runtime/recognition";
+import type { Diagnosis, Templates } from "./runtime/recognition";
+import { rms, SteadyCapture, TEACH_SAMPLES } from "./runtime/teach";
+import {
+  compactEmbedding,
+  cosineDistance,
+  diagnoseEmbedding,
+  IMAGE_MATCH_LIMIT,
+  IMAGE_STORAGE_KEY,
+  readEmbeddings,
+} from "./runtime/embedding";
+import type { CropSource } from "./runtime/crop";
 import { advanceSequence, StableSeal } from "./runtime/sequence";
 import { useCamera } from "./runtime/useCamera";
 import type { TrackingFrame } from "./runtime/useCamera";
@@ -54,9 +66,30 @@ const techniques: TechniqueOption[] = catalogue.techniques.map((technique) => ({
 const initialTechnique = techniques.find(
   (t) => t.id === "fire-great-fireball",
 )!;
-function loadCalibration() {
+const MATCHER_KEY = "naruto-ninja.matcher";
+type Matcher = "landmarks" | "image";
+// Experimental: ?matcher=image switches to the image-embedding matcher and is
+// remembered; ?matcher=landmarks switches back.
+function readMatcher(): Matcher {
   try {
-    return readTemplates(localStorage.getItem(STORAGE_KEY), staticSeals);
+    const param = new URLSearchParams(location.search).get("matcher");
+    if (param === "image" || param === "landmarks")
+      localStorage.setItem(MATCHER_KEY, param);
+    return localStorage.getItem(MATCHER_KEY) === "image"
+      ? "image"
+      : "landmarks";
+  } catch {
+    return "landmarks";
+  }
+}
+const calibrationKey = (matcher: Matcher) =>
+  matcher === "image" ? IMAGE_STORAGE_KEY : STORAGE_KEY;
+function loadCalibration(matcher: Matcher) {
+  try {
+    const raw = localStorage.getItem(calibrationKey(matcher));
+    return matcher === "image"
+      ? readEmbeddings(raw, staticSeals)
+      : readTemplates(raw, staticSeals);
   } catch {
     return {};
   }
@@ -76,11 +109,35 @@ export default function App() {
   const [status, setStatus] = useState(
     "Untimed rehearsal. Tap the numbered seals in order.",
   );
-  const [templates, setTemplates] = useState<Templates>(loadCalibration);
+  const [matcher] = useState(readMatcher);
+  const [templates, setTemplates] = useState<Templates>(() =>
+    loadCalibration(matcher),
+  );
+  const [crop, setCrop] = useState<CropSource | undefined>();
+  const [teaching, setTeaching] = useState<{
+    seal: string;
+    count: number;
+    hold: number;
+    waiting: boolean;
+  } | null>(null);
+  // Frame-to-frame steadiness thresholds are starting guesses, not measured.
+  const steady = useRef(
+    matcher === "image"
+      ? new SteadyCapture(0.06, cosineDistance)
+      : new SteadyCapture(0.08, rms),
+  );
+  const teachingRef = useRef(false);
+  // The pose of the step just accepted. Teaching the next seal waits until the
+  // hands move away from it, so a lingering seal is not saved as the next one.
+  const releaseFrom = useRef<number[] | null>(null);
+  const poseDistance = matcher === "image" ? cosineDistance : rms;
+  const releaseLimit = matcher === "image" ? IMAGE_MATCH_LIMIT : MATCH_LIMIT;
+  const calibrationOpen = useRef(false);
   const templatesRef = useRef(templates);
   templatesRef.current = templates;
   const [handsDetected, setHandsDetected] = useState(0);
   const [detectedSeal, setDetectedSeal] = useState<string | null>(null);
+  const [match, setMatch] = useState<Diagnosis>({ reason: "no-hands" });
   const videoRef = useRef<HTMLVideoElement>(null);
   const tracking = useRef<TrackingFrame>({ hands: [], face: [], aspect: 1 });
   const frameAt = useRef(0);
@@ -96,7 +153,10 @@ export default function App() {
   );
   const capturing = useRef(false);
   const inputRef = useRef<(id: string) => void>(() => {});
+  const teachRef = useRef<(id: string, sample: number[]) => void>(() => {});
   const variant = selected.variants.find((v) => v.id === variantId)!;
+  const practice = useRef({ steps: [] as string[], mode });
+  practice.current = { steps: variant.steps ?? [], mode };
   const sequence = (variant.steps ?? []).map(
     (id) => seals.find((seal) => seal.id === id)!,
   );
@@ -146,7 +206,12 @@ export default function App() {
             : ""),
       );
       if (next.progress && mode === "camera")
-        sequenceTimer.current = setTimeout(() => {
+        sequenceTimer.current = setTimeout(function expire() {
+          // Teaching a seal or calibrating is not a pause in practice.
+          if (teachingRef.current || calibrationOpen.current) {
+            sequenceTimer.current = setTimeout(expire, 8000);
+            return;
+          }
           progressRef.current = 0;
           setProgress(0);
           stable.current = new StableSeal();
@@ -155,20 +220,73 @@ export default function App() {
     }
   };
   inputRef.current = inputSeal;
-  const onFrame = useCallback((frame: TrackingFrame) => {
-    tracking.current = frame;
-    frameAt.current = performance.now();
-    setHandsDetected(frame.hands.length);
-    const label = classify(
-      features(frame.hands, frame.aspect),
-      templatesRef.current,
-    );
-    setDetectedSeal(
-      label ? (seals.find((seal) => seal.id === label)?.name ?? label) : null,
-    );
-    const accepted = stable.current.update(label, performance.now());
-    if (accepted && !capturing.current) inputRef.current(accepted);
-  }, []);
+  const onFrame = useCallback(
+    (frame: TrackingFrame) => {
+      tracking.current = frame;
+      frameAt.current = performance.now();
+      setHandsDetected(frame.hands.length);
+      setCrop(frame.crop);
+      const diagnosis =
+        matcher === "image"
+          ? diagnoseEmbedding(frame.embedding, templatesRef.current)
+          : diagnose(frame.hands, frame.aspect, templatesRef.current);
+      setMatch((previous) =>
+        sameDiagnosis(previous, diagnosis) ? previous : diagnosis,
+      );
+      const label = diagnosis.reason === "match" ? diagnosis.best : null;
+      setDetectedSeal(
+        label ? (seals.find((seal) => seal.id === label)?.name ?? label) : null,
+      );
+      const now = performance.now();
+      const { steps, mode } = practice.current;
+      const next = steps[progressRef.current % Math.max(1, steps.length)];
+      const known = next ? (templatesRef.current[next]?.length ?? 0) : 0;
+      teachingRef.current =
+        mode === "camera" &&
+        !!next &&
+        staticSeals.has(next) &&
+        known < TEACH_SAMPLES &&
+        !capturing.current &&
+        !calibrationOpen.current;
+      const vector =
+        matcher === "image"
+          ? frame.embedding
+          : features(frame.hands, frame.aspect);
+      const previousPose = releaseFrom.current;
+      if (
+        !vector ||
+        !previousPose ||
+        vector.length !== previousPose.length ||
+        poseDistance(vector, previousPose) > releaseLimit
+      )
+        releaseFrom.current = null;
+      if (teachingRef.current) {
+        const waiting = releaseFrom.current !== null;
+        const { hold, sample } = waiting
+          ? (steady.current.reset(), { hold: 0, sample: null })
+          : steady.current.update(vector, now);
+        const shown = Math.round(hold * 10) / 10;
+        setTeaching((previous) =>
+          previous?.seal === next &&
+          previous.count === known &&
+          previous.hold === shown &&
+          previous.waiting === waiting
+            ? previous
+            : { seal: next, count: known, hold: shown, waiting },
+        );
+        if (sample) teachRef.current(next, sample);
+        return;
+      }
+      steady.current.reset();
+      setTeaching(null);
+      const accepted = stable.current.update(label, now);
+      if (accepted && !capturing.current) {
+        releaseFrom.current = vector ?? null;
+        inputRef.current(accepted);
+      }
+    },
+    [matcher],
+  );
   const camera = useCamera(
     videoRef,
     onFrame,
@@ -176,6 +294,7 @@ export default function App() {
       (effect.type === "eyes" ||
         effect.type === "pale-eyes" ||
         effect.type === "markings"),
+    matcher === "image",
   );
 
   useEffect(
@@ -194,9 +313,10 @@ export default function App() {
   }, []);
 
   const saveTemplates = (next: Templates) => {
+    templatesRef.current = next;
     setTemplates(next);
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      localStorage.setItem(calibrationKey(matcher), JSON.stringify(next));
       return true;
     } catch {
       setStatus(
@@ -204,6 +324,26 @@ export default function App() {
       );
       return false;
     }
+  };
+  teachRef.current = (id, sample) => {
+    const name = seals.find((s) => s.id === id)?.name ?? id;
+    const stored = matcher === "image" ? compactEmbedding(sample) : sample;
+    const next = {
+      ...templatesRef.current,
+      [id]: [...(templatesRef.current[id] ?? []), stored].slice(-12),
+    };
+    saveTemplates(next);
+    if (next[id].length < TEACH_SAMPLES) {
+      setStatus(
+        `Learning ${name}: ${next[id].length} of ${TEACH_SAMPLES} samples. Keep holding.`,
+      );
+      return;
+    }
+    // The pose being held is the seal just taught: accept the step and keep
+    // the matcher from firing it again until the hands release.
+    stable.current.hold(id, performance.now());
+    releaseFrom.current = sample;
+    inputRef.current(id);
   };
   const calibrate = (id: string) => {
     if (capturing.current) return;
@@ -220,7 +360,7 @@ export default function App() {
     capturing.current = true;
     let seconds = 3;
     setStatus(
-      `Capturing ${seals.find((s) => s.id === id)?.name} in ${seconds}… Hold both hands in frame.`,
+      `Capturing ${seals.find((s) => s.id === id)?.name} in ${seconds}… Hold the seal in frame.`,
     );
     captureTimer.current = setInterval(() => {
       seconds--;
@@ -230,13 +370,20 @@ export default function App() {
       }
       clearInterval(captureTimer.current);
       capturing.current = false;
-      const vector =
-        performance.now() - frameAt.current < 500
-          ? features(tracking.current.hands, tracking.current.aspect)
-          : null;
+      const frame = tracking.current;
+      const fresh = performance.now() - frameAt.current < 500;
+      const vector = !fresh
+        ? null
+        : matcher === "image"
+          ? frame.embedding?.length
+            ? compactEmbedding(frame.embedding)
+            : null
+          : features(frame.hands, frame.aspect);
       if (!vector) {
         setStatus(
-          "Could not see both hands clearly. Separate them slightly and capture again.",
+          matcher === "image" && fresh
+            ? "The image matcher is still loading. Capture again in a moment."
+            : "Could not see your hands. Keep the seal in frame and capture again.",
         );
         return;
       }
@@ -246,7 +393,7 @@ export default function App() {
       };
       if (saveTemplates(next))
         setStatus(
-          `Saved ${next[id].length} sample${next[id].length === 1 ? "" : "s"} for ${seals.find((s) => s.id === id)?.name}. Capture at least 3 with small pose variations.`,
+          `Saved ${next[id].length} sample${next[id].length === 1 ? "" : "s"} for ${seals.find((s) => s.id === id)?.name} (${matcher === "image" ? `image crop: ${frame.crop ?? "center"}` : `tracked as ${vector.length === 42 ? "1 hand" : "2 hands"}`}). Capture at least 3 with small pose variations.`,
         );
       stable.current = new StableSeal();
     }, 1000);
@@ -279,6 +426,13 @@ export default function App() {
     handsDetected,
     faceStatus: camera.faceStatus,
     detectedSeal,
+    match,
+    matcher,
+    crop,
+    teaching,
+    setCalibrationOpen: (open: boolean) => {
+      calibrationOpen.current = open;
+    },
     samples: Object.fromEntries(
       Object.entries(templates).map(([id, examples]) => [id, examples.length]),
     ),

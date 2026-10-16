@@ -11,8 +11,8 @@ export const site = {
     },
     {
       title: "Teach your hands.",
-      body: "Start the camera, wait for the tracker to become ready, then open Calibration. Choose a seal and capture at least three examples with small pose variations. Keep both hands visible. The capture timer gives you three seconds to get into position.",
-      note: "Recognition is an experimental nearest-example prototype. Interlocked fingers, motion gestures and one-handed signs are not solved. Tracking your hands does not automatically identify a Naruto sign.",
+      body: "Switch to Camera mode, start the camera and practise as usual. When the next seal has not been taught yet, practice pauses on it: make the seal and hold still, and three samples are captured automatically before the step is accepted. Then switch to the next seal; teaching waits until your hands change pose. Calibration is still there to re-teach a seal or clear your samples, and opening it never resets your progress.",
+      note: "Recognition is an experimental nearest-example prototype. Interlocked fingers are estimated rather than seen, so similar seals can be confused; motion gestures are not solved. Tracking your hands does not automatically identify a Naruto sign.",
     },
     {
       title: "Know what you’re seeing.",
