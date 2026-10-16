@@ -59,4 +59,4 @@ Reusable browser checks: [verification skill](.agents/skills/verify-naruto-ninja
 
 Set `VITE_SITE_URL` to the actual HTTPS origin when building, then deploy `dist/` to a static host. The build adds canonical links, robots and a sitemap using that origin. Configure the host to serve `404.html` with a 404 status for missing routes; `/guide/index.html` is a real prerendered page. Avoid a blanket SPA fallback that turns missing URLs into 200 responses.
 
-`npm run preview -- --port 4400` serves the production build locally with those route/status rules. No public hostname is assumed or deployment performed by the design pass. The self-hosted Barlow Condensed and Manrope fonts are licensed under the SIL Open Font License.
+`npm run preview -- --port 4400` serves the production build locally with those route/status rules. No public hostname is assumed or deployment performed by the design pass. The self-hosted Barlow Condensed, Share Tech Mono and Shippori Mincho B1 fonts are licensed under the SIL Open Font License. Run `node scripts/subset-jp-font.mjs` after adding Japanese copy to refresh the Mincho subset.

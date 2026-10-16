@@ -1,21 +1,9 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import type { AppModel } from "./app-model";
+import { glyphFor } from "./seals";
 
-const glyphs: Record<string, string> = {
-  rat: "子",
-  ox: "丑",
-  tiger: "寅",
-  hare: "卯",
-  dragon: "辰",
-  snake: "巳",
-  horse: "午",
-  ram: "未",
-  monkey: "申",
-  bird: "酉",
-  dog: "戌",
-  boar: "亥",
-};
+const cross = [0, 90, 180, 270];
 
 export default function TrainingSeal({ model }: { model: AppModel }) {
   const root = useRef<HTMLDivElement>(null);
@@ -51,7 +39,7 @@ export default function TrainingSeal({ model }: { model: AppModel }) {
     ? model.sequence
     : [{ id: "seal", name: "Preview" }];
   const compact = steps.length > 16;
-  const markerRadius = Math.min(18, 520 / steps.length);
+  const markerRadius = Math.min(17, 500 / steps.length);
   return (
     <div
       className={`training-seal ${model.activeEffect ? "charged" : ""}`}
@@ -60,6 +48,13 @@ export default function TrainingSeal({ model }: { model: AppModel }) {
       aria-hidden="true"
     >
       <svg viewBox="0 0 400 400" fill="none">
+        <circle
+          className="seal-ticks"
+          cx="200"
+          cy="200"
+          r="199"
+          pathLength="360"
+        />
         <circle className="seal-track" cx="200" cy="200" r="188" />
         <circle
           className="seal-progress"
@@ -70,12 +65,28 @@ export default function TrainingSeal({ model }: { model: AppModel }) {
           strokeDasharray={`${model.sequence.length ? (model.progress / model.sequence.length) * 100 : 0} 100`}
           transform="rotate(-90 200 200)"
         />
-        <circle className="seal-inner" cx="200" cy="200" r="145" />
+        <circle className="seal-inner" cx="200" cy="200" r="150" />
+        {cross.map((turn) => (
+          <line
+            key={turn}
+            className="seal-cross"
+            x1="200"
+            y1="38"
+            x2="200"
+            y2="58"
+            transform={`rotate(${turn} 200 200)`}
+          />
+        ))}
         <g className="seal-orbit">
           {steps.map((seal, index) => {
             const angle = (index / steps.length) * Math.PI * 2 - Math.PI / 2;
             const x = 200 + Math.cos(angle) * 188;
             const y = 200 + Math.sin(angle) * 188;
+            const r = compact
+              ? index === model.progress
+                ? 17
+                : 3
+              : markerRadius;
             return (
               <g
                 key={`${index}-${seal.id}`}
@@ -87,13 +98,7 @@ export default function TrainingSeal({ model }: { model: AppModel }) {
                       : ""
                 }
               >
-                <circle
-                  cx={x}
-                  cy={y}
-                  r={
-                    compact ? (index === model.progress ? 18 : 3) : markerRadius
-                  }
-                />
+                <rect x={x - r} y={y - r} width={r * 2} height={r * 2} />
                 {(!compact || index === model.progress) && (
                   <text
                     x={x}
@@ -101,10 +106,12 @@ export default function TrainingSeal({ model }: { model: AppModel }) {
                     textAnchor="middle"
                     dominantBaseline="middle"
                     style={{
-                      fontSize: compact ? 20 : Math.min(20, markerRadius * 1.1),
+                      fontSize: compact
+                        ? 20
+                        : Math.min(20, markerRadius * 1.15),
                     }}
                   >
-                    {glyphs[seal.id] ?? "印"}
+                    {glyphFor(seal.id)}
                   </text>
                 )}
               </g>
@@ -113,7 +120,7 @@ export default function TrainingSeal({ model }: { model: AppModel }) {
         </g>
       </svg>
       <span className="seal-caption">
-        Original practice figure · not a pose reference
+        TARGET · original practice figure, not a pose reference
       </span>
     </div>
   );

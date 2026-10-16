@@ -29,7 +29,12 @@ function constrain(box: Box): Box {
   };
 }
 function initial(): Box {
-  const { width, height } = constrain({ x: 12, y: 64, width: 480, height: 320 });
+  const { width, height } = constrain({
+    x: 12,
+    y: 64,
+    width: 480,
+    height: 320,
+  });
   return constrain({
     x: innerWidth - width - 24,
     y: innerHeight - height - 86,
@@ -52,10 +57,12 @@ function load(): Box {
 }
 export default function FloatingPanel({
   title,
+  jp,
   children,
   footer,
 }: {
   title: string;
+  jp?: string;
   children: ReactNode;
   footer?: ReactNode;
 }) {
@@ -139,7 +146,13 @@ export default function FloatingPanel({
           }}
           onKeyDown={(e) => keyboard(e, "move")}
         >
-          <span aria-hidden="true">⠿</span> {title}
+          <span className="panel-grip" aria-hidden="true" />
+          {jp && (
+            <span className="panel-jp" aria-hidden="true">
+              {jp}
+            </span>
+          )}
+          {title}
         </button>
         <button
           className="panel-reset"
@@ -168,7 +181,7 @@ export default function FloatingPanel({
         }}
         onKeyDown={(e) => keyboard(e, "resize")}
       >
-        <span aria-hidden="true">◢</span>
+        <span aria-hidden="true" />
       </button>
     </section>
   );
