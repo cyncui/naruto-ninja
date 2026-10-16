@@ -2,8 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import type { AppModel } from "./app-model";
 import FloatingPanel from "./FloatingPanel";
+import Icon from "./Icon";
+import Scramble from "./Scramble";
 import SevenSegment from "./SevenSegment";
 import TrainingSeal from "./TrainingSeal";
+import { sealGuides, sealGuideSource } from "./seal-guide";
 import { glyphFor } from "./seals";
 import "./view.css";
 
@@ -231,7 +234,7 @@ export default function AppView({ model }: { model: AppModel }) {
           <span className="jp" aria-hidden="true">
             手引
           </span>
-          Field guide <span aria-hidden="true">↗</span>
+          <Scramble text="Field guide" /> <Icon name="arrow" />
         </a>
         <span className="internal-plate">
           <b lang="ja">内部</b>
@@ -298,7 +301,7 @@ export default function AppView({ model }: { model: AppModel }) {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Seal reference ↗
+                <Scramble text="Seal reference" /> <Icon name="arrow" />
               </a>
               <span>Secondary source</span>
             </>
@@ -324,7 +327,7 @@ export default function AppView({ model }: { model: AppModel }) {
               aria-label="Change technique"
               title="Change technique"
             >
-              ↗
+              <Icon name="arrow" />
             </button>
           </div>
           {model.sequence.length ? (
@@ -338,9 +341,11 @@ export default function AppView({ model }: { model: AppModel }) {
                     aria-label={`Practice step ${index + 1}: ${String(index + 1).padStart(2, "0")} ${glyphFor(seal.id)} ${seal.name}`}
                   >
                     <span aria-hidden="true">
-                      {index < model.progress
-                        ? "✓"
-                        : String(index + 1).padStart(2, "0")}
+                      {index < model.progress ? (
+                        <Icon name="check" />
+                      ) : (
+                        String(index + 1).padStart(2, "0")
+                      )}
                     </span>
                     <b className="seal-glyph" aria-hidden="true">
                       {glyphFor(seal.id)}
@@ -378,16 +383,27 @@ export default function AppView({ model }: { model: AppModel }) {
                     className={`rail-hint ${model.sequence.length > 6 ? "rail-hint-long" : ""}`}
                   >
                     {" "}
-                    · Scroll signs ↔
+                    · Scroll signs <Icon name="scroll" />
                   </span>
                 )}
               </span>
             </div>
-            <button onClick={model.resetSequence}>↺ Reset</button>
+            <button onClick={model.resetSequence}>
+              <Icon name="reset" /> Reset
+            </button>
           </div>
           <p className="runtime-status" role="status">
             {model.status}
           </p>
+          {currentSeal && sealGuides[currentSeal.id] && (
+            <p className="seal-howto">
+              <b>
+                <span lang="ja">{glyphFor(currentSeal.id)}</span> How to:{" "}
+                {currentSeal.name}
+              </b>
+              {sealGuides[currentSeal.id].how}
+            </p>
+          )}
           <details
             className="source-notes"
             onToggle={(event) => {
@@ -403,7 +419,7 @@ export default function AppView({ model }: { model: AppModel }) {
                 {model.selected.variants.length > 1
                   ? `${model.selected.variants.length} variants · `
                   : ""}
-                <span aria-hidden="true">+</span>
+                <Icon name="plus" className="toggle-icon" />
               </span>
             </summary>
             <div>
@@ -435,7 +451,7 @@ export default function AppView({ model }: { model: AppModel }) {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    View reference ↗
+                    <Scramble text="View reference" /> <Icon name="arrow" />
                   </a>
                 )}
               </p>
@@ -448,12 +464,24 @@ export default function AppView({ model }: { model: AppModel }) {
                 practice.
               </p>
               <p>
-                Zodiac characters are seal labels, not hand-position diagrams.
+                Seal diagrams are simplified schematics from your point of view,
+                paraphrased from the{" "}
+                <a
+                  href={sealGuideSource}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Scramble text="databook seal chart" /> <Icon name="arrow" />
+                </a>
+                . Zodiac characters are labels only.
               </p>
             </div>
           </details>
           <details className="free-practice">
-            <summary>Free seal practice</summary>
+            <summary>
+              <Icon name="plus" className="toggle-icon" />
+              Free seal practice
+            </summary>
             <div className="seal-keyboard">
               {model.seals.map((seal) => (
                 <button key={seal.id} onClick={() => model.inputSeal(seal.id)}>
@@ -487,9 +515,7 @@ export default function AppView({ model }: { model: AppModel }) {
               : model.startCamera
           }
         >
-          <span aria-hidden="true">
-            {model.cameraStatus === "live" ? "■" : "●"}
-          </span>{" "}
+          <Icon name={model.cameraStatus === "live" ? "stop" : "record"} />{" "}
           {cameraLabel}
         </button>
         <span className="dock-divider" />
@@ -497,11 +523,11 @@ export default function AppView({ model }: { model: AppModel }) {
           className="catalogue-button"
           onClick={() => catalogue.current?.showModal()}
         >
-          <span aria-hidden="true">▤</span> Techniques
+          <Icon name="library" /> Techniques
         </button>
         <button className="preview-button" onClick={model.previewEffect}>
           Preview<span className="desktop-label"> effect</span>{" "}
-          <span aria-hidden="true">↗</span>
+          <Icon name="arrow" />
         </button>
         <button
           className="settings-button"
@@ -509,9 +535,7 @@ export default function AppView({ model }: { model: AppModel }) {
           onClick={() => settings.current?.showModal()}
         >
           <span className="desktop-label">Calibration</span>
-          <span className="settings-icon" aria-hidden="true">
-            ☷
-          </span>
+          <Icon name="calibrate" className="settings-icon" />
         </button>
       </nav>
       <dialog
@@ -534,7 +558,7 @@ export default function AppView({ model }: { model: AppModel }) {
             aria-label="Close technique catalogue"
             onClick={() => catalogue.current?.close()}
           >
-            ×
+            <Icon name="close" />
           </button>
         </header>
         <div className="dialog-content">
@@ -587,9 +611,9 @@ export default function AppView({ model }: { model: AppModel }) {
                     {t.nature.length ? ` / ${t.nature.join(" + ")}` : ""}
                   </small>
                 </span>
-                <span aria-hidden="true">
-                  {t.id === model.selected.id ? "●" : "↗"}
-                </span>
+                <Icon
+                  name={t.id === model.selected.id ? "selected" : "arrow"}
+                />
               </button>
             ))}
             {!choices.length && (
@@ -618,7 +642,7 @@ export default function AppView({ model }: { model: AppModel }) {
             aria-label="Close calibration and settings"
             onClick={() => settings.current?.close()}
           >
-            ×
+            <Icon name="close" />
           </button>
         </header>
         <div className="dialog-content">
@@ -673,7 +697,7 @@ export default function AppView({ model }: { model: AppModel }) {
                 model.calibrate(calibrationSeal);
               }}
             >
-              Capture in 3 seconds ↗
+              Capture in 3 seconds <Icon name="arrow" />
             </button>
             <span>{totalSamples} examples saved</span>
           </div>

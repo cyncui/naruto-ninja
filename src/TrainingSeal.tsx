@@ -1,6 +1,8 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import type { AppModel } from "./app-model";
+import SealDiagram, { labelTop, layoutCallouts } from "./SealDiagram";
+import { sealGuides } from "./seal-guide";
 import { glyphFor } from "./seals";
 
 const cross = [0, 90, 180, 270];
@@ -40,6 +42,9 @@ export default function TrainingSeal({ model }: { model: AppModel }) {
     : [{ id: "seal", name: "Preview" }];
   const compact = steps.length > 16;
   const markerRadius = Math.min(17, 500 / steps.length);
+  const current = model.sequence[model.progress];
+  const guide =
+    !model.activeEffect && current ? sealGuides[current.id] : undefined;
   return (
     <div
       className={`training-seal ${model.activeEffect ? "charged" : ""}`}
@@ -118,9 +123,21 @@ export default function TrainingSeal({ model }: { model: AppModel }) {
             );
           })}
         </g>
+        {guide && <SealDiagram guide={guide} />}
       </svg>
+      {(guide ? layoutCallouts(guide) : []).map((callout, i) => (
+        <span
+          key={`${current.id}-${i}`}
+          className={`callout-label callout-${callout.side}`}
+          style={{ top: labelTop(callout.labelY) }}
+        >
+          {callout.text}
+        </span>
+      ))}
       <span className="seal-caption">
-        TARGET · original practice figure, not a pose reference
+        {guide
+          ? `${glyphFor(current.id)} ${current.name} · your view · simplified diagram`
+          : "TARGET · original practice figure, not a pose reference"}
       </span>
     </div>
   );

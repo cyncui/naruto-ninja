@@ -1,4 +1,6 @@
 import { site } from "./data/site";
+import Icon from "./Icon";
+import Scramble from "./Scramble";
 import "./view.css";
 import "./guide.css";
 
@@ -21,9 +23,11 @@ export default function FieldGuide({ missing = false }: { missing?: boolean }) {
         </a>
         <span className="hazard guide-hazard" aria-hidden="true" />
         <nav aria-label="Main navigation">
-          <a href="/">Training room</a>
+          <a href="/">
+            <Scramble text="Training room" />
+          </a>
           <a href="/guide" aria-current={missing ? undefined : "page"}>
-            Field guide
+            <Scramble text="Field guide" />
           </a>
         </nav>
       </header>
@@ -110,8 +114,10 @@ export default function FieldGuide({ missing = false }: { missing?: boolean }) {
         )}
         <footer className="guide-footer">
           <a className="guide-cta" href="/">
-            {missing ? "Return to practice" : "Enter the training room"}
-            <span aria-hidden="true">↗</span>
+            <Scramble
+              text={missing ? "Return to practice" : "Enter the training room"}
+            />
+            <Icon name="arrow" />
           </a>
           <p>
             Fan-made, experimental, and here for practice.

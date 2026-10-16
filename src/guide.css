@@ -252,10 +252,6 @@ body:has(.guide-page) {
   .guide-cta:hover span {
     translate: 6px -6px;
   }
-  .guide-cta:hover {
-    text-decoration: underline;
-    text-underline-offset: 8px;
-  }
 }
 @media (max-width: 860px) {
   .guide-hazard {

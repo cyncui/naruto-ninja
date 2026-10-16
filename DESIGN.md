@@ -26,6 +26,16 @@ Texture: the viewfinder overlay carries a 96px green crosshair grid, a vertical 
 
 Motion: GSAP ticker is the sole illustration and ring clock. The reticle markers ease with power3.out between steps. The live camera pilot light blinks in steps. Buttons swap fill in 120ms with no lift. Reduced motion holds everything still, including the blink.
 
+## Seal diagrams
+
+While a sequence is in progress, the reticle shows a schematic of the next seal instead of the practice figure (`src/SealDiagram.tsx`, data in `src/seal-guide.ts`). Hands are built from parts: a chamfered palm, four fingers that are either extended or curled, and a thumb in one of six positions. Each hand gets a green L/R tag and is drawn from the performer's point of view. Fingers that matter are filled amber. Green leader lines run to callout labels outside the reticle on desktop. The panel carries a written "How to" line at every size. Every composition is auto-fitted to the reticle. The practice figure returns only when a technique casts or a step has no diagram.
+
+Guidance is paraphrased from the twelve-seal databook chart reproduced on Narutopedia's Hand Seal page and linked from Source & notes. The schematics are simplified; they are not traced artwork, and catalogue `geometryStatus` stays `reference_required` because they are not classifier geometry.
+
+## Icons
+
+`src/Icon.tsx` replaces every Unicode arrow, check and box glyph with stroked glyphs on a 16-unit grid: square caps, mitred joins, and chamfered corners where a curve would be. They use `currentColor`. Native select arrows are replaced with the same chevron.
+
 ## Composition
 
 Practice:

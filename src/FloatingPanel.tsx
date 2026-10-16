@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import type { KeyboardEvent, PointerEvent, ReactNode } from "react";
+import Icon from "./Icon";
 import "./panel.css";
 interface Box {
   x: number;
@@ -160,7 +161,7 @@ export default function FloatingPanel({
           title="Reset panel position and size"
           onClick={() => update(initial())}
         >
-          ↺
+          <Icon name="reset" />
         </button>
       </header>
       <div className="floating-panel-content">{children}</div>

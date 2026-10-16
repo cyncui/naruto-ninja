@@ -48,7 +48,7 @@ test("manual practice casts only after the sequence and loads no vision assets",
     "data-progress",
     "1",
   );
-  await page.getByRole("button", { name: "↺ Reset", exact: true }).click();
+  await page.getByRole("button", { name: "Reset", exact: true }).click();
   for (const [index, name] of [
     "Snake",
     "Ram",
@@ -74,7 +74,7 @@ test("manual practice casts only after the sequence and loads no vision assets",
     path: "evidence/app-desktop-cast.png",
     fullPage: true,
   });
-  await page.getByRole("button", { name: "↺ Reset", exact: true }).click();
+  await page.getByRole("button", { name: "Reset", exact: true }).click();
   await expect(page.getByTestId("effect-stage")).toHaveAttribute(
     "data-effect",
     "none",

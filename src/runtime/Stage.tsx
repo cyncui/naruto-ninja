@@ -99,6 +99,7 @@ export default function Stage({
   active,
   effect,
   reducedMotion,
+  figure,
 }: {
   videoRef: RefObject<HTMLVideoElement | null>;
   tracking: RefObject<TrackingFrame>;
@@ -107,6 +108,8 @@ export default function Stage({
   active: boolean;
   effect: Effect;
   reducedMotion: boolean;
+  /** Draw the practice figure when the camera is off. */
+  figure: boolean;
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
@@ -187,7 +190,7 @@ export default function Stage({
         }
         ctx.drawImage(video, offsetX, offsetY, vw, vh);
         ctx.restore();
-      } else {
+      } else if (figure) {
         if (active && effect === "clones") {
           ctx.globalAlpha = 0.25;
           dummy(ctx, demoX - demoScale * 112, demoY, (demoScale * 350) / 420);
@@ -350,7 +353,16 @@ export default function Stage({
     draw(0);
     gsap.ticker.add(draw);
     return () => gsap.ticker.remove(draw);
-  }, [videoRef, tracking, live, mirrored, active, effect, reducedMotion]);
+  }, [
+    videoRef,
+    tracking,
+    live,
+    mirrored,
+    active,
+    effect,
+    reducedMotion,
+    figure,
+  ]);
   return (
     <div
       className="runtime-stage"
