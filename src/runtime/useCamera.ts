@@ -1,16 +1,22 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { RefObject } from "react";
 import type { Point } from "./recognition";
+import { CropMemory } from "./crop";
+import type { CropSource } from "./crop";
 
 export interface TrackingFrame {
   hands: Point[][];
   face: Point[];
   aspect: number;
+  /** Image embedding of the hand crop, when the image matcher is enabled. */
+  embedding?: number[];
+  crop?: CropSource;
 }
 export function useCamera(
   videoRef: RefObject<HTMLVideoElement | null>,
   onFrame: (frame: TrackingFrame) => void,
   withFace: boolean,
+  withEmbedding = false,
 ) {
   const [cameraStatus, setCameraStatus] = useState<
     "idle" | "requesting" | "live" | "error"
@@ -26,6 +32,7 @@ export function useCamera(
     "idle" | "loading" | "ready" | "error"
   >("idle");
   const faceWorker = useRef<Worker | null>(null);
+  const embedWorker = useRef<Worker | null>(null);
   const faceTimeout = useRef<ReturnType<typeof setTimeout> | undefined>(
     undefined,
   );
@@ -36,6 +43,8 @@ export function useCamera(
   callback.current = onFrame;
   const faceEnabled = useRef(withFace);
   faceEnabled.current = withFace;
+  const embeddingEnabled = useRef(withEmbedding);
+  embeddingEnabled.current = withEmbedding;
   const requested = useRef(false);
   const raf = useRef(0);
   const initTimeout = useRef<ReturnType<typeof setTimeout> | undefined>(
@@ -53,6 +62,8 @@ export function useCamera(
     worker.current = null;
     faceWorker.current?.terminate();
     faceWorker.current = null;
+    embedWorker.current?.terminate();
+    embedWorker.current = null;
     clearTimeout(faceTimeout.current);
     setFaceStatus("idle");
     if (videoRef.current) videoRef.current.srcObject = null;
@@ -116,6 +127,12 @@ export function useCamera(
       let faceBusy = false;
       let lastFaceAt = 0;
       let lastFace: Point[] = [];
+      let lastHands: Point[][] = [];
+      let embedReady = false;
+      let embedBusy = false;
+      let lastEmbedAt = 0;
+      let lastEmbedding: { embedding?: number[]; crop?: CropSource } = {};
+      const cropMemory = new CropMemory();
       const base = new URL(import.meta.env.BASE_URL, location.href).href;
       const failTracker = () => {
         if (token !== session.current) return;
@@ -139,16 +156,44 @@ export function useCamera(
           setTrackerMessage("Hand tracking ready · teach your own seals below");
         } else if (data.type === "result") {
           busy = false;
+          lastHands = data.hands;
           callback.current({
             hands: data.hands,
             face: faceEnabled.current ? lastFace : [],
             aspect: video.videoWidth / video.videoHeight,
+            ...lastEmbedding,
           });
         } else if (data.type === "error" || data.type === "frame-error")
           failTracker();
       };
       tracker.postMessage({ type: "init", base });
       initTimeout.current = setTimeout(failTracker, 45000);
+      if (embeddingEnabled.current) {
+        const embedder = new Worker(
+          new URL("./vision.worker.ts", import.meta.url),
+          { type: "module" },
+        );
+        embedWorker.current = embedder;
+        // The image matcher is optional: if it fails, landmark tracking and
+        // manual practice carry on and frames simply have no embedding.
+        const failEmbed = () => {
+          embedReady = false;
+          lastEmbedding = {};
+          embedder.terminate();
+          if (embedWorker.current === embedder) embedWorker.current = null;
+        };
+        embedder.onerror = failEmbed;
+        embedder.onmessage = ({ data }) => {
+          if (token !== session.current) return;
+          if (data.type === "embed-ready") embedReady = true;
+          else if (data.type === "embedding") {
+            embedBusy = false;
+            lastEmbedding = { embedding: data.embedding, crop: data.crop };
+          } else if (data.type === "error" || data.type === "frame-error")
+            failEmbed();
+        };
+        embedder.postMessage({ type: "init", task: "embed", base });
+      }
       const tick = async (now: number) => {
         if (token !== session.current) return;
         raf.current = requestAnimationFrame(tick);
@@ -237,6 +282,37 @@ export function useCamera(
             } catch {
               copy?.close();
               faceBusy = false;
+            }
+          }
+          if (embedReady && !embedBusy && now - lastEmbedAt > 120) {
+            embedBusy = true;
+            lastEmbedAt = now;
+            const crop = cropMemory.next(
+              lastHands,
+              bitmap.width / bitmap.height,
+              now,
+            );
+            let copy: ImageBitmap | undefined;
+            try {
+              copy = await createImageBitmap(bitmap);
+              if (token === session.current && embedWorker.current) {
+                embedWorker.current.postMessage(
+                  {
+                    type: "frame",
+                    bitmap: copy,
+                    timestamp: now,
+                    region: crop.region,
+                    crop: crop.source,
+                  },
+                  [copy],
+                );
+              } else {
+                copy.close();
+                embedBusy = false;
+              }
+            } catch {
+              copy?.close();
+              embedBusy = false;
             }
           }
           if (token !== session.current || !ready) {
