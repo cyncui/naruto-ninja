@@ -226,9 +226,6 @@ body:has(.guide-page) {
   text-transform: uppercase;
   text-decoration: none;
 }
-.guide-cta span {
-  transition: translate 180ms var(--ease);
-}
 .guide-footer p {
   margin: 0;
   font: 12px/1.6 var(--mono);
@@ -237,20 +234,10 @@ body:has(.guide-page) {
 .guide-cta:focus-visible {
   outline-color: var(--void);
 }
-.guide-cta:focus-visible span {
-  translate: 4px -4px;
-}
-.guide-header a:active,
-.guide-cta:active {
-  scale: 0.98;
-}
 @media (hover: hover) {
   .guide-header nav a:not([aria-current="page"]):hover {
     background: #2a1300;
     border-color: var(--amber);
-  }
-  .guide-cta:hover span {
-    translate: 6px -6px;
   }
 }
 @media (max-width: 860px) {
@@ -345,15 +332,5 @@ body:has(.guide-page) {
   .guide-cta {
     gap: 18px;
     font-size: 36px;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .guide-cta:hover span,
-  .guide-cta:focus-visible span {
-    translate: none;
-  }
-  .guide-header a:active,
-  .guide-cta:active {
-    scale: none;
   }
 }
