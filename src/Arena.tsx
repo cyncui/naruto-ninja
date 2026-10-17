@@ -3,6 +3,7 @@ import type { AppModel } from "./app-model";
 import SealRing from "./SealRing";
 import type { MarkerState } from "./SealRing";
 import SevenSegment from "./SevenSegment";
+import Corrections from "./Corrections";
 import { sealGuides } from "./seal-guide";
 import { glyphFor, glyphs } from "./seals";
 import { TEACH_SAMPLES } from "./runtime/teach";
@@ -113,6 +114,17 @@ export default function Arena({ model }: { model: AppModel }) {
   );
 
   const calibrated = (id: string) => (model.samples[id] ?? 0) >= TEACH_SAMPLES;
+  const issues = model.poseCheck
+    ? new Set(model.poseCheck.issues.flatMap((issue) => issue.digits))
+    : undefined;
+  // Camera feedback checks the seal the arena is showing.
+  const focus =
+    tab === "library" ? selected : phase === "running" ? target : null;
+  const setFocus = model.setArenaFocus;
+  useEffect(() => {
+    setFocus(focus ?? null);
+    return () => setFocus(null);
+  }, [focus, setFocus]);
   const drillState = (id: string): MarkerState =>
     !feedback
       ? ""
@@ -130,15 +142,25 @@ export default function Arena({ model }: { model: AppModel }) {
         focusIndex={seals.findIndex((s) => s.id === selected)}
         progress={0}
         turns={0}
-        guide={sealGuides[selected]}
-        guideKey={selected}
+        figure={{
+          sealId: selected,
+          issues: live ? issues : undefined,
+          label: `3D hand model of the ${name(selected)} seal`,
+          still: model.reducedMotion,
+        }}
         still={model.reducedMotion || live}
         onPick={(seal) => setSelected(seal.id)}
         pickLabel={(seal) => `Show ${seal.name}`}
         caption={
-          live
-            ? `${glyphFor(selected)} ${name(selected)}: ${sealGuides[selected].how}`
-            : `${glyphFor(selected)} ${name(selected)} · your view · simplified diagram`
+          live ? (
+            <Corrections
+              check={model.poseCheck}
+              title={`${glyphFor(selected)} ${name(selected)}`}
+              how={sealGuides[selected].how}
+            />
+          ) : (
+            `${glyphFor(selected)} ${name(selected)} · mirror view · drag to turn`
+          )
         }
         className="arena-ring"
       />
@@ -149,9 +171,16 @@ export default function Arena({ model }: { model: AppModel }) {
         focusIndex={-1}
         progress={phase === "idle" ? 0 : answered / DRILL_LENGTH}
         turns={answered}
-        guide={phase === "running" && target ? sealGuides[target] : undefined}
-        guideKey={`${index}-${target}`}
-        callouts={false}
+        figure={
+          phase === "running" && target
+            ? {
+                sealId: target,
+                issues: live ? issues : undefined,
+                label: "3D hand model of the seal to identify",
+                still: model.reducedMotion,
+              }
+            : undefined
+        }
         still={model.reducedMotion || live}
         onPick={phase === "running" ? (seal) => answer(seal.id) : undefined}
         pickLabel={(seal) => `Ring answer: ${seal.name}`}

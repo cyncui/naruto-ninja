@@ -26,6 +26,8 @@ import { useCamera } from "./runtime/useCamera";
 import type { TrackingFrame } from "./runtime/useCamera";
 import Stage, { effectFor } from "./runtime/Stage";
 import { sealGuides } from "./seal-guide";
+import { checkPose, samePoseCheck } from "./pose/feedback";
+import type { PoseCheck } from "./pose/feedback";
 
 const seals = catalogue.signs.map(({ id, name, aliases, sourceIds }) => ({
   id,
@@ -155,6 +157,8 @@ export default function App() {
   const inputRef = useRef<(id: string) => void>(() => {});
   // In the arena, recognized seals answer the drill instead of the sequence.
   const arenaListener = useRef<((id: string) => void) | null>(null);
+  const arenaFocus = useRef<string | null>(null);
+  const [poseCheck, setPoseCheck] = useState<PoseCheck | null>(null);
   const teachRef = useRef<(id: string, sample: number[]) => void>(() => {});
   const variant = selected.variants.find((v) => v.id === variantId)!;
   const practice = useRef({ steps: [] as string[], mode });
@@ -243,6 +247,13 @@ export default function App() {
       const { steps, mode } = practice.current;
       const next = steps[progressRef.current % Math.max(1, steps.length)];
       const known = next ? (templatesRef.current[next]?.length ?? 0) : 0;
+      // Compare the hands with the reference pose of the seal being practised.
+      const focus =
+        mode === "arena" ? arenaFocus.current : mode === "camera" ? next : null;
+      const check = focus ? checkPose(focus, frame.hands, frame.aspect) : null;
+      setPoseCheck((previous) =>
+        samePoseCheck(previous, check) ? previous : check,
+      );
       teachingRef.current =
         mode === "camera" &&
         !!next &&
@@ -467,6 +478,10 @@ export default function App() {
             ? "Arena: study each seal in the library, or test yourself in the drill."
             : "Start the camera, then use Calibration to teach each seal.",
       );
+    },
+    poseCheck,
+    setArenaFocus: (id) => {
+      arenaFocus.current = id;
     },
     onArenaSeal: (listener) => {
       arenaListener.current = listener;

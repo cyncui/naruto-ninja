@@ -1,8 +1,7 @@
 import { useEffect, useRef } from "react";
-import type { KeyboardEvent } from "react";
+import type { KeyboardEvent, ReactNode } from "react";
 import { gsap } from "gsap";
-import SealDiagram, { labelTop, layoutCallouts } from "./SealDiagram";
-import type { SealGuide } from "./seal-guide";
+import HandFigure from "./HandFigure";
 import { glyphFor } from "./seals";
 
 const cross = [0, 90, 180, 270];
@@ -13,8 +12,9 @@ interface RingSeal {
 }
 
 /**
- * The targeting reticle: seal markers on a ring, an optional progress arc and
- * a hand diagram in the centre. Markers become buttons when `onPick` is set.
+ * The targeting reticle: seal markers on a ring, a progress arc and an
+ * animated 3D hand model in the centre. Markers become buttons when `onPick`
+ * is set.
  */
 export default function SealRing({
   seals,
@@ -22,12 +22,10 @@ export default function SealRing({
   focusIndex,
   progress,
   turns,
-  guide,
-  guideKey,
+  figure,
   caption,
   charged = false,
   still = false,
-  callouts = true,
   onPick,
   pickLabel,
   className = "",
@@ -41,13 +39,18 @@ export default function SealRing({
   progress: number;
   /** Steps taken; each eases the ring round a few degrees. */
   turns: number;
-  guide?: SealGuide;
-  guideKey?: string;
-  caption: string;
+  /** Seal shown on the hand model, with digits to mark as wrong. */
+  figure?: {
+    sealId: string;
+    issues?: Set<string>;
+    label: string;
+    /** Hold the model at the finished seal (reduced motion). */
+    still?: boolean;
+  };
+  caption: ReactNode;
   charged?: boolean;
-  /** Hold the ring still (reduced motion or live camera). */
+  /** Hold the ring and model still (reduced motion or live camera). */
   still?: boolean;
-  callouts?: boolean;
   onPick?: (seal: RingSeal, index: number) => void;
   pickLabel?: (seal: RingSeal, index: number) => string;
   className?: string;
@@ -171,27 +174,17 @@ export default function SealRing({
             );
           })}
         </g>
-        {guide && (
-          <g aria-hidden="true" className={callouts ? "" : "no-callouts"}>
-            <SealDiagram guide={guide} />
-          </g>
+        {figure && (
+          <HandFigure
+            key={figure.sealId}
+            sealId={figure.sealId}
+            still={figure.still ?? still}
+            issues={figure.issues}
+            label={figure.label}
+          />
         )}
       </svg>
-      {guide &&
-        callouts &&
-        layoutCallouts(guide).map((callout, i) => (
-          <span
-            key={`${guideKey}-${i}`}
-            className={`callout-label callout-${callout.side}`}
-            style={{ top: labelTop(callout.labelY) }}
-            aria-hidden="true"
-          >
-            {callout.text}
-          </span>
-        ))}
-      <span className="seal-caption" aria-hidden={onPick ? true : undefined}>
-        {caption}
-      </span>
+      <div className="seal-caption">{caption}</div>
     </div>
   );
 }

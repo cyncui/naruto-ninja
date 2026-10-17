@@ -542,62 +542,6 @@ summary:focus-visible {
   stroke: var(--red);
   filter: drop-shadow(0 0 6px var(--red));
 }
-.diagram-hand path {
-  fill: var(--void);
-  stroke: var(--amber);
-  stroke-width: 1.1;
-  stroke-linejoin: miter;
-}
-.diagram-hand .diagram-palm {
-  fill: #140a03;
-}
-.diagram-hand .curled {
-  fill: #1f1005;
-  stroke: var(--amber-dim);
-}
-.diagram-hand .focus {
-  fill: var(--amber);
-  stroke: var(--amber-hi);
-  filter: drop-shadow(0 0 3px #ff8a1e);
-}
-.diagram-tag {
-  fill: var(--void);
-  stroke: var(--green);
-  stroke-width: 0.8;
-}
-.diagram-tag-text {
-  fill: var(--green);
-  font: 8px var(--mono);
-  dominant-baseline: middle;
-}
-.diagram-callout path {
-  stroke: var(--green);
-  stroke-width: 1;
-  fill: none;
-}
-.diagram-callout rect {
-  fill: var(--green);
-}
-.callout-label {
-  position: absolute;
-  width: max-content;
-  max-width: 150px;
-  translate: 0 -50%;
-  padding: 3px 7px;
-  background: #050505e0;
-  border: 1px solid var(--green);
-  font: 11px/1.25 var(--mono);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--green);
-}
-.callout-left {
-  right: calc(100% + 8px);
-  text-align: right;
-}
-.callout-right {
-  left: calc(100% + 8px);
-}
 .seal-caption {
   position: absolute;
   top: 100%;
@@ -608,6 +552,106 @@ summary:focus-visible {
   font: 10px/1.4 var(--mono);
   letter-spacing: 0.06em;
   text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* 3D hand figure */
+.figure-palm {
+  fill: #1a0d04;
+  stroke: var(--amber-dim);
+  stroke-width: 1;
+  stroke-linejoin: round;
+}
+.figure-bone line {
+  stroke: var(--amber);
+  stroke-linecap: round;
+}
+.figure-bone .figure-core {
+  stroke: #160b03;
+}
+.figure-bone circle {
+  fill: none;
+  stroke: var(--green);
+  stroke-width: 0.8;
+  opacity: 0.8;
+}
+.figure-bone.issue line {
+  stroke: var(--red);
+  filter: drop-shadow(0 0 4px var(--red));
+}
+.figure-bone.issue .figure-core {
+  stroke: #2a0703;
+}
+.figure-tag rect {
+  fill: var(--void);
+  stroke: var(--green);
+  stroke-width: 0.8;
+}
+.figure-tag text {
+  fill: var(--green);
+  font: 9px var(--mono);
+  dominant-baseline: middle;
+}
+.figure-handle {
+  fill: transparent;
+  pointer-events: all;
+  cursor: grab;
+}
+.figure-handle:active {
+  cursor: grabbing;
+}
+.figure-handle:focus {
+  outline: none;
+}
+.figure-handle:focus-visible {
+  stroke: var(--green);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 6;
+}
+
+/* Live pose corrections on the reticle caption */
+.caption-title {
+  display: block;
+  margin-bottom: 4px;
+  font: 700 14px/1 var(--display);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--amber-hi);
+}
+.corrections {
+  margin: 0 0 6px;
+  padding: 0;
+  list-style: none;
+  font: 700 14px/1.25 var(--display);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--red);
+}
+.corrections li {
+  display: flex;
+  gap: 6px;
+  align-items: baseline;
+  padding: 2px 0;
+}
+.corrections li i {
+  flex-shrink: 0;
+  width: 7px;
+  height: 7px;
+  background: var(--red);
+}
+.corrections .ok {
+  color: var(--green);
+}
+.corrections.one-hand,
+.corrections.no-hands {
+  color: var(--amber-hi);
+}
+.corrections.one-hand li i,
+.corrections.no-hands li i {
+  background: var(--amber);
+}
+.caption-how {
+  display: block;
   color: var(--muted);
 }
 
@@ -637,10 +681,6 @@ summary:focus-visible {
 .seal-orbit .wrong text {
   fill: var(--void);
 }
-.no-callouts .diagram-callout {
-  display: none;
-}
-
 /* Practice arena */
 .arena-mode .practice-intro,
 .arena-mode .floating-panel {
@@ -1905,10 +1945,6 @@ details[open] > summary .toggle-icon {
   width: min(22vw, 34dvh, 300px);
   opacity: 0.85;
 }
-.camera-live .callout-label,
-.camera-live .diagram-callout {
-  display: none;
-}
 .camera-live .seal-caption {
   padding: 6px 8px;
   background: #050505c8;
@@ -2186,10 +2222,6 @@ details[open] > summary .toggle-icon {
   .catalogue-button .icon,
   .desktop-label,
   .control-dock .preview-button .icon {
-    display: none;
-  }
-  .callout-label,
-  .diagram-callout {
     display: none;
   }
   .arena-panel {

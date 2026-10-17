@@ -26,11 +26,13 @@ Texture: the viewfinder overlay carries a 96px green crosshair grid, a vertical 
 
 Motion: GSAP ticker is the sole illustration and ring clock. The reticle markers ease with power3.out between steps. The live camera pilot light blinks in steps. Buttons swap fill in 120ms with no lift. Reduced motion holds everything still, including the blink.
 
-## Seal diagrams
+## Hand models and pose corrections
 
-While a sequence is in progress, the reticle shows a schematic of the next seal instead of the practice figure (`src/SealDiagram.tsx`, data in `src/seal-guide.ts`). Hands are built from parts: a chamfered palm, four fingers that are either extended or curled, and a thumb in one of six positions. Each hand gets a green L/R tag and is drawn from the performer's point of view. Fingers that matter are filled amber. Green leader lines run to callout labels outside the reticle on desktop. The panel carries a written "How to" line at every size. Every composition is auto-fitted to the reticle. The practice figure returns only when a technique casts or a step has no diagram.
+Each seal is a reference pose in `src/pose/seals.ts`, estimated from the databook chart: wrist placement, hand rotation, finger bends and thumb position, plus rules the camera can check. `src/pose/hand.ts` turns a pose into MediaPipe's 21 landmarks with anatomical bone lengths, so one model drives both the drawing and the feedback.
 
-Guidance is paraphrased from the twelve-seal databook chart reproduced on Narutopedia's Hand Seal page and linked from Source & notes. The schematics are simplified; they are not traced artwork, and catalogue `geometryStatus` stays `reference_required` because they are not classifier geometry.
+`src/HandFigure.tsx` draws the pose in the reticle as a 3D wireframe in mirror view. Palms are filled planes, bones are capsules, and joints carry green construction circles, depth-sorted so nearer fingers cover farther ones. It loops from open hands into the seal and holds it; reduced motion shows the finished seal. Drag or use the arrow keys to turn it, and Home or a double-click resets the view.
+
+In Camera mode and in the arena with the camera on, `src/pose/feedback.ts` compares the hands with the focus seal. Finger bends are measured the same way on the model and on the camera landmarks, and rules cover fingertips touching, palms together, hand on top, fingers pointing down, upright or sideways fingers, and thumbs pointing down. Up to three fixes appear on the reticle caption ("Curl your right ring finger"), and the digits involved turn red on the model. A unit test requires every reference pose to pass its own checks. Interlocked seals hide fingers, so their finger checks are looser, and a clasp that tracks as one hand asks you to ease your hands apart.
 
 ## Practice arena
 

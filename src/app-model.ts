@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import type { Diagnosis } from "./runtime/recognition";
 import type { CropSource } from "./runtime/crop";
+import type { PoseCheck } from "./pose/feedback";
 
 export interface Seal {
   id: string;
@@ -50,6 +51,10 @@ export interface AppModel {
     waiting: boolean;
   } | null;
   setCalibrationOpen(open: boolean): void;
+  /** Live comparison of the hands with the focus seal's reference pose. */
+  poseCheck: PoseCheck | null;
+  /** The seal the arena is showing, for live pose feedback. */
+  setArenaFocus(id: string | null): void;
   samples: Record<string, number>;
   activeEffect: boolean;
   effectName: string;

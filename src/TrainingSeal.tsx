@@ -1,4 +1,5 @@
 import type { AppModel } from "./app-model";
+import Corrections from "./Corrections";
 import SealRing from "./SealRing";
 import { sealGuides } from "./seal-guide";
 import { glyphFor } from "./seals";
@@ -13,6 +14,10 @@ export default function TrainingSeal({ model }: { model: AppModel }) {
   const guide =
     !model.activeEffect && current ? sealGuides[current.id] : undefined;
   const pickable = model.mode === "demo" && model.sequence.length > 0;
+  const issues =
+    live && model.poseCheck
+      ? new Set(model.poseCheck.issues.flatMap((issue) => issue.digits))
+      : undefined;
   return (
     <SealRing
       seals={steps}
@@ -28,19 +33,33 @@ export default function TrainingSeal({ model }: { model: AppModel }) {
         model.sequence.length ? model.progress / model.sequence.length : 0
       }
       turns={model.progress}
-      guide={guide}
-      guideKey={current?.id}
+      figure={
+        guide
+          ? {
+              sealId: current.id,
+              issues,
+              label: `3D hand model of the ${current.name} seal`,
+              still: model.reducedMotion,
+            }
+          : undefined
+      }
       charged={model.activeEffect}
       still={model.reducedMotion || live}
       dataProgress={model.progress}
       onPick={pickable ? (seal) => model.inputSeal(seal.id) : undefined}
       pickLabel={(seal, index) => `Seal ring step ${index + 1}: ${seal.name}`}
       caption={
-        guide && live
-          ? `${glyphFor(current.id)} ${current.name}: ${guide.how}`
-          : guide
-            ? `${glyphFor(current.id)} ${current.name} · your view · simplified diagram`
-            : "TARGET · original practice figure, not a pose reference"
+        guide && live ? (
+          <Corrections
+            check={model.poseCheck}
+            title={`${glyphFor(current.id)} ${current.name}`}
+            how={guide.how}
+          />
+        ) : guide ? (
+          `${glyphFor(current.id)} ${current.name} · mirror view · drag to turn`
+        ) : (
+          "TARGET · original practice figure, not a pose reference"
+        )
       }
     />
   );

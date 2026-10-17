@@ -605,8 +605,8 @@ export default function AppView({ model }: { model: AppModel }) {
                 practice.
               </p>
               <p>
-                Seal diagrams are simplified schematics from your point of view,
-                paraphrased from the{" "}
+                The 3D hand models are simplified reference poses estimated from
+                the{" "}
                 <a
                   href={sealGuideSource}
                   target="_blank"
@@ -614,7 +614,8 @@ export default function AppView({ model }: { model: AppModel }) {
                 >
                   <Scramble text="databook seal chart" /> <Icon name="arrow" />
                 </a>
-                . Zodiac characters are labels only.
+                , not traced artwork; camera corrections compare your hands with
+                them. Zodiac characters are labels only.
               </p>
             </div>
           </details>
