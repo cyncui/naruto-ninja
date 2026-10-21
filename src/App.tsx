@@ -13,6 +13,7 @@ import { advanceSequence, StableSeal } from "./runtime/sequence";
 import { useCamera } from "./runtime/useCamera";
 import type { TrackingFrame } from "./runtime/useCamera";
 import Stage, { effectFor } from "./runtime/Stage";
+import { sealGuides } from "./seal-guide";
 
 const seals = catalogue.signs.map(({ id, name, aliases, sourceIds }) => ({
   id,
@@ -261,6 +262,7 @@ export default function App() {
         active={activeEffect}
         effect={effect.type}
         reducedMotion={reducedMotion}
+        figure={activeEffect || !sealGuides[sequence[progress]?.id]}
       />
     ),
     techniques,

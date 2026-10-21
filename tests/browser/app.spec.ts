@@ -37,11 +37,18 @@ test("manual practice casts only after the sequence and loads no vision assets",
   await expect(
     page.getByRole("status").filter({ hasText: "Out of order" }),
   ).toBeVisible();
-  await page.getByRole("button", { name: /^Practice step 1:.* Snake$/ }).click();
-  await expect(page.locator(".runtime-status")).toContainText("Untimed rehearsal.");
+  await page
+    .getByRole("button", { name: /^Practice step 1:.* Snake$/ })
+    .click();
+  await expect(page.locator(".runtime-status")).toContainText(
+    "Untimed rehearsal.",
+  );
   await page.waitForTimeout(8300);
-  await expect(page.locator(".training-seal")).toHaveAttribute("data-progress", "1");
-  await page.getByRole("button", { name: "↺ Reset", exact: true }).click();
+  await expect(page.locator(".training-seal")).toHaveAttribute(
+    "data-progress",
+    "1",
+  );
+  await page.getByRole("button", { name: "Reset", exact: true }).click();
   for (const [index, name] of [
     "Snake",
     "Ram",
@@ -67,7 +74,7 @@ test("manual practice casts only after the sequence and loads no vision assets",
     path: "evidence/app-desktop-cast.png",
     fullPage: true,
   });
-  await page.getByRole("button", { name: "↺ Reset", exact: true }).click();
+  await page.getByRole("button", { name: "Reset", exact: true }).click();
   await expect(page.getByTestId("effect-stage")).toHaveAttribute(
     "data-effect",
     "none",
@@ -342,11 +349,11 @@ test("field guide navigation, reduced motion and missing routes work in producti
   await page.getByRole("link", { name: "Field guide" }).click();
   await expect(page).toHaveURL(/\/guide$/);
   await expect(page.getByRole("heading", { level: 1 })).toContainText(
-    "A little training.",
+    "Shinobi training manual.",
   );
   await expect(page).toHaveTitle("Field guide | Naruto Ninja");
   await expect(page.locator("#main")).toBeFocused();
-  await page.getByRole("link", { name: "Make your next move" }).click();
+  await page.getByRole("link", { name: "Enter the training room" }).click();
   await expect(page.getByRole("heading", { level: 1 })).toContainText(
     "Fireball",
   );
@@ -360,7 +367,7 @@ test("field guide navigation, reduced motion and missing routes work in producti
   const response = await page.goto("/missing-scroll");
   expect(response?.status()).toBe(404);
   await expect(page.getByRole("heading", { level: 1 })).toContainText(
-    "went missing",
+    "signal lost",
   );
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute(
     "content",
@@ -394,7 +401,7 @@ test("short phone keeps the seal, instructions and guide outside the floating pa
   );
   await page.getByRole("link", { name: "Field guide" }).click();
   await expect(page.getByRole("heading", { level: 1 })).toContainText(
-    "A little training.",
+    "Shinobi training manual.",
   );
 });
 

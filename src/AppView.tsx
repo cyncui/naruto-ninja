@@ -1,28 +1,21 @@
 import { useEffect, useRef, useState } from "react";
+import type { CSSProperties } from "react";
 import type { AppModel } from "./app-model";
 import FloatingPanel from "./FloatingPanel";
+import Icon from "./Icon";
+import Scramble from "./Scramble";
+import SevenSegment from "./SevenSegment";
 import TrainingSeal from "./TrainingSeal";
+import { sealGuides, sealGuideSource } from "./seal-guide";
+import { glyphFor } from "./seals";
 import "./view.css";
 
-const glyphs: Record<string, string> = {
-  rat: "子",
-  ox: "丑",
-  tiger: "寅",
-  hare: "卯",
-  dragon: "辰",
-  snake: "巳",
-  horse: "午",
-  ram: "未",
-  monkey: "申",
-  bird: "酉",
-  dog: "戌",
-  boar: "亥",
-};
 const shortName = (name: string) =>
   name
     .replace(/^(Fire|Water|Wind|Earth|Lightning|Wood|Ice) Release: /, "")
     .replace(/ Technique$/, "")
     .replace(/[—–]/g, "-");
+const pad = (n: number) => String(n).padStart(2, "0");
 
 export default function AppView({ model }: { model: AppModel }) {
   const sequenceRail = useRef<HTMLOListElement>(null);
@@ -77,6 +70,29 @@ export default function AppView({ model }: { model: AppModel }) {
           : model.cameraStatus === "error"
             ? "CAMERA / ERROR"
             : "CAMERA / STANDBY";
+  const ratio = model.sequence.length
+    ? Math.min(model.progress, model.sequence.length) / model.sequence.length
+    : 0;
+  const syncValue = model.sequence.length
+    ? (ratio * 100).toFixed(1).padStart(5, "0")
+    : "---.-";
+  const feedJp =
+    model.mode === "demo"
+      ? "模擬"
+      : model.cameraStatus === "live"
+        ? "稼働"
+        : model.cameraStatus === "error"
+          ? "警告"
+          : "待機";
+  const meters = [
+    { id: "00", label: "SEALS", value: ratio },
+    {
+      id: "01",
+      label: "HANDS",
+      value: model.mode === "camera" ? model.handsDetected / 2 : 0,
+    },
+    { id: "02", label: "CHAKRA", value: model.activeEffect ? 1 : 0 },
+  ];
   return (
     <main
       id="main"
@@ -91,6 +107,16 @@ export default function AppView({ model }: { model: AppModel }) {
         {model.stage}
       </div>
       <TrainingSeal model={model} />
+      <div className="ruler ruler-y" aria-hidden="true">
+        {Array.from({ length: 12 }, (_, i) => (
+          <span key={i}>+{String(12 - i).padStart(2, "0")}</span>
+        ))}
+      </div>
+      <div className="ruler ruler-x" aria-hidden="true">
+        {Array.from({ length: 13 }, (_, i) => (
+          <span key={i}>{i ? `+${(i - 1) * 10}` : "-10"}</span>
+        ))}
+      </div>
       <header className="masthead">
         <div className="brand">
           <span className="brand-seal" aria-hidden="true">
@@ -100,9 +126,10 @@ export default function AppView({ model }: { model: AppModel }) {
             <strong>
               NARUTO<span>/</span>NINJA
             </strong>
-            <small>HAND SEAL LABORATORY</small>
+            <small>HAND SEAL LABORATORY · EXPERIMENTAL</small>
           </div>
         </div>
+        <span className="hazard masthead-hazard" aria-hidden="true" />
         <div className="feed-state">
           <i
             className={
@@ -111,9 +138,15 @@ export default function AppView({ model }: { model: AppModel }) {
                 : "pilot"
             }
           />
+          <span className="jp" aria-hidden="true">
+            {feedJp}
+          </span>
           {feedLabel}
         </div>
-        <span className="edition">VOL. 01 / EXPERIMENTAL</span>
+        <div className="edition">
+          <b>PILOT : YOU</b>
+          <span>DATA ANALYZED ON THIS DEVICE</span>
+        </div>
         <div className="mobile-mode" role="group" aria-label="Input mode">
           <button
             aria-pressed={model.mode === "demo"}
@@ -130,25 +163,87 @@ export default function AppView({ model }: { model: AppModel }) {
         </div>
       </header>
       <div className="practice-intro">
+        <p className="hero-kanji" lang="ja">
+          印契同調試験
+        </p>
         <p className="hero-statement">
-          Hands first.
-          <br />
-          <span>Chakra follows.</span>
+          Hand seal <span>synchronization test</span>
         </p>
-        <p className="hero-description">
-          Rehearse Naruto seal sequences.
-          <br />
-          Try local tracking and chakra previews.
-        </p>
+        <div className="telemetry" aria-hidden="true">
+          <div className="sync-readout">
+            <span className="sync-label">
+              <b lang="ja">同調率</b>SYNC RATIO
+            </span>
+            <SevenSegment value={syncValue} label="Sync ratio" />
+            <span className="sync-unit">%</span>
+          </div>
+          <p className="sync-lines">
+            <span>
+              SEALS : {pad(Math.min(model.progress, model.sequence.length))} /{" "}
+              {pad(model.sequence.length)}
+            </span>
+            <span>
+              NEXT :{" "}
+              {currentSeal ? (
+                <>
+                  <b lang="ja">{glyphFor(currentSeal.id)}</b>{" "}
+                  {currentSeal.name.toUpperCase()}
+                </>
+              ) : completed ? (
+                <>
+                  <b lang="ja">完了</b> COMPLETE
+                </>
+              ) : (
+                "NONE"
+              )}
+            </span>
+          </p>
+          <div className="meters">
+            <div className="meter-scale">
+              <span>+0</span>
+              <span>+50.0</span>
+              <span>+100.0</span>
+              <span className="meter-caution">( CAUTION )</span>
+            </div>
+            {meters.map((meter) => (
+              <div className="meter" key={meter.id}>
+                <span className="meter-label">
+                  <small>SUBJECT</small>
+                  <b>{meter.id}</b>
+                  <small>{meter.label}</small>
+                </span>
+                <span className="meter-bar">
+                  {Array.from({ length: 32 }, (_, i) => (
+                    <i
+                      key={i}
+                      className={i < Math.round(meter.value * 32) ? "on" : ""}
+                      style={{ "--i": i } as CSSProperties}
+                    />
+                  ))}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
         <span className="practice-instruction">
           Tap the seals in order. Try Camera after calibration.
         </span>
       </div>
       <div className="room-colophon">
         <a href="/guide">
-          Field guide <span aria-hidden="true">↗</span>
+          <span className="jp" aria-hidden="true">
+            手引
+          </span>
+          <Scramble text="Field guide" /> <Icon name="arrow" />
         </a>
-        <span>Made for practice. Powered by your hands.</span>
+        <span className="internal-plate">
+          <b lang="ja">内部</b>
+          <span>
+            INTERNAL
+            <br />
+            LOCAL PROCESSING
+          </span>
+        </span>
         <span className="privacy-note">
           <i aria-hidden="true" /> Camera frames stay on your device.
         </span>
@@ -186,12 +281,18 @@ export default function AppView({ model }: { model: AppModel }) {
               : "status"
           }
         >
+          <b className="message-tag" aria-hidden="true">
+            {model.cameraStatus === "error" || model.trackerStatus === "error"
+              ? "警告 WARNING"
+              : "待機 STANDBY"}
+          </b>
           {model.cameraMessage && <p>{model.cameraMessage}</p>}
           {model.trackerMessage && <p>{model.trackerMessage}</p>}
         </div>
       )}
       <FloatingPanel
         title="HAND SEQUENCE"
+        jp="印契配列"
         footer={
           currentSeal?.sourceUrl ? (
             <>
@@ -200,7 +301,7 @@ export default function AppView({ model }: { model: AppModel }) {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Seal reference ↗
+                <Scramble text="Seal reference" /> <Icon name="arrow" />
               </a>
               <span>Secondary source</span>
             </>
@@ -226,7 +327,7 @@ export default function AppView({ model }: { model: AppModel }) {
               aria-label="Change technique"
               title="Change technique"
             >
-              ↗
+              <Icon name="arrow" />
             </button>
           </div>
           {model.sequence.length ? (
@@ -237,15 +338,17 @@ export default function AppView({ model }: { model: AppModel }) {
                     onClick={() => model.inputSeal(seal.id)}
                     className={`seal-step ${index < model.progress ? "complete" : ""} ${index === model.progress ? "current" : ""}`}
                     aria-current={index === model.progress ? "step" : undefined}
-                    aria-label={`Practice step ${index + 1}: ${String(index + 1).padStart(2, "0")} ${glyphs[seal.id] ?? "印"} ${seal.name}`}
+                    aria-label={`Practice step ${index + 1}: ${String(index + 1).padStart(2, "0")} ${glyphFor(seal.id)} ${seal.name}`}
                   >
                     <span aria-hidden="true">
-                      {index < model.progress
-                        ? "✓"
-                        : String(index + 1).padStart(2, "0")}
+                      {index < model.progress ? (
+                        <Icon name="check" />
+                      ) : (
+                        String(index + 1).padStart(2, "0")
+                      )}
                     </span>
                     <b className="seal-glyph" aria-hidden="true">
-                      {glyphs[seal.id] ?? "印"}
+                      {glyphFor(seal.id)}
                     </b>
                     <strong>{seal.name}</strong>
                   </button>
@@ -276,15 +379,31 @@ export default function AppView({ model }: { model: AppModel }) {
                   ? `${Math.min(model.progress, model.sequence.length)} of ${model.sequence.length} signs`
                   : "No automatic casting"}
                 {model.sequence.length > 4 && (
-                  <span className={`rail-hint ${model.sequence.length > 6 ? "rail-hint-long" : ""}`}> · Scroll signs ↔</span>
+                  <span
+                    className={`rail-hint ${model.sequence.length > 6 ? "rail-hint-long" : ""}`}
+                  >
+                    {" "}
+                    · Scroll signs <Icon name="scroll" />
+                  </span>
                 )}
               </span>
             </div>
-            <button onClick={model.resetSequence}>↺ Reset</button>
+            <button onClick={model.resetSequence}>
+              <Icon name="reset" /> Reset
+            </button>
           </div>
           <p className="runtime-status" role="status">
             {model.status}
           </p>
+          {currentSeal && sealGuides[currentSeal.id] && (
+            <p className="seal-howto">
+              <b>
+                <span lang="ja">{glyphFor(currentSeal.id)}</span> How to:{" "}
+                {currentSeal.name}
+              </b>
+              {sealGuides[currentSeal.id].how}
+            </p>
+          )}
           <details
             className="source-notes"
             onToggle={(event) => {
@@ -300,7 +419,7 @@ export default function AppView({ model }: { model: AppModel }) {
                 {model.selected.variants.length > 1
                   ? `${model.selected.variants.length} variants · `
                   : ""}
-                <span aria-hidden="true">+</span>
+                <Icon name="plus" className="toggle-icon" />
               </span>
             </summary>
             <div>
@@ -332,7 +451,7 @@ export default function AppView({ model }: { model: AppModel }) {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    View reference ↗
+                    <Scramble text="View reference" /> <Icon name="arrow" />
                   </a>
                 )}
               </p>
@@ -345,12 +464,24 @@ export default function AppView({ model }: { model: AppModel }) {
                 practice.
               </p>
               <p>
-                Zodiac characters are seal labels, not hand-position diagrams.
+                Seal diagrams are simplified schematics from your point of view,
+                paraphrased from the{" "}
+                <a
+                  href={sealGuideSource}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Scramble text="databook seal chart" /> <Icon name="arrow" />
+                </a>
+                . Zodiac characters are labels only.
               </p>
             </div>
           </details>
           <details className="free-practice">
-            <summary>Free seal practice</summary>
+            <summary>
+              <Icon name="plus" className="toggle-icon" />
+              Free seal practice
+            </summary>
             <div className="seal-keyboard">
               {model.seals.map((seal) => (
                 <button key={seal.id} onClick={() => model.inputSeal(seal.id)}>
@@ -384,9 +515,7 @@ export default function AppView({ model }: { model: AppModel }) {
               : model.startCamera
           }
         >
-          <span aria-hidden="true">
-            {model.cameraStatus === "live" ? "■" : "●"}
-          </span>{" "}
+          <Icon name={model.cameraStatus === "live" ? "stop" : "record"} />{" "}
           {cameraLabel}
         </button>
         <span className="dock-divider" />
@@ -394,11 +523,11 @@ export default function AppView({ model }: { model: AppModel }) {
           className="catalogue-button"
           onClick={() => catalogue.current?.showModal()}
         >
-          <span aria-hidden="true">▤</span> Techniques
+          <Icon name="library" /> Techniques
         </button>
         <button className="preview-button" onClick={model.previewEffect}>
           Preview<span className="desktop-label"> effect</span>{" "}
-          <span aria-hidden="true">↗</span>
+          <Icon name="arrow" />
         </button>
         <button
           className="settings-button"
@@ -406,9 +535,7 @@ export default function AppView({ model }: { model: AppModel }) {
           onClick={() => settings.current?.showModal()}
         >
           <span className="desktop-label">Calibration</span>
-          <span className="settings-icon" aria-hidden="true">
-            ☷
-          </span>
+          <Icon name="calibrate" className="settings-icon" />
         </button>
       </nav>
       <dialog
@@ -423,12 +550,15 @@ export default function AppView({ model }: { model: AppModel }) {
         aria-labelledby="catalogue-title"
       >
         <header className="dialog-header">
-          <span>REFERENCE LIBRARY</span>
+          <span>
+            <b lang="ja">術式目録</b> REFERENCE LIBRARY
+          </span>
+          <i className="hazard" aria-hidden="true" />
           <button
             aria-label="Close technique catalogue"
             onClick={() => catalogue.current?.close()}
           >
-            ×
+            <Icon name="close" />
           </button>
         </header>
         <div className="dialog-content">
@@ -481,9 +611,9 @@ export default function AppView({ model }: { model: AppModel }) {
                     {t.nature.length ? ` / ${t.nature.join(" + ")}` : ""}
                   </small>
                 </span>
-                <span aria-hidden="true">
-                  {t.id === model.selected.id ? "●" : "↗"}
-                </span>
+                <Icon
+                  name={t.id === model.selected.id ? "selected" : "arrow"}
+                />
               </button>
             ))}
             {!choices.length && (
@@ -504,12 +634,15 @@ export default function AppView({ model }: { model: AppModel }) {
         aria-labelledby="calibration-title"
       >
         <header className="dialog-header">
-          <span>PERSONAL SETUP</span>
+          <span>
+            <b lang="ja">個人調整</b> PERSONAL SETUP
+          </span>
+          <i className="hazard" aria-hidden="true" />
           <button
             aria-label="Close calibration and settings"
             onClick={() => settings.current?.close()}
           >
-            ×
+            <Icon name="close" />
           </button>
         </header>
         <div className="dialog-content">
@@ -564,7 +697,7 @@ export default function AppView({ model }: { model: AppModel }) {
                 model.calibrate(calibrationSeal);
               }}
             >
-              Capture in 3 seconds ↗
+              Capture in 3 seconds <Icon name="arrow" />
             </button>
             <span>{totalSamples} examples saved</span>
           </div>

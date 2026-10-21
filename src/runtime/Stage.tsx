@@ -30,6 +30,16 @@ export function effectFor(
   return { type: "chakra", name: "Chakra aura" };
 }
 
+const phosphor: Record<string, string> = {
+  "#202b36": "#4a2204",
+  "#f46b2c": "#ff8a1e",
+  "#ecb990": "#c96a12",
+  "#f3caa8": "#e07a16",
+  "#e6e8e0": "#ffc46b",
+  "#9f7054": "#1c0d02",
+};
+const tint = (color: string) => phosphor[color] ?? color;
+
 function dummy(
   ctx: CanvasRenderingContext2D,
   x: number,
@@ -40,7 +50,7 @@ function dummy(
   ctx.translate(x, y);
   ctx.scale(scale, scale);
   const shape = (color: string, path: string) => {
-    ctx.fillStyle = color;
+    ctx.fillStyle = tint(color);
     ctx.fill(new Path2D(path));
   };
   shape(
@@ -60,7 +70,7 @@ function dummy(
   );
   shape("#202b36", "M-35-59L36-59 33-42-32-42Z");
   shape("#e6e8e0", "M-20-57L21-57 20-44-19-44Z");
-  ctx.strokeStyle = "#202b36";
+  ctx.strokeStyle = tint("#202b36");
   ctx.lineWidth = 1.8;
   ctx.stroke(new Path2D("M-5-48Q-12-55-2-54Q6-51 0-47Q-6-44-6-50L-10-46"));
   ctx.stroke(new Path2D("M-20-30L-10-29M10-29L20-30M-6-16Q0-12 6-16"));
@@ -69,7 +79,7 @@ function dummy(
     "#f3caa8",
     "M49 58L29 34 12 19 8 3Q2-3 0 4L1 24-8 5Q-14 0-15 8L-9 36 11 56 37 73Z",
   );
-  ctx.strokeStyle = "#9f7054";
+  ctx.strokeStyle = tint("#9f7054");
   ctx.lineWidth = 1.3;
   ctx.stroke(new Path2D("M1 24L7 37M-9 36L-2 42M12 19L15 36"));
   shape("#e6e8e0", "M-35 69Q0 78 36 69L37 78Q0 88-36 78Z");
@@ -89,6 +99,7 @@ export default function Stage({
   active,
   effect,
   reducedMotion,
+  figure,
 }: {
   videoRef: RefObject<HTMLVideoElement | null>;
   tracking: RefObject<TrackingFrame>;
@@ -97,6 +108,8 @@ export default function Stage({
   active: boolean;
   effect: Effect;
   reducedMotion: boolean;
+  /** Draw the practice figure when the camera is off. */
+  figure: boolean;
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
@@ -158,7 +171,7 @@ export default function Stage({
       const video = videoRef.current;
       const ready = live && video && video.readyState >= 2;
       ctx.globalAlpha = 1;
-      ctx.fillStyle = live ? "#202b36" : "#f3f2ec";
+      ctx.fillStyle = "#050505";
       ctx.fillRect(0, 0, w, h);
       let offsetX = 0,
         offsetY = 0,
@@ -177,11 +190,7 @@ export default function Stage({
         }
         ctx.drawImage(video, offsetX, offsetY, vw, vh);
         ctx.restore();
-      } else {
-        ctx.fillStyle = "#f46b2c";
-        ctx.beginPath();
-        ctx.arc(demoX, demoY, demoScale * 140, 0, Math.PI * 2);
-        ctx.fill();
+      } else if (figure) {
         if (active && effect === "clones") {
           ctx.globalAlpha = 0.25;
           dummy(ctx, demoX - demoScale * 112, demoY, (demoScale * 350) / 420);
@@ -195,8 +204,8 @@ export default function Stage({
         y: offsetY + p.y * vh,
       });
       if (live) {
-        ctx.strokeStyle = "#e3c266";
-        ctx.fillStyle = "#ffdc86";
+        ctx.strokeStyle = "#5dff8f";
+        ctx.fillStyle = "#ffb347";
         ctx.lineWidth = 1.3 * dpr;
         for (const hand of tracking.current.hands) {
           for (const chain of [
@@ -287,8 +296,8 @@ export default function Stage({
             }
           }
           if (ready && !eyes.length) {
-            ctx.fillStyle = "#f4e2bd";
-            ctx.font = `${13 * dpr}px monospace`;
+            ctx.fillStyle = "#ffb347";
+            ctx.font = `${13 * dpr}px Readout, monospace`;
             ctx.fillText(
               "FACE EFFECT · LOOK TOWARD CAMERA",
               18 * dpr,
@@ -344,7 +353,16 @@ export default function Stage({
     draw(0);
     gsap.ticker.add(draw);
     return () => gsap.ticker.remove(draw);
-  }, [videoRef, tracking, live, mirrored, active, effect, reducedMotion]);
+  }, [
+    videoRef,
+    tracking,
+    live,
+    mirrored,
+    active,
+    effect,
+    reducedMotion,
+    figure,
+  ]);
   return (
     <div
       className="runtime-stage"
@@ -352,7 +370,7 @@ export default function Stage({
         position: "absolute",
         inset: 0,
         overflow: "hidden",
-        background: live ? "#202b36" : "#f3f2ec",
+        background: "#050505",
       }}
     >
       <video
