@@ -3,6 +3,7 @@ node_modules/
 dist/
 public/vision/
 public/models/*.task
+public/models/*.tflite
 playwright-report/
 test-results/
 evidence/verification/

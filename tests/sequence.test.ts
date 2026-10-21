@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { advanceSequence, StableSeal } from "../src/runtime/sequence.ts";
 import {
   classify,
+  diagnose,
   features,
   readTemplates,
 } from "../src/runtime/recognition.ts";
@@ -39,6 +40,15 @@ test("brief tracking loss cannot count as a second seal", () => {
   stable.update("dog", 430);
   assert.equal(stable.update("dog", 800), null);
 });
+test("a held seal is not emitted twice after teaching", () => {
+  const stable = new StableSeal();
+  stable.hold("ram", 0);
+  assert.equal(stable.update("ram", 400), null);
+  assert.equal(stable.update(null, 500), null);
+  assert.equal(stable.update(null, 700), null);
+  assert.equal(stable.update("ram", 750), null);
+  assert.equal(stable.update("ram", 1100), "ram");
+});
 test("classifier rejects insufficient, distant and ambiguous samples", () => {
   const vector = Array(84).fill(0);
   assert.equal(classify(vector, { rat: [vector, vector] }), null);
@@ -55,6 +65,46 @@ test("classifier rejects insufficient, distant and ambiguous samples", () => {
     null,
   );
   assert.equal(features([], 1), null);
+});
+test("diagnosis explains each rejected pose", () => {
+  const hand = (x: number, size = 0.1) =>
+    Array.from({ length: 21 }, (_, i) => ({
+      x: x + (i % 4) * size * 0.1,
+      y: 0.6 - (i / 20) * size,
+    }));
+  const hands = [hand(0.3), hand(0.6)];
+  const pose = features(hands, 1)!;
+  const far = pose.map((value) => value + 1);
+  assert.equal(diagnose([], 1, {}).reason, "no-hands");
+  const clasp = features([hand(0.3)], 1)!;
+  assert.equal(clasp.length, 42);
+  assert.equal(diagnose([hand(0.3)], 1, {}).reason, "uncalibrated");
+  assert.equal(
+    diagnose([hand(0.3)], 1, { rat: [clasp, clasp, clasp] }).reason,
+    "match",
+  );
+  assert.deepEqual(diagnose([hand(0.3)], 1, { rat: [pose, pose, pose] }), {
+    reason: "hand-count",
+    hands: 1,
+  });
+  assert.equal(
+    diagnose([hand(0.3, 0.01), hand(0.31, 0.01)], 1, {}).reason,
+    "too-small",
+  );
+  assert.equal(
+    diagnose(hands, 1, { rat: [pose, pose] }).reason,
+    "uncalibrated",
+  );
+  assert.deepEqual(diagnose(hands, 1, { rat: [pose, pose, pose] }), {
+    reason: "match",
+    best: "rat",
+    distance: 0,
+  });
+  assert.equal(diagnose(hands, 1, { rat: [far, far, far] }).reason, "no-match");
+  assert.deepEqual(
+    diagnose(hands, 1, { rat: [pose, pose, pose], ox: [pose, pose, pose] }),
+    { reason: "ambiguous", best: "rat", distance: 0, runnerUp: "ox" },
+  );
 });
 test("calibration parser rejects corrupt and unknown entries", () => {
   assert.deepEqual(readTemplates("{broken", new Set(["rat"])), {});

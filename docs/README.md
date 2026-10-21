@@ -11,6 +11,7 @@ The catalogue is the current structured research source. Its evidence and recogn
 ## Preliminary app
 
 - [Implementation and runtime limits](implementation.md)
+- [Image matcher spike](image-matcher-spike.md): experimental crop-and-embed matcher for clasped seals (`?matcher=image`)
 - [Arena design comparison and synthesis](arena/synthesis.md)
 - [Project run instructions](../README.md)
 - [Browser evidence](../evidence/)

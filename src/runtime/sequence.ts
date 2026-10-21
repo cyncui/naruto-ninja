@@ -37,4 +37,12 @@ export class StableSeal {
     }
     return null;
   }
+
+  /** Treat a seal already held (e.g. just taught) as emitted until released. */
+  hold(label: string, now: number) {
+    this.candidate = label;
+    this.since = now;
+    this.emitted = label;
+    this.releasedAt = null;
+  }
 }
