@@ -76,9 +76,17 @@ self.onmessage = async ({ data }) => {
         });
         return;
       }
+      const result = hands?.detectForVideo(bitmap, data.timestamp);
       self.postMessage({
         type: "result",
-        hands: hands?.detectForVideo(bitmap, data.timestamp).landmarks ?? [],
+        hands: result?.landmarks ?? [],
+        // MediaPipe labels handedness as if the image were mirrored; frames
+        // here are not, so "Left" is usually the user's right hand.
+        handedness:
+          result?.handedness.map(([top]) => ({
+            label: top?.categoryName ?? "",
+            score: top?.score ?? 0,
+          })) ?? [],
         face:
           face?.detectForVideo(bitmap, data.timestamp).faceLandmarks[0] ?? [],
       });

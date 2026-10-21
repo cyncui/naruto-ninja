@@ -9,3 +9,6 @@ test-results/
 evidence/verification/
 
 .shots/
+
+# Recorded training sessions (docs/trained-classifier-plan.md)
+data/recordings/
