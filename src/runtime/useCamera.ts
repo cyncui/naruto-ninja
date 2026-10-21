@@ -4,8 +4,14 @@ import type { Point } from "./recognition";
 import { CropMemory } from "./crop";
 import type { CropSource } from "./crop";
 
+export interface Handedness {
+  label: string;
+  score: number;
+}
 export interface TrackingFrame {
   hands: Point[][];
+  /** One entry per hand, in the same order as `hands`. */
+  handedness?: Handedness[];
   face: Point[];
   aspect: number;
   /** Image embedding of the hand crop, when the image matcher is enabled. */
@@ -159,6 +165,7 @@ export function useCamera(
           lastHands = data.hands;
           callback.current({
             hands: data.hands,
+            handedness: data.handedness,
             face: faceEnabled.current ? lastFace : [],
             aspect: video.videoWidth / video.videoHeight,
             ...lastEmbedding,

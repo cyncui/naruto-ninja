@@ -28,6 +28,9 @@ import Stage, { effectFor } from "./runtime/Stage";
 import { sealGuides } from "./seal-guide";
 import { checkPose, samePoseCheck } from "./pose/feedback";
 import type { PoseCheck } from "./pose/feedback";
+import RecordPanel from "./RecordPanel";
+import { NONE_LABELS } from "./runtime/recording";
+import type { SessionRecorder } from "./runtime/recording";
 
 const seals = catalogue.signs.map(({ id, name, aliases, sourceIds }) => ({
   id,
@@ -84,6 +87,12 @@ function readMatcher(): Matcher {
     return "landmarks";
   }
 }
+// ?record shows the data-collection panel. Not remembered between visits.
+const recordMode = new URLSearchParams(location.search).has("record");
+const recordLabels = [
+  ...seals.filter((seal) => staticSeals.has(seal.id)).map((seal) => seal.id),
+  ...NONE_LABELS,
+];
 const calibrationKey = (matcher: Matcher) =>
   matcher === "image" ? IMAGE_STORAGE_KEY : STORAGE_KEY;
 function loadCalibration(matcher: Matcher) {
@@ -144,6 +153,7 @@ export default function App() {
   const tracking = useRef<TrackingFrame>({ hands: [], face: [], aspect: 1 });
   const frameAt = useRef(0);
   const stable = useRef(new StableSeal());
+  const recorder = useRef<SessionRecorder | null>(null);
   const effectTimer = useRef<ReturnType<typeof setTimeout> | undefined>(
     undefined,
   );
@@ -244,6 +254,11 @@ export default function App() {
         label ? (seals.find((seal) => seal.id === label)?.name ?? label) : null,
       );
       const now = performance.now();
+      // Recording keeps the live readout but must not teach or advance practice.
+      if (recordMode) {
+        recorder.current?.frame(frame, now);
+        return;
+      }
       const { steps, mode } = practice.current;
       const next = steps[progressRef.current % Math.max(1, steps.length)];
       const known = next ? (templatesRef.current[next]?.length ?? 0) : 0;
@@ -308,7 +323,7 @@ export default function App() {
       (effect.type === "eyes" ||
         effect.type === "pale-eyes" ||
         effect.type === "markings"),
-    matcher === "image",
+    matcher === "image" || recordMode,
   );
 
   useEffect(
@@ -526,5 +541,17 @@ export default function App() {
     toggleMirror: () => setMirrored((value) => !value),
     toggleReducedMotion: () => setReducedMotion((value) => !value),
   };
-  return <AppView model={model} />;
+  return (
+    <>
+      <AppView model={model} />
+      {recordMode && (
+        <RecordPanel
+          model={model}
+          recorder={recorder}
+          labels={recordLabels}
+          matcher={matcher}
+        />
+      )}
+    </>
+  );
 }

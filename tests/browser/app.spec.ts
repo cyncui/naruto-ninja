@@ -539,3 +539,45 @@ test("arena library shows any seal and the drill scores a full round", async ({
     page.getByRole("button", { name: "Run it again" }),
   ).toBeVisible();
 });
+
+test("record mode saves a labelled clip, including frames with no hands", async ({
+  page,
+}) => {
+  await page.goto("/?record");
+  const panel = page.getByRole("region", { name: "Recorder" });
+  await page.getByRole("button", { name: /Start camera/ }).click();
+  const record = panel.getByRole("button", { name: "Record", exact: true });
+  await expect(record).toBeEnabled({ timeout: 45000 });
+  await panel.getByLabel("Person").fill("p1");
+  await panel.getByLabel("Label").selectOption("none:rest");
+  await panel.getByLabel("Length").selectOption("5");
+  await record.click();
+  await expect(panel.getByRole("status")).toContainText("Not a seal · rest");
+  await expect(panel.locator(".record-stats")).toContainText(
+    "Not a seal · rest",
+    { timeout: 15000 },
+  );
+  // Recording must not auto-teach the practice sequence.
+  expect(
+    await page.evaluate(() =>
+      localStorage.getItem("naruto-ninja.calibration.v1"),
+    ),
+  ).toBeNull();
+  const [download] = await Promise.all([
+    page.waitForEvent("download"),
+    panel.getByRole("button", { name: "Download .jsonl" }).click(),
+  ]);
+  expect(download.suggestedFilename()).toMatch(/^session-\d{4}-\d\d-\d\d-p1-/);
+  const lines = (await (await download.createReadStream()).toArray())
+    .join("")
+    .trim()
+    .split("\n")
+    .map((line) => JSON.parse(line));
+  expect(lines[0]).toMatchObject({ type: "session", version: 1, person: "p1" });
+  expect(lines[1]).toMatchObject({ type: "clip", clip: 0, label: "none:rest" });
+  const frames = lines.filter((line) => line.type === "frame");
+  expect(frames.length).toBeGreaterThan(20);
+  expect(frames.length).toBe(lines[1].frames);
+  expect(frames.every((f) => Array.isArray(f.handedness))).toBe(true);
+  expect(frames.some((f) => f.embedding?.length === 1024)).toBe(true);
+});
