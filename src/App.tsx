@@ -26,6 +26,8 @@ import { useCamera } from "./runtime/useCamera";
 import type { TrackingFrame } from "./runtime/useCamera";
 import Stage, { effectFor } from "./runtime/Stage";
 import { sealGuides } from "./seal-guide";
+import { checkPose, samePoseCheck } from "./pose/feedback";
+import type { PoseCheck } from "./pose/feedback";
 
 const seals = catalogue.signs.map(({ id, name, aliases, sourceIds }) => ({
   id,
@@ -100,7 +102,7 @@ export default function App() {
   const [variantId, setVariantId] = useState(initialTechnique.variants[0].id);
   const [progress, setProgress] = useState(0);
   const progressRef = useRef(0);
-  const [mode, setMode] = useState<"demo" | "camera">("demo");
+  const [mode, setMode] = useState<AppModel["mode"]>("demo");
   const [activeEffect, setActiveEffect] = useState(false);
   const [mirrored, setMirrored] = useState(true);
   const [reducedMotion, setReducedMotion] = useState(
@@ -153,6 +155,10 @@ export default function App() {
   );
   const capturing = useRef(false);
   const inputRef = useRef<(id: string) => void>(() => {});
+  // In the arena, recognized seals answer the drill instead of the sequence.
+  const arenaListener = useRef<((id: string) => void) | null>(null);
+  const arenaFocus = useRef<string | null>(null);
+  const [poseCheck, setPoseCheck] = useState<PoseCheck | null>(null);
   const teachRef = useRef<(id: string, sample: number[]) => void>(() => {});
   const variant = selected.variants.find((v) => v.id === variantId)!;
   const practice = useRef({ steps: [] as string[], mode });
@@ -241,6 +247,13 @@ export default function App() {
       const { steps, mode } = practice.current;
       const next = steps[progressRef.current % Math.max(1, steps.length)];
       const known = next ? (templatesRef.current[next]?.length ?? 0) : 0;
+      // Compare the hands with the reference pose of the seal being practised.
+      const focus =
+        mode === "arena" ? arenaFocus.current : mode === "camera" ? next : null;
+      const check = focus ? checkPose(focus, frame.hands, frame.aspect) : null;
+      setPoseCheck((previous) =>
+        samePoseCheck(previous, check) ? previous : check,
+      );
       teachingRef.current =
         mode === "camera" &&
         !!next &&
@@ -282,7 +295,8 @@ export default function App() {
       const accepted = stable.current.update(label, now);
       if (accepted && !capturing.current) {
         releaseFrom.current = vector ?? null;
-        inputRef.current(accepted);
+        if (mode === "arena") arenaListener.current?.(accepted);
+        else inputRef.current(accepted);
       }
     },
     [matcher],
@@ -409,7 +423,10 @@ export default function App() {
         active={activeEffect}
         effect={effect.type}
         reducedMotion={reducedMotion}
-        figure={activeEffect || !sealGuides[sequence[progress]?.id]}
+        figure={
+          mode !== "arena" &&
+          (activeEffect || !sealGuides[sequence[progress]?.id])
+        }
       />
     ),
     techniques,
@@ -442,7 +459,7 @@ export default function App() {
     reducedMotion,
     status,
     startCamera: () => {
-      setMode("camera");
+      if (mode !== "arena") setMode("camera");
       resetSequence();
       void camera.startCamera();
     },
@@ -457,8 +474,20 @@ export default function App() {
       setStatus(
         next === "demo"
           ? "Untimed rehearsal. Tap the numbered seals in order."
-          : "Start the camera, then use Calibration to teach each seal.",
+          : next === "arena"
+            ? "Arena: study each seal in the library, or test yourself in the drill."
+            : "Start the camera, then use Calibration to teach each seal.",
       );
+    },
+    poseCheck,
+    setArenaFocus: (id) => {
+      arenaFocus.current = id;
+    },
+    onArenaSeal: (listener) => {
+      arenaListener.current = listener;
+      return () => {
+        if (arenaListener.current === listener) arenaListener.current = null;
+      };
     },
     selectTechnique: (id) => {
       const next = techniques.find((t) => t.id === id);
