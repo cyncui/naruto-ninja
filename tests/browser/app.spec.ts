@@ -454,3 +454,40 @@ test("long techniques keep practice feedback visible and disclose reported varia
     await page.getByRole("button", { name: /^Practice step/ }).count(),
   ).toBeLessThan(44);
 });
+
+test("experimental image matcher embeds a crop and stores calibration samples", async ({
+  page,
+}) => {
+  await page.goto("/?matcher=image");
+  await page.getByRole("button", { name: /Start camera/ }).click();
+  await expect(page.getByText(/IMAGE MATCHER · CROP/)).toBeVisible({
+    timeout: 45000,
+  });
+  await expect(page.locator(".camera-readout")).toContainText(
+    "NO SEALS CALIBRATED",
+  );
+  await page.getByRole("button", { name: "Calibration", exact: true }).click();
+  await page.getByLabel("Seal to teach").selectOption("snake");
+  await page.getByRole("button", { name: /Capture in 3 seconds/ }).click();
+  await expect(page.locator(".runtime-status")).toContainText(
+    "Saved 1 sample for Snake (image crop:",
+    { timeout: 8000 },
+  );
+  const lengths = await page.evaluate(() =>
+    JSON.parse(
+      localStorage.getItem("naruto-ninja.image-calibration.v1") ?? "{}",
+    ).snake.map((sample: number[]) => sample.length),
+  );
+  expect(lengths).toEqual([1024]);
+  expect(
+    await page.evaluate(() =>
+      localStorage.getItem("naruto-ninja.calibration.v1"),
+    ),
+  ).toBeNull();
+  await page.goto("/?matcher=landmarks");
+  await page.getByRole("button", { name: /Start camera/ }).click();
+  await expect(page.getByText("TRACKER: READY")).toBeVisible({
+    timeout: 45000,
+  });
+  await expect(page.getByText(/IMAGE MATCHER/)).toHaveCount(0);
+});

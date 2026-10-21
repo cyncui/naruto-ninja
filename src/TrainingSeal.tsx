@@ -36,7 +36,6 @@ export default function TrainingSeal({ model }: { model: AppModel }) {
       tween.kill();
     };
   }, [model.progress, model.reducedMotion]);
-  if (model.cameraStatus === "live") return null;
   const steps = model.sequence.length
     ? model.sequence
     : [{ id: "seal", name: "Preview" }];
@@ -135,9 +134,11 @@ export default function TrainingSeal({ model }: { model: AppModel }) {
         </span>
       ))}
       <span className="seal-caption">
-        {guide
-          ? `${glyphFor(current.id)} ${current.name} · your view · simplified diagram`
-          : "TARGET · original practice figure, not a pose reference"}
+        {guide && model.cameraStatus === "live"
+          ? `${glyphFor(current.id)} ${current.name}: ${guide.how}`
+          : guide
+            ? `${glyphFor(current.id)} ${current.name} · your view · simplified diagram`
+            : "TARGET · original practice figure, not a pose reference"}
       </span>
     </div>
   );

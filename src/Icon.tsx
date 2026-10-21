@@ -14,6 +14,8 @@ const paths = {
   check: <path d="M2.5 8.5 6 12l7.5-8" />,
   close: <path d="M3.5 3.5l9 9M12.5 3.5l-9 9" />,
   plus: <path d="M8 3v10M3 8h10" />,
+  expand: <path d="M3 10.5 8 5.5l5 5" />,
+  collapse: <path d="M3 5.5 8 10.5l5-5" />,
   scroll: <path d="M1.5 8h13M4.5 5 1.5 8l3 3M11.5 5l3 3-3 3" />,
   selected: <path d="M4 4h8v8H4Z" className="fill" />,
 } as const;

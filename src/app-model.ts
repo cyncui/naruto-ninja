@@ -1,4 +1,6 @@
 import type { ReactNode } from "react";
+import type { Diagnosis } from "./runtime/recognition";
+import type { CropSource } from "./runtime/crop";
 
 export interface Seal {
   id: string;
@@ -37,6 +39,17 @@ export interface AppModel {
   faceStatus: "idle" | "loading" | "ready" | "error";
   handsDetected: number;
   detectedSeal: string | null;
+  match: Diagnosis;
+  matcher: "landmarks" | "image";
+  crop?: CropSource;
+  /** Hands-free capture for the next seal, while it has too few samples. */
+  teaching: {
+    seal: string;
+    count: number;
+    hold: number;
+    waiting: boolean;
+  } | null;
+  setCalibrationOpen(open: boolean): void;
   samples: Record<string, number>;
   activeEffect: boolean;
   effectName: string;

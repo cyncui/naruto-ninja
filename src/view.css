@@ -80,6 +80,9 @@ a {
   color: inherit;
   text-decoration: none;
 }
+[hidden] {
+  display: none !important;
+}
 .sr-only {
   position: absolute;
   width: 1px;
@@ -691,6 +694,136 @@ summary:focus-visible {
   border-color: var(--green);
   color: var(--green);
 }
+.camera-readout > .tag-ok {
+  border-color: var(--green);
+  color: var(--green);
+}
+.camera-readout > .tag-warn {
+  border-color: var(--amber);
+  color: var(--amber-hi);
+}
+.camera-readout > .tag-alert {
+  border-color: var(--red);
+  color: var(--red);
+}
+.calibration-alert {
+  position: fixed;
+  z-index: 6;
+  top: 140px;
+  left: 56px;
+  display: flex;
+  align-items: stretch;
+  max-width: min(520px, calc(100vw - 112px));
+  background: #170402f0;
+  border: 1.5px solid var(--red);
+  box-shadow: 0 0 16px #ff3b2a33;
+}
+.needs-calibration .practice-intro {
+  top: 236px;
+}
+.calibration-alert > .hazard {
+  width: 14px;
+  flex-shrink: 0;
+}
+.calibration-alert p {
+  flex: 1;
+  margin: 0;
+  padding: 10px 14px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+.calibration-alert b {
+  display: block;
+  margin-bottom: 3px;
+  font: 700 16px/1 var(--display);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--red);
+}
+.teaching-panel {
+  flex-wrap: wrap;
+  background: #120a02f0;
+  border-color: var(--amber);
+  box-shadow: 0 0 16px #ff8a1e33;
+}
+.teaching-panel > .hazard {
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--amber) 0 7px,
+    var(--void) 7px 14px
+  );
+}
+.teaching-panel b {
+  color: var(--amber-hi);
+}
+.teach-meter {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  min-width: 120px;
+  padding: 10px 14px;
+  border-left: 1px solid var(--amber-dim);
+}
+.teach-count {
+  font: 700 22px/1 var(--display);
+  color: var(--amber-hi);
+}
+.teach-pips {
+  display: flex;
+  gap: 4px;
+}
+.teach-pips i {
+  flex: 1;
+  height: 8px;
+  border: 1px solid var(--green);
+}
+.teach-pips i.on {
+  background: var(--green);
+  box-shadow: 0 0 6px var(--green);
+}
+.teach-hold {
+  height: 4px;
+  background: #ff8a1e22;
+}
+.teach-hold i {
+  display: block;
+  height: 100%;
+  background: var(--amber);
+  transition: width 100ms linear;
+}
+.calibration-alert button {
+  flex-shrink: 0;
+  padding: 0 14px;
+  background: var(--red);
+  border: 0;
+  color: var(--void);
+  font: 700 15px/1 var(--display);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.calibration-alert button .icon {
+  margin-left: 6px;
+}
+.seal-step.cal-ok::before,
+.seal-step.cal-missing::before {
+  content: "";
+  position: absolute;
+  top: -1.5px;
+  left: -1.5px;
+  right: -1.5px;
+  height: 4px;
+}
+.seal-step.cal-ok::before {
+  background: var(--green);
+}
+.seal-step.cal-missing::before {
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--red) 0 4px,
+    var(--void) 4px 8px
+  );
+}
 .device-message {
   position: fixed;
   top: 150px;
@@ -767,6 +900,31 @@ summary:focus-visible {
   margin-right: 10px;
   font: 800 16px/1 var(--jp);
   letter-spacing: 0.02em;
+}
+.panel-summary {
+  margin-left: auto;
+  padding: 0 10px 0 12px;
+  font: 12px/1 var(--mono);
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+.panel-toggle {
+  display: grid;
+  place-items: center;
+  flex: 0 0 42px;
+  font-size: 18px;
+  border: 0;
+  border-left: 1.5px solid var(--void);
+  border-radius: 0;
+  background: transparent;
+  color: var(--void);
+}
+.panel-toggle:focus-visible {
+  outline-color: var(--void);
+  outline-offset: -4px;
+}
+.floating-panel.collapsed {
+  overflow: hidden;
 }
 .panel-reset {
   display: grid;
@@ -1451,9 +1609,104 @@ details[open] > summary .toggle-icon {
 .mobile-feed {
   display: none;
 }
-.camera-live .practice-intro,
+/* Live camera keeps the display on screen, dimmed over the feed. The sync
+   readout stays at near full strength so progress is readable mid-seal. */
+.camera-live .hero-kanji,
+.camera-live .hero-statement,
+.camera-live .practice-instruction,
 .camera-live .room-colophon > span:not(.privacy-note) {
+  opacity: 0.4;
+}
+.camera-live .hero-statement {
   display: none;
+}
+/* Live: keep the centre of the frame clear for the face and hands. The
+   readout shrinks into the left margin and the reticle docks on the right. */
+.camera-live .hero-kanji {
+  margin-bottom: 4px;
+  font-size: 34px;
+}
+.camera-live .telemetry {
+  max-width: 330px;
+  margin-top: 8px;
+  padding: 10px 12px;
+  opacity: 0.94;
+  background: #050505b8;
+  border: 1px solid var(--amber-dim);
+}
+.camera-live .sync-readout {
+  gap: 10px;
+}
+.camera-live .sync-label {
+  padding-bottom: 3px;
+  font-size: 11px;
+}
+.camera-live .sync-label b {
+  font-size: 16px;
+}
+.camera-live .seven-segment {
+  height: 40px;
+}
+.camera-live .sync-unit {
+  font-size: 20px;
+}
+.camera-live .sync-lines {
+  gap: 2px 16px;
+  margin: 8px 0;
+  font-size: 10px;
+}
+.camera-live .meter-scale {
+  margin-left: 84px;
+  font-size: 8px;
+}
+.camera-live .meter {
+  grid-template-columns: 76px 1fr;
+  gap: 8px;
+  height: 13px;
+}
+.camera-live .meter-label b {
+  font-size: 14px;
+}
+.camera-live .meter-label small {
+  font-size: 7px;
+}
+.camera-live .meter-bar {
+  gap: 1px;
+}
+.camera-live .training-seal {
+  left: auto;
+  right: 48px;
+  top: 50%;
+  translate: 0 -50%;
+  width: min(22vw, 34dvh, 300px);
+  opacity: 0.85;
+}
+.camera-live .callout-label,
+.camera-live .diagram-callout {
+  display: none;
+}
+.camera-live .seal-caption {
+  padding: 6px 8px;
+  background: #050505c8;
+  border: 1px solid var(--amber-dim);
+  margin-top: 12px;
+  font-size: 11px;
+  line-height: 1.45;
+  text-align: left;
+  text-transform: none;
+  letter-spacing: 0.02em;
+  color: var(--text);
+}
+@keyframes sync-pulse {
+  from {
+    filter: brightness(1.9) drop-shadow(0 0 10px var(--amber));
+  }
+}
+.sync-readout .seven-segment {
+  animation: sync-pulse 600ms ease-out;
+}
+[data-reduced-motion="true"] .sync-readout .seven-segment {
+  animation: none;
 }
 .camera-live .masthead {
   background: #050505e6;
@@ -1465,6 +1718,9 @@ details[open] > summary .toggle-icon {
 }
 
 @media (hover: hover) {
+  .calibration-alert button:hover {
+    background: #ff6a4d;
+  }
   .change-technique:hover,
   .room-colophon > a:hover,
   .seal-keyboard button:hover,
@@ -1486,6 +1742,7 @@ details[open] > summary .toggle-icon {
     background: #1c0e04;
   }
   .panel-reset:hover,
+  .panel-toggle:hover,
   .panel-move:hover,
   .dialog-header > button:hover {
     background: var(--amber-hi);
@@ -1700,6 +1957,17 @@ details[open] > summary .toggle-icon {
   .diagram-callout {
     display: none;
   }
+  .floating-panel.collapsed .panel-jp {
+    display: none;
+  }
+  .floating-panel.collapsed .panel-move {
+    white-space: nowrap;
+    font-size: 14px;
+  }
+  .panel-summary {
+    padding: 0 8px;
+    font-size: 11px;
+  }
   .settings-icon {
     display: inline-block;
     font-size: 20px;
@@ -1724,6 +1992,23 @@ details[open] > summary .toggle-icon {
     top: 112px;
     left: 16px;
     max-width: calc(100vw - 32px);
+  }
+  .needs-calibration .practice-intro {
+    top: 118px;
+    visibility: hidden;
+  }
+  .calibration-alert {
+    top: 118px;
+    left: 16px;
+    max-width: calc(100vw - 32px);
+  }
+  .calibration-alert p {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+  .calibration-alert button {
+    padding: 0 10px;
+    font-size: 13px;
   }
   .dialog-header {
     padding-left: 16px;
@@ -1772,6 +2057,61 @@ details[open] > summary .toggle-icon {
   }
   .camera-live .room-colophon .privacy-note {
     display: none;
+  }
+  .camera-live .camera-readout .tag-tracker,
+  .camera-live .camera-readout .tag-standby {
+    display: none;
+  }
+  .camera-live .practice-intro {
+    top: 126px;
+    visibility: visible;
+  }
+  .camera-live .hero-kanji {
+    display: none;
+  }
+  .camera-live .telemetry {
+    display: block;
+    width: fit-content;
+    margin-top: 0;
+    padding: 6px 10px;
+  }
+  .camera-live .training-seal {
+    right: 16px;
+    top: 284px;
+    translate: none;
+    width: 150px;
+  }
+  .camera-live .seal-caption {
+    left: auto;
+    right: 0;
+    width: 220px;
+    translate: none;
+    font-size: 10px;
+    text-align: right;
+  }
+  .camera-live .calibration-alert {
+    top: 178px;
+  }
+  .camera-live .sync-lines,
+  .camera-live .meters {
+    display: none;
+  }
+  .camera-live .sync-readout {
+    gap: 10px;
+  }
+  .camera-live .sync-label {
+    padding-bottom: 2px;
+    font-size: 11px;
+  }
+  .camera-live .sync-label b {
+    font-size: 15px;
+  }
+  .camera-live .seven-segment {
+    height: 34px;
+  }
+  .camera-live .sync-unit {
+    padding-bottom: 2px;
+    font-size: 18px;
   }
 }
 

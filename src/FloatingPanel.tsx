@@ -56,16 +56,25 @@ function load(): Box {
   } catch {}
   return initial();
 }
+// Title bar height plus its borders: the size of a collapsed panel.
+const barHeight = 45;
 export default function FloatingPanel({
   title,
   jp,
   children,
   footer,
+  collapsed = false,
+  onToggle,
+  summary,
 }: {
   title: string;
   jp?: string;
   children: ReactNode;
   footer?: ReactNode;
+  collapsed?: boolean;
+  onToggle?: () => void;
+  /** Shown in the title bar while collapsed. */
+  summary?: ReactNode;
 }) {
   const [box, setBox] = useState<Box>(load);
   const drag = useRef<{
@@ -128,9 +137,15 @@ export default function FloatingPanel({
   };
   return (
     <section
-      className="floating-panel"
+      className={`floating-panel ${collapsed ? "collapsed" : ""}`}
       aria-label="Movable hand sequence"
-      style={{ left: box.x, top: box.y, width: box.width, height: box.height }}
+      style={{
+        left: box.x,
+        // A collapsed panel keeps its bottom edge, so it folds down in place.
+        top: collapsed ? box.y + box.height - barHeight : box.y,
+        width: box.width,
+        height: collapsed ? barHeight : box.height,
+      }}
     >
       <header className="floating-panel-bar">
         <button
@@ -154,7 +169,25 @@ export default function FloatingPanel({
             </span>
           )}
           {title}
+          {collapsed && summary && (
+            <span className="panel-summary" aria-hidden="true">
+              {summary}
+            </span>
+          )}
         </button>
+        {onToggle && (
+          <button
+            className="panel-toggle"
+            aria-expanded={!collapsed}
+            aria-label={
+              collapsed ? "Expand sequence panel" : "Collapse sequence panel"
+            }
+            title={collapsed ? "Expand" : "Collapse"}
+            onClick={onToggle}
+          >
+            <Icon name={collapsed ? "expand" : "collapse"} />
+          </button>
+        )}
         <button
           className="panel-reset"
           aria-label="Reset panel position and size"
@@ -164,11 +197,14 @@ export default function FloatingPanel({
           <Icon name="reset" />
         </button>
       </header>
-      <div className="floating-panel-content">{children}</div>
-      <div className="panel-hint">
+      <div className="floating-panel-content" hidden={collapsed}>
+        {children}
+      </div>
+      <div className="panel-hint" hidden={collapsed}>
         {footer ?? "Drag title · resize corner · scroll for more"}
       </div>
       <button
+        hidden={collapsed}
         className="panel-resize"
         aria-label="Resize sequence panel"
         title="Drag to resize. Arrow keys resize; Shift changes faster."
