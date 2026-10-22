@@ -1,10 +1,11 @@
+import { readSampleMap } from "./recognition.ts";
 import type { Diagnosis, Templates } from "./recognition";
 
 export const IMAGE_STORAGE_KEY = "naruto-ninja.image-calibration.v1";
 // Starting guesses, not measured: cosine distance (1 − similarity) between
 // unit-norm MobileNet embeddings. Tune against real calibration data.
 export const IMAGE_MATCH_LIMIT = 0.2;
-export const IMAGE_MATCH_MARGIN = 0.02;
+const IMAGE_MATCH_MARGIN = 0.02;
 
 export function cosineDistance(a: number[], b: number[]) {
   let dot = 0;
@@ -49,36 +50,12 @@ export function diagnoseEmbedding(
 export const compactEmbedding = (embedding: number[]) =>
   embedding.map((value) => Math.round(value * 1e4) / 1e4);
 
-export function readEmbeddings(
-  raw: string | null,
-  allowed: Set<string>,
-): Templates {
-  if (!raw) return {};
-  try {
-    const parsed: unknown = JSON.parse(raw);
-    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed))
-      return {};
-    return Object.fromEntries(
-      Object.entries(parsed).filter(
-        ([id, samples]) =>
-          allowed.has(id) &&
-          Array.isArray(samples) &&
-          samples.length <= 12 &&
-          samples.every(
-            (sample) =>
-              Array.isArray(sample) &&
-              sample.length > 0 &&
-              sample.length <= 4096 &&
-              sample.every(
-                (n) =>
-                  typeof n === "number" &&
-                  Number.isFinite(n) &&
-                  Math.abs(n) <= 1,
-              ),
-          ),
-      ),
-    );
-  } catch {
-    return {};
-  }
-}
+export const readEmbeddings = (raw: string | null, allowed: Set<string>) =>
+  readSampleMap(
+    raw,
+    allowed,
+    (sample) =>
+      sample.length > 0 &&
+      sample.length <= 4096 &&
+      sample.every((n) => Math.abs(n) <= 1),
+  );

@@ -26,7 +26,7 @@ export interface Sign {
   recognitionStatus: 'untrained';
 }
 
-interface VariantEvidence {
+export interface VariantEvidence {
   id: string;
   label: string;
   sourceIds: string[];

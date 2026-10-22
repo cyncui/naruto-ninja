@@ -6,7 +6,7 @@ import { glyphFor } from "./seals";
 
 const cross = [0, 90, 180, 270];
 export type MarkerState = "accepted" | "next" | "right" | "wrong" | "";
-interface RingSeal {
+export interface RingSeal {
   id: string;
   name: string;
 }

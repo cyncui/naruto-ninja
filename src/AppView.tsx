@@ -50,6 +50,33 @@ function describeMatch(
   return ["ok", `MATCH · ${best} ${distance}`];
 }
 
+const modes = [
+  ["demo", "Demo"],
+  ["camera", "Camera"],
+  ["arena", "Arena"],
+] as const;
+function ModeSwitch({
+  className,
+  model,
+}: {
+  className: string;
+  model: AppModel;
+}) {
+  return (
+    <div className={className} role="group" aria-label="Input mode">
+      {modes.map(([mode, label]) => (
+        <button
+          key={mode}
+          aria-pressed={model.mode === mode}
+          onClick={() => model.setMode(mode)}
+        >
+          {label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 export default function AppView({ model }: { model: AppModel }) {
   const sequenceRail = useRef<HTMLOListElement>(null);
   useEffect(() => {
@@ -228,26 +255,7 @@ export default function AppView({ model }: { model: AppModel }) {
           <b>PILOT : YOU</b>
           <span>DATA ANALYZED ON THIS DEVICE</span>
         </div>
-        <div className="mobile-mode" role="group" aria-label="Input mode">
-          <button
-            aria-pressed={model.mode === "demo"}
-            onClick={() => model.setMode("demo")}
-          >
-            Demo
-          </button>
-          <button
-            aria-pressed={model.mode === "camera"}
-            onClick={() => model.setMode("camera")}
-          >
-            Camera
-          </button>
-          <button
-            aria-pressed={model.mode === "arena"}
-            onClick={() => model.setMode("arena")}
-          >
-            Arena
-          </button>
-        </div>
+        <ModeSwitch className="mobile-mode" model={model} />
       </header>
       <div className="practice-intro">
         <p className="hero-kanji" lang="ja">
@@ -635,26 +643,7 @@ export default function AppView({ model }: { model: AppModel }) {
         </div>
       </FloatingPanel>
       <nav className="control-dock" aria-label="Camera and practice controls">
-        <div className="mode-switch" role="group" aria-label="Input mode">
-          <button
-            aria-pressed={model.mode === "demo"}
-            onClick={() => model.setMode("demo")}
-          >
-            Demo
-          </button>
-          <button
-            aria-pressed={model.mode === "camera"}
-            onClick={() => model.setMode("camera")}
-          >
-            Camera
-          </button>
-          <button
-            aria-pressed={model.mode === "arena"}
-            onClick={() => model.setMode("arena")}
-          >
-            Arena
-          </button>
-        </div>
+        <ModeSwitch className="mode-switch" model={model} />
         <button
           className="camera-button"
           onClick={

@@ -3,7 +3,7 @@ import type { Handedness } from "./useCamera";
 
 // Labelled session recording for training and evaluating a seal model
 // (docs/trained-classifier-plan.md). Landmarks and embeddings only, no pixels.
-export const RECORD_VERSION = 1;
+const RECORD_VERSION = 1;
 export const NONE_LABELS = [
   "none:rest",
   "none:transition",
