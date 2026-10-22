@@ -129,24 +129,7 @@ export function checkPose(
 ): PoseCheck | null {
   const seal = sealPoses[sealId];
   if (!seal) return null;
-  if (!hands.length)
-    return {
-      state: "no-hands",
-      issues: [
-        { key: "hands", text: "Show both hands to the camera", digits: [] },
-      ],
-    };
-  if (hands.length === 1)
-    return {
-      state: "one-hand",
-      issues: [
-        {
-          key: "one-hand",
-          text: "The camera sees your hands as one. Ease them apart slightly so it can check each finger.",
-          digits: [],
-        },
-      ],
-    };
+  if (hands.length < 2) return trackingCheck(hands.length);
   const [first, second] = hands.map((h) => landmarkVecs(h, aspect));
   const hand: Record<Side, Vec[]> =
     first[0][0] > second[0][0]
@@ -155,40 +138,67 @@ export function checkPose(
   const palm =
     (distance(hand.L[0], hand.L[9]) + distance(hand.R[0], hand.R[9])) / 2;
 
-  const issues: Issue[] = [];
-  for (const rule of seal.rules)
-    if (!ruleHolds(rule, hand, palm))
-      issues.push({
-        key: `rule:${rule.kind}:${rule.text}`,
-        text: rule.text,
-        digits: ruleDigits(rule),
-      });
-
+  const issues: Issue[] = seal.rules
+    .filter((rule) => !ruleHolds(rule, hand, palm))
+    .map((rule) => ({
+      key: `rule:${rule.kind}:${rule.text}`,
+      text: rule.text,
+      digits: ruleDigits(rule),
+    }));
   const target = targetBends(sealId);
   const tolerance = hidden.has(sealId) ? 0.42 : 0.33;
-  for (const side of ["L", "R"] as Side[]) {
-    const measured = bends(hand[side]);
-    const fix: Record<"Straighten" | "Curl", Digit[]> = {
-      Straighten: [],
-      Curl: [],
-    };
-    for (const digit of [...FINGERS, "thumb"] as Digit[]) {
-      const want = target[side][digit];
-      const got = measured[digit];
-      if (want < 0.3 && got > want + tolerance) fix.Straighten.push(digit);
-      else if (want > 0.55 && got < want - tolerance) fix.Curl.push(digit);
-    }
-    for (const verb of ["Straighten", "Curl"] as const) {
-      const digits = fix[verb];
-      if (!digits.length) continue;
-      issues.push({
-        key: `${side}:${verb}:${digits.join(",")}`,
-        text: `${verb} your ${sideName[side]} ${describe(digits)}`,
-        digits: digits.map((d) => `${side}:${d}`),
-      });
-    }
-  }
+  for (const side of ["L", "R"] as Side[])
+    issues.push(
+      ...bendIssues(side, target[side], bends(hand[side]), tolerance),
+    );
   return { state: issues.length ? "issues" : "ok", issues };
+}
+
+/** Too few hands to check the pose: say how to fix the framing. */
+function trackingCheck(count: number): PoseCheck {
+  if (!count)
+    return {
+      state: "no-hands",
+      issues: [
+        { key: "hands", text: "Show both hands to the camera", digits: [] },
+      ],
+    };
+  return {
+    state: "one-hand",
+    issues: [
+      {
+        key: "one-hand",
+        text: "The camera sees your hands as one. Ease them apart slightly so it can check each finger.",
+        digits: [],
+      },
+    ],
+  };
+}
+
+/** Fingers on one hand that should straighten or curl to match the target. */
+function bendIssues(
+  side: Side,
+  target: Record<Digit, number>,
+  measured: Record<Digit, number>,
+  tolerance: number,
+): Issue[] {
+  const fix: Record<"Straighten" | "Curl", Digit[]> = {
+    Straighten: [],
+    Curl: [],
+  };
+  for (const digit of [...FINGERS, "thumb"] as Digit[]) {
+    const want = target[digit];
+    const got = measured[digit];
+    if (want < 0.3 && got > want + tolerance) fix.Straighten.push(digit);
+    else if (want > 0.55 && got < want - tolerance) fix.Curl.push(digit);
+  }
+  return (["Straighten", "Curl"] as const)
+    .filter((verb) => fix[verb].length)
+    .map((verb) => ({
+      key: `${side}:${verb}:${fix[verb].join(",")}`,
+      text: `${verb} your ${sideName[side]} ${describe(fix[verb])}`,
+      digits: fix[verb].map((d) => `${side}:${d}`),
+    }));
 }
 
 /** Equal enough that the on-screen corrections would not change. */
