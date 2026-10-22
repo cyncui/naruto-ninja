@@ -1,7 +1,7 @@
 // Hands-free calibration: while practice waits on a seal with too few samples,
 // capture one each time the pose has stayed steady long enough.
 export const TEACH_SAMPLES = 3;
-export const TEACH_HOLD_MS = 900;
+const TEACH_HOLD_MS = 900;
 
 export class SteadyCapture {
   private previous: number[] | null = null;

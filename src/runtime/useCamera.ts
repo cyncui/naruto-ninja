@@ -18,6 +18,45 @@ export interface TrackingFrame {
   embedding?: number[];
   crop?: CropSource;
 }
+type Status = "idle" | "loading" | "ready" | "error";
+type Timer = ReturnType<typeof setTimeout> | undefined;
+const blankFrame = (): TrackingFrame => ({ hands: [], face: [], aspect: 1 });
+
+// Separate workers avoid reusing the task library's one-shot module factory.
+const visionWorker = () =>
+  new Worker(new URL("./vision.worker.ts", import.meta.url), {
+    type: "module",
+  });
+
+function cameraError(error: unknown) {
+  if (error instanceof DOMException && error.name === "NotAllowedError")
+    return "Camera permission was denied. Allow it in your browser, then try again. Demo mode is always available.";
+  if (error instanceof DOMException && error.name === "NotFoundError")
+    return "No camera found. Connect one, or use demo mode.";
+  return error instanceof Error
+    ? `Could not start the camera: ${error.message}`
+    : "Could not start the camera. Try demo mode.";
+}
+
+/**
+ * Posts a copy of `bitmap` to a side worker. Returns false, with the copy
+ * released, when it could not be sent so the caller can clear its busy flag.
+ */
+async function sendCopy(
+  bitmap: ImageBitmap,
+  send: (copy: ImageBitmap) => boolean,
+) {
+  let copy: ImageBitmap | undefined;
+  try {
+    copy = await createImageBitmap(bitmap);
+    if (send(copy)) return true;
+    copy.close();
+  } catch {
+    copy?.close();
+  }
+  return false;
+}
+
 export function useCamera(
   videoRef: RefObject<HTMLVideoElement | null>,
   onFrame: (frame: TrackingFrame) => void,
@@ -30,54 +69,43 @@ export function useCamera(
   const [cameraMessage, setCameraMessage] = useState(
     "Your camera stays on this device.",
   );
-  const [trackerStatus, setTrackerStatus] = useState<
-    "idle" | "loading" | "ready" | "error"
-  >("idle");
+  const [trackerStatus, setTrackerStatus] = useState<Status>("idle");
   const [trackerMessage, setTrackerMessage] = useState("Camera off");
-  const [faceStatus, setFaceStatus] = useState<
-    "idle" | "loading" | "ready" | "error"
-  >("idle");
-  const faceWorker = useRef<Worker | null>(null);
-  const embedWorker = useRef<Worker | null>(null);
-  const faceTimeout = useRef<ReturnType<typeof setTimeout> | undefined>(
-    undefined,
-  );
+  const [faceStatus, setFaceStatus] = useState<Status>("idle");
+  const workers = useRef<Record<"hands" | "face" | "embed", Worker | null>>({
+    hands: null,
+    face: null,
+    embed: null,
+  });
+  const timers = useRef<{ init: Timer; face: Timer }>({
+    init: undefined,
+    face: undefined,
+  });
   const session = useRef(0);
   const stream = useRef<MediaStream | null>(null);
-  const worker = useRef<Worker | null>(null);
-  const callback = useRef(onFrame);
-  callback.current = onFrame;
-  const faceEnabled = useRef(withFace);
-  faceEnabled.current = withFace;
-  const embeddingEnabled = useRef(withEmbedding);
-  embeddingEnabled.current = withEmbedding;
+  // The latest props, read from worker callbacks that outlive a render.
+  const latest = useRef({ onFrame, withFace, withEmbedding });
+  latest.current = { onFrame, withFace, withEmbedding };
   const requested = useRef(false);
   const raf = useRef(0);
-  const initTimeout = useRef<ReturnType<typeof setTimeout> | undefined>(
-    undefined,
-  );
 
   const stopCamera = useCallback(() => {
     session.current++;
     requested.current = false;
     cancelAnimationFrame(raf.current);
-    clearTimeout(initTimeout.current);
+    clearTimeout(timers.current.init);
     stream.current?.getTracks().forEach((track) => track.stop());
     stream.current = null;
-    worker.current?.terminate();
-    worker.current = null;
-    faceWorker.current?.terminate();
-    faceWorker.current = null;
-    embedWorker.current?.terminate();
-    embedWorker.current = null;
-    clearTimeout(faceTimeout.current);
+    for (const worker of Object.values(workers.current)) worker?.terminate();
+    workers.current = { hands: null, face: null, embed: null };
+    clearTimeout(timers.current.face);
     setFaceStatus("idle");
     if (videoRef.current) videoRef.current.srcObject = null;
     setCameraStatus("idle");
     setCameraMessage("Camera stopped. Your video was not saved.");
     setTrackerStatus("idle");
     setTrackerMessage("Camera off");
-    callback.current({ hands: [], face: [], aspect: 1 });
+    latest.current.onFrame(blankFrame());
   }, [videoRef]);
 
   const startCamera = useCallback(async () => {
@@ -119,11 +147,8 @@ export function useCamera(
       setCameraMessage("Live · video processed on your device");
       setTrackerStatus("loading");
       setTrackerMessage("Loading hand tracking…");
-      const tracker = new Worker(
-        new URL("./vision.worker.ts", import.meta.url),
-        { type: "module" },
-      );
-      worker.current = tracker;
+      const tracker = visionWorker();
+      workers.current.hands = tracker;
       let busy = false;
       let ready = false;
       let lastTime = -1;
@@ -144,29 +169,29 @@ export function useCamera(
         if (token !== session.current) return;
         ready = false;
         tracker.terminate();
-        if (worker.current === tracker) worker.current = null;
-        clearTimeout(initTimeout.current);
+        if (workers.current.hands === tracker) workers.current.hands = null;
+        clearTimeout(timers.current.init);
         setTrackerStatus("error");
         setTrackerMessage(
           "Tracking unavailable. You can still use camera effects and manual seals. Restart the camera to retry.",
         );
-        callback.current({ hands: [], face: [], aspect: 1 });
+        latest.current.onFrame(blankFrame());
       };
       tracker.onerror = failTracker;
       tracker.onmessage = ({ data }) => {
         if (token !== session.current) return;
         if (data.type === "ready") {
-          clearTimeout(initTimeout.current);
+          clearTimeout(timers.current.init);
           ready = true;
           setTrackerStatus("ready");
           setTrackerMessage("Hand tracking ready · teach your own seals below");
         } else if (data.type === "result") {
           busy = false;
           lastHands = data.hands;
-          callback.current({
+          latest.current.onFrame({
             hands: data.hands,
             handedness: data.handedness,
-            face: faceEnabled.current ? lastFace : [],
+            face: latest.current.withFace ? lastFace : [],
             aspect: video.videoWidth / video.videoHeight,
             ...lastEmbedding,
           });
@@ -174,20 +199,17 @@ export function useCamera(
           failTracker();
       };
       tracker.postMessage({ type: "init", base });
-      initTimeout.current = setTimeout(failTracker, 45000);
-      if (embeddingEnabled.current) {
-        const embedder = new Worker(
-          new URL("./vision.worker.ts", import.meta.url),
-          { type: "module" },
-        );
-        embedWorker.current = embedder;
+      timers.current.init = setTimeout(failTracker, 45000);
+      if (latest.current.withEmbedding) {
+        const embedder = visionWorker();
+        workers.current.embed = embedder;
         // The image matcher is optional: if it fails, landmark tracking and
         // manual practice carry on and frames simply have no embedding.
         const failEmbed = () => {
           embedReady = false;
           lastEmbedding = {};
           embedder.terminate();
-          if (embedWorker.current === embedder) embedWorker.current = null;
+          if (workers.current.embed === embedder) workers.current.embed = null;
         };
         embedder.onerror = failEmbed;
         embedder.onmessage = ({ data }) => {
@@ -201,52 +223,87 @@ export function useCamera(
         };
         embedder.postMessage({ type: "init", task: "embed", base });
       }
+      const startFace = () => {
+        faceRequested = true;
+        setFaceStatus("loading");
+        const faceTracker = visionWorker();
+        workers.current.face = faceTracker;
+        const failFace = () => {
+          if (token !== session.current) return;
+          faceReady = false;
+          lastFace = [];
+          faceTracker.terminate();
+          if (workers.current.face === faceTracker) workers.current.face = null;
+          clearTimeout(timers.current.face);
+          setFaceStatus("error");
+        };
+        faceTracker.onerror = failFace;
+        faceTracker.onmessage = ({ data }) => {
+          if (token !== session.current) return;
+          if (data.type === "face-ready") {
+            clearTimeout(timers.current.face);
+            faceReady = true;
+            setFaceStatus("ready");
+          } else if (data.type === "result") {
+            faceBusy = false;
+            lastFace = data.face;
+          } else if (data.type === "error" || data.type === "frame-error")
+            failFace();
+        };
+        faceTracker.postMessage({ type: "init", task: "face", base });
+        timers.current.face = setTimeout(failFace, 45000);
+      };
+      const sendFace = async (bitmap: ImageBitmap, now: number) => {
+        faceBusy = true;
+        lastFaceAt = now;
+        const sent = await sendCopy(bitmap, (copy) => {
+          const face = workers.current.face;
+          if (token !== session.current || !faceReady || !face) return false;
+          face.postMessage({ type: "frame", bitmap: copy, timestamp: now }, [
+            copy,
+          ]);
+          return true;
+        });
+        if (!sent) faceBusy = false;
+      };
+      const sendEmbed = async (bitmap: ImageBitmap, now: number) => {
+        embedBusy = true;
+        lastEmbedAt = now;
+        const crop = cropMemory.next(
+          lastHands,
+          bitmap.width / bitmap.height,
+          now,
+        );
+        const sent = await sendCopy(bitmap, (copy) => {
+          const embed = workers.current.embed;
+          if (token !== session.current || !embed) return false;
+          embed.postMessage(
+            {
+              type: "frame",
+              bitmap: copy,
+              timestamp: now,
+              region: crop.region,
+              crop: crop.source,
+            },
+            [copy],
+          );
+          return true;
+        });
+        if (!sent) embedBusy = false;
+      };
+      /** Whether this animation frame has a new video frame worth tracking. */
+      const due = (now: number) =>
+        ready &&
+        !busy &&
+        !document.hidden &&
+        video.readyState >= 2 &&
+        lastTime !== video.currentTime &&
+        now - sentAt >= 65;
       const tick = async (now: number) => {
         if (token !== session.current) return;
         raf.current = requestAnimationFrame(tick);
-        if (
-          !ready ||
-          busy ||
-          document.hidden ||
-          video.readyState < 2 ||
-          lastTime === video.currentTime ||
-          now - sentAt < 65
-        )
-          return;
-        if (faceEnabled.current && !faceRequested) {
-          faceRequested = true;
-          setFaceStatus("loading");
-          // Separate workers avoid reusing the task library's one-shot module factory.
-          const faceTracker = new Worker(
-            new URL("./vision.worker.ts", import.meta.url),
-            { type: "module" },
-          );
-          faceWorker.current = faceTracker;
-          const failFace = () => {
-            if (token !== session.current) return;
-            faceReady = false;
-            lastFace = [];
-            faceTracker.terminate();
-            if (faceWorker.current === faceTracker) faceWorker.current = null;
-            clearTimeout(faceTimeout.current);
-            setFaceStatus("error");
-          };
-          faceTracker.onerror = failFace;
-          faceTracker.onmessage = ({ data }) => {
-            if (token !== session.current) return;
-            if (data.type === "face-ready") {
-              clearTimeout(faceTimeout.current);
-              faceReady = true;
-              setFaceStatus("ready");
-            } else if (data.type === "result") {
-              faceBusy = false;
-              lastFace = data.face;
-            } else if (data.type === "error" || data.type === "frame-error")
-              failFace();
-          };
-          faceTracker.postMessage({ type: "init", task: "face", base });
-          faceTimeout.current = setTimeout(failFace, 45000);
-        }
+        if (!due(now)) return;
+        if (latest.current.withFace && !faceRequested) startFace();
         lastTime = video.currentTime;
         sentAt = now;
         busy = true;
@@ -257,83 +314,25 @@ export function useCamera(
               (640 * video.videoHeight) / video.videoWidth,
             ),
           });
-          if (token !== session.current || !ready) {
-            bitmap.close();
-            return;
-          }
-          if (
-            faceEnabled.current &&
+          const faceDue =
+            latest.current.withFace &&
             faceReady &&
             !faceBusy &&
-            now - lastFaceAt > 100
-          ) {
-            faceBusy = true;
-            lastFaceAt = now;
-            let copy: ImageBitmap | undefined;
-            try {
-              copy = await createImageBitmap(bitmap);
-              if (token !== session.current) {
-                copy.close();
-                bitmap.close();
-                return;
-              }
-              if (faceReady && faceWorker.current) {
-                faceWorker.current.postMessage(
-                  { type: "frame", bitmap: copy, timestamp: now },
-                  [copy],
-                );
-              } else {
-                copy.close();
-                faceBusy = false;
-              }
-            } catch {
-              copy?.close();
-              faceBusy = false;
-            }
-          }
-          if (embedReady && !embedBusy && now - lastEmbedAt > 120) {
-            embedBusy = true;
-            lastEmbedAt = now;
-            const crop = cropMemory.next(
-              lastHands,
-              bitmap.width / bitmap.height,
-              now,
-            );
-            let copy: ImageBitmap | undefined;
-            try {
-              copy = await createImageBitmap(bitmap);
-              if (token === session.current && embedWorker.current) {
-                embedWorker.current.postMessage(
-                  {
-                    type: "frame",
-                    bitmap: copy,
-                    timestamp: now,
-                    region: crop.region,
-                    crop: crop.source,
-                  },
-                  [copy],
-                );
-              } else {
-                copy.close();
-                embedBusy = false;
-              }
-            } catch {
-              copy?.close();
-              embedBusy = false;
-            }
-          }
+            now - lastFaceAt > 100;
           if (token !== session.current || !ready) {
             bitmap.close();
             return;
           }
-          tracker.postMessage(
-            {
-              type: "frame",
-              bitmap,
-              timestamp: now,
-            },
-            [bitmap],
-          );
+          if (faceDue) await sendFace(bitmap, now);
+          if (embedReady && !embedBusy && now - lastEmbedAt > 120)
+            await sendEmbed(bitmap, now);
+          if (token !== session.current || !ready) {
+            bitmap.close();
+            return;
+          }
+          tracker.postMessage({ type: "frame", bitmap, timestamp: now }, [
+            bitmap,
+          ]);
         } catch {
           busy = false;
           failTracker();
@@ -344,15 +343,7 @@ export function useCamera(
       if (token !== session.current) return;
       stopCamera();
       setCameraStatus("error");
-      setCameraMessage(
-        error instanceof DOMException && error.name === "NotAllowedError"
-          ? "Camera permission was denied. Allow it in your browser, then try again. Demo mode is always available."
-          : error instanceof DOMException && error.name === "NotFoundError"
-            ? "No camera found. Connect one, or use demo mode."
-            : error instanceof Error
-              ? `Could not start the camera: ${error.message}`
-              : "Could not start the camera. Try demo mode.",
-      );
+      setCameraMessage(cameraError(error));
     }
   }, [stopCamera, videoRef]);
 

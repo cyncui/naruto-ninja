@@ -31,7 +31,7 @@ export function features(hands: Point[][], aspect: number): number[] | null {
 }
 
 export const MATCH_LIMIT = 0.16;
-export const MATCH_MARGIN = 0.035;
+const MATCH_MARGIN = 0.035;
 export type Diagnosis =
   | { reason: "no-hands" | "too-small" | "uncalibrated" }
   | { reason: "hand-count"; hands: number }
@@ -115,9 +115,14 @@ export function classify(
   return best.id;
 }
 
-export function readTemplates(
+/**
+ * Parses stored calibration samples, keeping only allowed seals whose 1–12
+ * samples are arrays of finite numbers that also pass `valid`.
+ */
+export function readSampleMap(
   raw: string | null,
   allowed: Set<string>,
+  valid: (sample: number[]) => boolean,
 ): Templates {
   if (!raw) return {};
   try {
@@ -133,13 +138,10 @@ export function readTemplates(
           samples.every(
             (sample) =>
               Array.isArray(sample) &&
-              (sample.length === 84 || sample.length === 42) &&
               sample.every(
-                (n) =>
-                  typeof n === "number" &&
-                  Number.isFinite(n) &&
-                  Math.abs(n) < 100,
-              ),
+                (n) => typeof n === "number" && Number.isFinite(n),
+              ) &&
+              valid(sample),
           ),
       ),
     );
@@ -147,3 +149,12 @@ export function readTemplates(
     return {};
   }
 }
+
+export const readTemplates = (raw: string | null, allowed: Set<string>) =>
+  readSampleMap(
+    raw,
+    allowed,
+    (sample) =>
+      (sample.length === 84 || sample.length === 42) &&
+      sample.every((n) => Math.abs(n) < 100),
+  );
