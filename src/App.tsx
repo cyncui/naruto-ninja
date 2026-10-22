@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import type { RefObject } from "react";
 import AppView from "./AppView";
 import { catalogue } from "../docs/data/catalogue";
 import type { AppModel, TechniqueOption } from "./app-model";
@@ -106,241 +107,118 @@ function loadCalibration(matcher: Matcher) {
   }
 }
 
-export default function App() {
-  const [selected, setSelected] = useState(initialTechnique);
-  const [variantId, setVariantId] = useState(initialTechnique.variants[0].id);
-  const [progress, setProgress] = useState(0);
-  const progressRef = useRef(0);
-  const [mode, setMode] = useState<AppModel["mode"]>("demo");
-  const [activeEffect, setActiveEffect] = useState(false);
-  const [mirrored, setMirrored] = useState(true);
-  const [reducedMotion, setReducedMotion] = useState(
-    () => matchMedia("(prefers-reduced-motion: reduce)").matches,
+const sealName = (id: string) => seals.find((s) => s.id === id)?.name ?? id;
+const faceEffects = new Set(["eyes", "pale-eyes", "markings"]);
+const modeStatus: Record<AppModel["mode"], string> = {
+  demo: "Untimed rehearsal. Tap the numbered seals in order.",
+  arena:
+    "Arena: study each seal in the library, or test yourself in the drill.",
+  camera: "Start the camera, then use Calibration to teach each seal.",
+};
+
+/** Status line after a seal is entered mid-sequence. */
+function stepStatus(
+  next: { correct: boolean; progress: number },
+  id: string,
+  upcoming: string,
+  mode: AppModel["mode"],
+) {
+  const head = next.correct
+    ? `${seals.find((s) => s.id === id)?.name} accepted.`
+    : `Out of order. ${next.progress ? "First seal accepted." : "Start again."}`;
+  const pause = !next.progress
+    ? ""
+    : mode === "demo"
+      ? " Untimed rehearsal."
+      : " An 8-second pause resets practice.";
+  return `${head} Next: ${upcoming}.${pause}`;
+}
+
+const diagnoseFrame = (
+  matcher: Matcher,
+  frame: TrackingFrame,
+  templates: Templates,
+) =>
+  matcher === "image"
+    ? diagnoseEmbedding(frame.embedding, templates)
+    : diagnose(frame.hands, frame.aspect, templates);
+
+const frameVector = (matcher: Matcher, frame: TrackingFrame) =>
+  matcher === "image" ? frame.embedding : features(frame.hands, frame.aspect);
+
+/** Whether the hands have moved away from `from`, the pose just accepted. */
+function released(
+  vector: number[] | null | undefined,
+  from: number[] | null,
+  distance: (a: number[], b: number[]) => number,
+  limit: number,
+) {
+  return (
+    !vector ||
+    !from ||
+    vector.length !== from.length ||
+    distance(vector, from) > limit
   );
-  const [status, setStatus] = useState(
-    "Untimed rehearsal. Tap the numbered seals in order.",
-  );
-  const [matcher] = useState(readMatcher);
+}
+
+/** A calibration sample from the latest frame, or null when there is none. */
+function captureVector(matcher: Matcher, frame: TrackingFrame) {
+  if (matcher !== "image") return features(frame.hands, frame.aspect);
+  return frame.embedding?.length ? compactEmbedding(frame.embedding) : null;
+}
+
+function capturedStatus(
+  matcher: Matcher,
+  id: string,
+  count: number,
+  frame: TrackingFrame,
+  vector: number[],
+) {
+  const tracked =
+    matcher === "image"
+      ? `image crop: ${frame.crop ?? "center"}`
+      : `tracked as ${vector.length === 42 ? "1 hand" : "2 hands"}`;
+  return `Saved ${count} sample${count === 1 ? "" : "s"} for ${seals.find((s) => s.id === id)?.name} (${tracked}). Capture at least 3 with small pose variations.`;
+}
+
+/** A static seal with too few samples for the matcher yet. */
+const needsTeaching = (seal: string | undefined, known: number) =>
+  !!seal && staticSeals.has(seal) && known < TEACH_SAMPLES;
+
+type Teaching = { seal: string; count: number; hold: number; waiting: boolean };
+const sameTeaching = (a: Teaching | null, b: Teaching) =>
+  a?.seal === b.seal &&
+  a.count === b.count &&
+  a.hold === b.hold &&
+  a.waiting === b.waiting;
+
+type Timer = ReturnType<typeof setTimeout> | undefined;
+type SetStatus = (status: string) => void;
+
+/**
+ * Personal calibration samples for the active matcher: storage, the timed
+ * capture countdown and clearing.
+ */
+function useCalibration(
+  matcher: Matcher,
+  setStatus: SetStatus,
+  stable: RefObject<StableSeal>,
+  tracking: RefObject<TrackingFrame>,
+  frameAt: RefObject<number>,
+) {
   const [templates, setTemplates] = useState<Templates>(() =>
     loadCalibration(matcher),
   );
-  const [crop, setCrop] = useState<CropSource | undefined>();
-  const [teaching, setTeaching] = useState<{
-    seal: string;
-    count: number;
-    hold: number;
-    waiting: boolean;
-  } | null>(null);
-  // Frame-to-frame steadiness thresholds are starting guesses, not measured.
-  const steady = useRef(
-    matcher === "image"
-      ? new SteadyCapture(0.06, cosineDistance)
-      : new SteadyCapture(0.08, rms),
-  );
-  const teachingRef = useRef(false);
-  // The pose of the step just accepted. Teaching the next seal waits until the
-  // hands move away from it, so a lingering seal is not saved as the next one.
-  const releaseFrom = useRef<number[] | null>(null);
-  const poseDistance = matcher === "image" ? cosineDistance : rms;
-  const releaseLimit = matcher === "image" ? IMAGE_MATCH_LIMIT : MATCH_LIMIT;
-  const calibrationOpen = useRef(false);
   const templatesRef = useRef(templates);
   templatesRef.current = templates;
-  const [handsDetected, setHandsDetected] = useState(0);
-  const [detectedSeal, setDetectedSeal] = useState<string | null>(null);
-  const [match, setMatch] = useState<Diagnosis>({ reason: "no-hands" });
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const tracking = useRef<TrackingFrame>({ hands: [], face: [], aspect: 1 });
-  const frameAt = useRef(0);
-  const stable = useRef(new StableSeal());
-  const recorder = useRef<SessionRecorder | null>(null);
-  const effectTimer = useRef<ReturnType<typeof setTimeout> | undefined>(
-    undefined,
-  );
-  const sequenceTimer = useRef<ReturnType<typeof setTimeout> | undefined>(
-    undefined,
-  );
-  const captureTimer = useRef<ReturnType<typeof setInterval> | undefined>(
-    undefined,
-  );
+  const captureTimer = useRef<Timer>(undefined);
   const capturing = useRef(false);
-  const inputRef = useRef<(id: string) => void>(() => {});
-  // In the arena, recognized seals answer the drill instead of the sequence.
-  const arenaListener = useRef<((id: string) => void) | null>(null);
-  const arenaFocus = useRef<string | null>(null);
-  const [poseCheck, setPoseCheck] = useState<PoseCheck | null>(null);
-  const teachRef = useRef<(id: string, sample: number[]) => void>(() => {});
-  const variant = selected.variants.find((v) => v.id === variantId)!;
-  const practice = useRef({ steps: [] as string[], mode });
-  practice.current = { steps: variant.steps ?? [], mode };
-  const sequence = (variant.steps ?? []).map(
-    (id) => seals.find((seal) => seal.id === id)!,
-  );
-  const effect = effectFor(selected.id, selected.nature);
+  useEffect(() => () => clearInterval(captureTimer.current), []);
 
-  const previewEffect = useCallback(() => {
-    clearTimeout(effectTimer.current);
-    setActiveEffect(true);
-    effectTimer.current = setTimeout(() => setActiveEffect(false), 6500);
-  }, []);
-  const resetSequence = useCallback(() => {
-    clearTimeout(sequenceTimer.current);
-    clearTimeout(effectTimer.current);
+  const cancelCapture = useCallback(() => {
     clearInterval(captureTimer.current);
     capturing.current = false;
-    progressRef.current = 0;
-    setProgress(0);
-    setActiveEffect(false);
-    stable.current = new StableSeal();
-    setStatus("Sequence reset. Begin with the first seal.");
   }, []);
-  const inputSeal = (id: string) => {
-    if (!variant.steps?.length) {
-      setStatus(
-        "This technique has no known practice sequence. Use effect preview.",
-      );
-      return;
-    }
-    clearTimeout(sequenceTimer.current);
-    const previous =
-      progressRef.current === variant.steps.length ? 0 : progressRef.current;
-    const next = advanceSequence(variant.steps, previous, id);
-    progressRef.current = next.progress;
-    setProgress(next.progress);
-    if (next.complete) {
-      previewEffect();
-      setStatus(`${selected.name}: sequence complete. Effect playing.`);
-    } else {
-      setStatus(
-        (next.correct
-          ? `${seals.find((s) => s.id === id)?.name} accepted. Next: ${sequence[next.progress].name}.`
-          : `Out of order. ${next.progress ? "First seal accepted." : "Start again."} Next: ${sequence[next.progress].name}.`) +
-          (next.progress
-            ? mode === "demo"
-              ? " Untimed rehearsal."
-              : " An 8-second pause resets practice."
-            : ""),
-      );
-      if (next.progress && mode === "camera")
-        sequenceTimer.current = setTimeout(function expire() {
-          // Teaching a seal or calibrating is not a pause in practice.
-          if (teachingRef.current || calibrationOpen.current) {
-            sequenceTimer.current = setTimeout(expire, 8000);
-            return;
-          }
-          progressRef.current = 0;
-          setProgress(0);
-          stable.current = new StableSeal();
-          setStatus("Sequence timed out after 8 seconds. Start again.");
-        }, 8000);
-    }
-  };
-  inputRef.current = inputSeal;
-  const onFrame = useCallback(
-    (frame: TrackingFrame) => {
-      tracking.current = frame;
-      frameAt.current = performance.now();
-      setHandsDetected(frame.hands.length);
-      setCrop(frame.crop);
-      const diagnosis =
-        matcher === "image"
-          ? diagnoseEmbedding(frame.embedding, templatesRef.current)
-          : diagnose(frame.hands, frame.aspect, templatesRef.current);
-      setMatch((previous) =>
-        sameDiagnosis(previous, diagnosis) ? previous : diagnosis,
-      );
-      const label = diagnosis.reason === "match" ? diagnosis.best : null;
-      setDetectedSeal(
-        label ? (seals.find((seal) => seal.id === label)?.name ?? label) : null,
-      );
-      const now = performance.now();
-      // Recording keeps the live readout but must not teach or advance practice.
-      if (recordMode) {
-        recorder.current?.frame(frame, now);
-        return;
-      }
-      const { steps, mode } = practice.current;
-      const next = steps[progressRef.current % Math.max(1, steps.length)];
-      const known = next ? (templatesRef.current[next]?.length ?? 0) : 0;
-      // Compare the hands with the reference pose of the seal being practised.
-      const focus =
-        mode === "arena" ? arenaFocus.current : mode === "camera" ? next : null;
-      const check = focus ? checkPose(focus, frame.hands, frame.aspect) : null;
-      setPoseCheck((previous) =>
-        samePoseCheck(previous, check) ? previous : check,
-      );
-      teachingRef.current =
-        mode === "camera" &&
-        !!next &&
-        staticSeals.has(next) &&
-        known < TEACH_SAMPLES &&
-        !capturing.current &&
-        !calibrationOpen.current;
-      const vector =
-        matcher === "image"
-          ? frame.embedding
-          : features(frame.hands, frame.aspect);
-      const previousPose = releaseFrom.current;
-      if (
-        !vector ||
-        !previousPose ||
-        vector.length !== previousPose.length ||
-        poseDistance(vector, previousPose) > releaseLimit
-      )
-        releaseFrom.current = null;
-      if (teachingRef.current) {
-        const waiting = releaseFrom.current !== null;
-        const { hold, sample } = waiting
-          ? (steady.current.reset(), { hold: 0, sample: null })
-          : steady.current.update(vector, now);
-        const shown = Math.round(hold * 10) / 10;
-        setTeaching((previous) =>
-          previous?.seal === next &&
-          previous.count === known &&
-          previous.hold === shown &&
-          previous.waiting === waiting
-            ? previous
-            : { seal: next, count: known, hold: shown, waiting },
-        );
-        if (sample) teachRef.current(next, sample);
-        return;
-      }
-      steady.current.reset();
-      setTeaching(null);
-      const accepted = stable.current.update(label, now);
-      if (accepted && !capturing.current) {
-        releaseFrom.current = vector ?? null;
-        if (mode === "arena") arenaListener.current?.(accepted);
-        else inputRef.current(accepted);
-      }
-    },
-    [matcher],
-  );
-  const camera = useCamera(
-    videoRef,
-    onFrame,
-    activeEffect &&
-      (effect.type === "eyes" ||
-        effect.type === "pale-eyes" ||
-        effect.type === "markings"),
-    matcher === "image" || recordMode,
-  );
-
-  useEffect(
-    () => () => {
-      clearTimeout(effectTimer.current);
-      clearTimeout(sequenceTimer.current);
-      clearInterval(captureTimer.current);
-    },
-    [],
-  );
-  useEffect(() => {
-    const query = matchMedia("(prefers-reduced-motion: reduce)");
-    const listener = () => setReducedMotion(query.matches);
-    query.addEventListener("change", listener);
-    return () => query.removeEventListener("change", listener);
-  }, []);
-
   const saveTemplates = (next: Templates) => {
     templatesRef.current = next;
     setTemplates(next);
@@ -354,27 +232,33 @@ export default function App() {
       return false;
     }
   };
-  teachRef.current = (id, sample) => {
-    const name = seals.find((s) => s.id === id)?.name ?? id;
-    const stored = matcher === "image" ? compactEmbedding(sample) : sample;
+  const addSample = (id: string, sample: number[]) => {
     const next = {
       ...templatesRef.current,
-      [id]: [...(templatesRef.current[id] ?? []), stored].slice(-12),
+      [id]: [...(templatesRef.current[id] ?? []), sample].slice(-12),
     };
-    saveTemplates(next);
-    if (next[id].length < TEACH_SAMPLES) {
+    return { next, saved: saveTemplates(next) };
+  };
+  /** Ends the countdown by storing the latest frame, if it is fresh and usable. */
+  const finishCapture = (id: string) => {
+    cancelCapture();
+    const frame = tracking.current;
+    const fresh = performance.now() - frameAt.current < 500;
+    const vector = fresh ? captureVector(matcher, frame) : null;
+    if (!vector) {
       setStatus(
-        `Learning ${name}: ${next[id].length} of ${TEACH_SAMPLES} samples. Keep holding.`,
+        matcher === "image" && fresh
+          ? "The image matcher is still loading. Capture again in a moment."
+          : "Could not see your hands. Keep the seal in frame and capture again.",
       );
       return;
     }
-    // The pose being held is the seal just taught: accept the step and keep
-    // the matcher from firing it again until the hands release.
-    stable.current.hold(id, performance.now());
-    releaseFrom.current = sample;
-    inputRef.current(id);
+    const { next, saved } = addSample(id, vector);
+    if (saved)
+      setStatus(capturedStatus(matcher, id, next[id].length, frame, vector));
+    stable.current = new StableSeal();
   };
-  const calibrate = (id: string) => {
+  const calibrate = (id: string, tracked: boolean) => {
     if (capturing.current) return;
     if (!staticSeals.has(id)) {
       setStatus(
@@ -382,7 +266,7 @@ export default function App() {
       );
       return;
     }
-    if (camera.cameraStatus !== "live" || camera.trackerStatus !== "ready") {
+    if (!tracked) {
       setStatus("Start the camera and wait for tracking before capturing.");
       return;
     }
@@ -393,40 +277,467 @@ export default function App() {
     );
     captureTimer.current = setInterval(() => {
       seconds--;
-      if (seconds) {
-        setStatus(`Capturing in ${seconds}… Hold your seal still.`);
-        return;
-      }
-      clearInterval(captureTimer.current);
-      capturing.current = false;
-      const frame = tracking.current;
-      const fresh = performance.now() - frameAt.current < 500;
-      const vector = !fresh
-        ? null
-        : matcher === "image"
-          ? frame.embedding?.length
-            ? compactEmbedding(frame.embedding)
-            : null
-          : features(frame.hands, frame.aspect);
-      if (!vector) {
-        setStatus(
-          matcher === "image" && fresh
-            ? "The image matcher is still loading. Capture again in a moment."
-            : "Could not see your hands. Keep the seal in frame and capture again.",
-        );
-        return;
-      }
-      const next = {
-        ...templatesRef.current,
-        [id]: [...(templatesRef.current[id] ?? []), vector].slice(-12),
-      };
-      if (saveTemplates(next))
-        setStatus(
-          `Saved ${next[id].length} sample${next[id].length === 1 ? "" : "s"} for ${seals.find((s) => s.id === id)?.name} (${matcher === "image" ? `image crop: ${frame.crop ?? "center"}` : `tracked as ${vector.length === 42 ? "1 hand" : "2 hands"}`}). Capture at least 3 with small pose variations.`,
-        );
-      stable.current = new StableSeal();
+      if (seconds) setStatus(`Capturing in ${seconds}… Hold your seal still.`);
+      else finishCapture(id);
     }, 1000);
   };
+  const clearCalibration = () => {
+    cancelCapture();
+    if (saveTemplates({}))
+      setStatus("All personal calibration samples cleared.");
+    stable.current = new StableSeal();
+  };
+  return {
+    templates,
+    templatesRef,
+    capturing,
+    cancelCapture,
+    addSample,
+    calibrate,
+    clearCalibration,
+  };
+}
+
+interface PracticeInput {
+  steps: string[] | null | undefined;
+  sequence: { name: string }[];
+  techniqueName: string;
+  mode: AppModel["mode"];
+  /** True while teaching or calibrating, which do not count as a pause. */
+  paused: () => boolean;
+  /** Stops anything else that a reset must cancel, such as a capture. */
+  onReset: () => void;
+}
+
+/** Progress through the selected sequence, its pause timeout and the effect. */
+function usePractice(
+  input: PracticeInput,
+  setStatus: SetStatus,
+  stable: RefObject<StableSeal>,
+) {
+  const latest = useRef(input);
+  latest.current = input;
+  const [progress, setProgress] = useState(0);
+  const progressRef = useRef(0);
+  const [activeEffect, setActiveEffect] = useState(false);
+  const effectTimer = useRef<Timer>(undefined);
+  const sequenceTimer = useRef<Timer>(undefined);
+  useEffect(
+    () => () => {
+      clearTimeout(effectTimer.current);
+      clearTimeout(sequenceTimer.current);
+    },
+    [],
+  );
+
+  const setStep = useCallback((step: number) => {
+    progressRef.current = step;
+    setProgress(step);
+  }, []);
+  const previewEffect = useCallback(() => {
+    clearTimeout(effectTimer.current);
+    setActiveEffect(true);
+    effectTimer.current = setTimeout(() => setActiveEffect(false), 6500);
+  }, []);
+  const resetSequence = useCallback(() => {
+    clearTimeout(sequenceTimer.current);
+    clearTimeout(effectTimer.current);
+    latest.current.onReset();
+    setStep(0);
+    setActiveEffect(false);
+    stable.current = new StableSeal();
+    setStatus("Sequence reset. Begin with the first seal.");
+  }, [setStep, setStatus, stable]);
+  /** After 8 seconds without a step, camera practice starts over. */
+  const startPauseTimer = () => {
+    sequenceTimer.current = setTimeout(function expire() {
+      // Teaching a seal or calibrating is not a pause in practice.
+      if (latest.current.paused()) {
+        sequenceTimer.current = setTimeout(expire, 8000);
+        return;
+      }
+      setStep(0);
+      stable.current = new StableSeal();
+      setStatus("Sequence timed out after 8 seconds. Start again.");
+    }, 8000);
+  };
+  const inputSeal = (id: string) => {
+    const { steps, sequence, techniqueName, mode } = latest.current;
+    if (!steps?.length) {
+      setStatus(
+        "This technique has no known practice sequence. Use effect preview.",
+      );
+      return;
+    }
+    clearTimeout(sequenceTimer.current);
+    const previous =
+      progressRef.current === steps.length ? 0 : progressRef.current;
+    const next = advanceSequence(steps, previous, id);
+    setStep(next.progress);
+    if (next.complete) {
+      previewEffect();
+      setStatus(`${techniqueName}: sequence complete. Effect playing.`);
+      return;
+    }
+    setStatus(stepStatus(next, id, sequence[next.progress].name, mode));
+    if (next.progress && mode === "camera") startPauseTimer();
+  };
+  return {
+    progress,
+    progressRef,
+    activeEffect,
+    previewEffect,
+    resetSequence,
+    inputSeal,
+  };
+}
+
+/** Refs and callbacks the frame pipeline shares with the rest of the app. */
+interface RecognitionInput {
+  matcher: Matcher;
+  templatesRef: RefObject<Templates>;
+  progressRef: RefObject<number>;
+  practice: RefObject<{ steps: string[]; mode: AppModel["mode"] }>;
+  capturing: RefObject<boolean>;
+  calibrationOpen: RefObject<boolean>;
+  /** Set each frame: whether hands-free teaching owns the camera. */
+  teachingRef: RefObject<boolean>;
+  stable: RefObject<StableSeal>;
+  tracking: RefObject<TrackingFrame>;
+  frameAt: RefObject<number>;
+  recorder: RefObject<SessionRecorder | null>;
+  arenaFocus: RefObject<string | null>;
+  arenaListener: RefObject<((id: string) => void) | null>;
+  inputSeal: (id: string) => void;
+  addSample: (id: string, sample: number[]) => { next: Templates };
+  setStatus: SetStatus;
+}
+
+/**
+ * The per-frame pipeline: match the hands, check the pose, teach seals that
+ * lack samples, and pass accepted seals on to practice or the arena.
+ */
+function useRecognition(input: RecognitionInput) {
+  const latest = useRef(input);
+  latest.current = input;
+  const { matcher } = input;
+  const [crop, setCrop] = useState<CropSource | undefined>();
+  const [teaching, setTeaching] = useState<Teaching | null>(null);
+  const [handsDetected, setHandsDetected] = useState(0);
+  const [detectedSeal, setDetectedSeal] = useState<string | null>(null);
+  const [match, setMatch] = useState<Diagnosis>({ reason: "no-hands" });
+  const [poseCheck, setPoseCheck] = useState<PoseCheck | null>(null);
+  // Frame-to-frame steadiness thresholds are starting guesses, not measured.
+  const steady = useRef(
+    matcher === "image"
+      ? new SteadyCapture(0.06, cosineDistance)
+      : new SteadyCapture(0.08, rms),
+  );
+  // The pose of the step just accepted. Teaching the next seal waits until the
+  // hands move away from it, so a lingering seal is not saved as the next one.
+  const releaseFrom = useRef<number[] | null>(null);
+  const poseDistance = matcher === "image" ? cosineDistance : rms;
+  const releaseLimit = matcher === "image" ? IMAGE_MATCH_LIMIT : MATCH_LIMIT;
+
+  const teach = (id: string, sample: number[]) => {
+    const { addSample, setStatus, stable, inputSeal } = latest.current;
+    const stored = matcher === "image" ? compactEmbedding(sample) : sample;
+    const { next } = addSample(id, stored);
+    if (next[id].length < TEACH_SAMPLES) {
+      setStatus(
+        `Learning ${sealName(id)}: ${next[id].length} of ${TEACH_SAMPLES} samples. Keep holding.`,
+      );
+      return;
+    }
+    // The pose being held is the seal just taught: accept the step and keep
+    // the matcher from firing it again until the hands release.
+    stable.current.hold(id, performance.now());
+    releaseFrom.current = sample;
+    inputSeal(id);
+  };
+  /** Hands-free teaching: show hold progress and store a sample once steady. */
+  const teachFrame = (
+    seal: string,
+    count: number,
+    vector: number[] | null | undefined,
+    now: number,
+  ) => {
+    const waiting = releaseFrom.current !== null;
+    if (waiting) steady.current.reset();
+    const { hold, sample } = waiting
+      ? { hold: 0, sample: null }
+      : steady.current.update(vector, now);
+    const shown: Teaching = {
+      seal,
+      count,
+      hold: Math.round(hold * 10) / 10,
+      waiting,
+    };
+    setTeaching((previous) =>
+      sameTeaching(previous, shown) ? previous : shown,
+    );
+    if (sample) teach(seal, sample);
+  };
+  const teachFrameRef = useRef(teachFrame);
+  teachFrameRef.current = teachFrame;
+  const onFrame = useCallback(
+    (frame: TrackingFrame) => {
+      const {
+        templatesRef,
+        progressRef,
+        practice,
+        capturing,
+        calibrationOpen,
+        teachingRef,
+        stable,
+        tracking,
+        frameAt,
+        recorder,
+        arenaFocus,
+        arenaListener,
+        inputSeal,
+      } = latest.current;
+      tracking.current = frame;
+      frameAt.current = performance.now();
+      setHandsDetected(frame.hands.length);
+      setCrop(frame.crop);
+      const diagnosis = diagnoseFrame(matcher, frame, templatesRef.current);
+      setMatch((previous) =>
+        sameDiagnosis(previous, diagnosis) ? previous : diagnosis,
+      );
+      const label = diagnosis.reason === "match" ? diagnosis.best : null;
+      setDetectedSeal(label && sealName(label));
+      const now = performance.now();
+      // Recording keeps the live readout but must not teach or advance practice.
+      if (recordMode) {
+        recorder.current?.frame(frame, now);
+        return;
+      }
+      const { steps, mode } = practice.current;
+      const next = steps[progressRef.current % Math.max(1, steps.length)];
+      const known = next ? (templatesRef.current[next]?.length ?? 0) : 0;
+      // Compare the hands with the reference pose of the seal being practised.
+      const focus = practiceFocus(mode, arenaFocus.current, next);
+      const check = focus ? checkPose(focus, frame.hands, frame.aspect) : null;
+      setPoseCheck((previous) =>
+        samePoseCheck(previous, check) ? previous : check,
+      );
+      teachingRef.current =
+        mode === "camera" &&
+        needsTeaching(next, known) &&
+        !capturing.current &&
+        !calibrationOpen.current;
+      const vector = frameVector(matcher, frame);
+      if (released(vector, releaseFrom.current, poseDistance, releaseLimit))
+        releaseFrom.current = null;
+      if (teachingRef.current) {
+        teachFrameRef.current(next, known, vector, now);
+        return;
+      }
+      steady.current.reset();
+      setTeaching(null);
+      const accepted = stable.current.update(label, now);
+      if (accepted && !capturing.current) {
+        releaseFrom.current = vector ?? null;
+        if (mode === "arena") arenaListener.current?.(accepted);
+        else inputSeal(accepted);
+      }
+    },
+    [matcher],
+  );
+  return {
+    onFrame,
+    crop,
+    teaching,
+    handsDetected,
+    detectedSeal,
+    match,
+    poseCheck,
+  };
+}
+
+/** The chosen technique and variant, with the seal sequence it implies. */
+function useTechnique(setStatus: SetStatus) {
+  const [selected, setSelected] = useState(initialTechnique);
+  const [variantId, setVariantId] = useState(initialTechnique.variants[0].id);
+  const variant = selected.variants.find((v) => v.id === variantId)!;
+  const sequence = (variant.steps ?? []).map(
+    (id) => seals.find((seal) => seal.id === id)!,
+  );
+  const selectTechnique = (id: string, reset: () => void) => {
+    const next = techniques.find((t) => t.id === id);
+    if (!next) return;
+    reset();
+    setSelected(next);
+    setVariantId(next.variants[0].id);
+    setStatus(
+      next.variants[0].steps?.length
+        ? "Technique selected. Tap the seals in order."
+        : "Technique selected. Preview its effect below.",
+    );
+  };
+  const selectVariant = (id: string, reset: () => void) => {
+    if (!selected.variants.some((v) => v.id === id)) return;
+    reset();
+    setVariantId(id);
+  };
+  return {
+    selected,
+    variantId,
+    variant,
+    sequence,
+    effect: effectFor(selected.id, selected.nature),
+    selectTechnique,
+    selectVariant,
+  };
+}
+
+/** In the arena, recognized seals answer the drill instead of the sequence. */
+function useArenaBridge() {
+  const focus = useRef<string | null>(null);
+  const listener = useRef<((id: string) => void) | null>(null);
+  const setArenaFocus = useCallback((id: string | null) => {
+    focus.current = id;
+  }, []);
+  const onArenaSeal = useCallback((next: (id: string) => void) => {
+    listener.current = next;
+    return () => {
+      if (listener.current === next) listener.current = null;
+    };
+  }, []);
+  return { focus, listener, setArenaFocus, onArenaSeal };
+}
+
+const previewStatus = (name: string) =>
+  `${name} preview. This does not count as a recognized sequence.`;
+
+/** Camera start/stop and input-mode switches; each also resets practice. */
+function modeControls(
+  camera: { startCamera(): Promise<void>; stopCamera(): void },
+  mode: AppModel["mode"],
+  setMode: (mode: AppModel["mode"]) => void,
+  resetSequence: () => void,
+  setStatus: SetStatus,
+): Pick<AppModel, "startCamera" | "stopCamera" | "setMode"> {
+  return {
+    startCamera: () => {
+      if (mode !== "arena") setMode("camera");
+      resetSequence();
+      void camera.startCamera();
+    },
+    stopCamera: () => {
+      camera.stopCamera();
+      resetSequence();
+    },
+    setMode: (next) => {
+      if (next === "demo") camera.stopCamera();
+      resetSequence();
+      setMode(next);
+      setStatus(modeStatus[next]);
+    },
+  };
+}
+
+/** Follows the system reduced-motion setting; the UI can also toggle it. */
+function useReducedMotion() {
+  const state = useState(
+    () => matchMedia("(prefers-reduced-motion: reduce)").matches,
+  );
+  const setReducedMotion = state[1];
+  useEffect(() => {
+    const query = matchMedia("(prefers-reduced-motion: reduce)");
+    const listener = () => setReducedMotion(query.matches);
+    query.addEventListener("change", listener);
+    return () => query.removeEventListener("change", listener);
+  }, [setReducedMotion]);
+  return state;
+}
+
+/** The seal practice would check now: the arena's focus, or the next step. */
+const practiceFocus = (
+  mode: AppModel["mode"],
+  arena: string | null,
+  next: string | undefined,
+) => (mode === "arena" ? arena : mode === "camera" ? next : null);
+
+export default function App() {
+  const [mode, setMode] = useState<AppModel["mode"]>("demo");
+  const [mirrored, setMirrored] = useState(true);
+  const [reducedMotion, setReducedMotion] = useReducedMotion();
+  const [status, setStatus] = useState(modeStatus.demo);
+  const technique = useTechnique(setStatus);
+  const { selected, variant, sequence, effect } = technique;
+  const arena = useArenaBridge();
+  const [matcher] = useState(readMatcher);
+  const teachingRef = useRef(false);
+  const calibrationOpen = useRef(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const tracking = useRef<TrackingFrame>({ hands: [], face: [], aspect: 1 });
+  const frameAt = useRef(0);
+  const stable = useRef(new StableSeal());
+  const recorder = useRef<SessionRecorder | null>(null);
+  const practice = useRef({ steps: [] as string[], mode });
+  practice.current = { steps: variant.steps ?? [], mode };
+  const calibration = useCalibration(
+    matcher,
+    setStatus,
+    stable,
+    tracking,
+    frameAt,
+  );
+  const { templates, templatesRef, capturing } = calibration;
+  const {
+    progress,
+    progressRef,
+    activeEffect,
+    previewEffect,
+    resetSequence,
+    inputSeal,
+  } = usePractice(
+    {
+      steps: variant.steps,
+      sequence,
+      techniqueName: selected.name,
+      mode,
+      paused: () => teachingRef.current || calibrationOpen.current,
+      onReset: calibration.cancelCapture,
+    },
+    setStatus,
+    stable,
+  );
+  const {
+    onFrame,
+    crop,
+    teaching,
+    handsDetected,
+    detectedSeal,
+    match,
+    poseCheck,
+  } = useRecognition({
+    matcher,
+    templatesRef,
+    progressRef,
+    practice,
+    capturing,
+    calibrationOpen,
+    teachingRef,
+    stable,
+    tracking,
+    frameAt,
+    recorder,
+    arenaFocus: arena.focus,
+    arenaListener: arena.listener,
+    inputSeal,
+    addSample: calibration.addSample,
+    setStatus,
+  });
+
+  const camera = useCamera(
+    videoRef,
+    onFrame,
+    activeEffect && faceEffects.has(effect.type),
+    matcher === "image" || recordMode,
+  );
 
   const model: AppModel = {
     stage: (
@@ -447,7 +758,7 @@ export default function App() {
     techniques,
     seals,
     selected,
-    variantId,
+    variantId: technique.variantId,
     sequence,
     progress,
     mode,
@@ -473,71 +784,24 @@ export default function App() {
     mirrored,
     reducedMotion,
     status,
-    startCamera: () => {
-      if (mode !== "arena") setMode("camera");
-      resetSequence();
-      void camera.startCamera();
-    },
-    stopCamera: () => {
-      camera.stopCamera();
-      resetSequence();
-    },
-    setMode: (next) => {
-      if (next === "demo") camera.stopCamera();
-      resetSequence();
-      setMode(next);
-      setStatus(
-        next === "demo"
-          ? "Untimed rehearsal. Tap the numbered seals in order."
-          : next === "arena"
-            ? "Arena: study each seal in the library, or test yourself in the drill."
-            : "Start the camera, then use Calibration to teach each seal.",
-      );
-    },
+    ...modeControls(camera, mode, setMode, resetSequence, setStatus),
     poseCheck,
-    setArenaFocus: (id) => {
-      arenaFocus.current = id;
-    },
-    onArenaSeal: (listener) => {
-      arenaListener.current = listener;
-      return () => {
-        if (arenaListener.current === listener) arenaListener.current = null;
-      };
-    },
-    selectTechnique: (id) => {
-      const next = techniques.find((t) => t.id === id);
-      if (!next) return;
-      resetSequence();
-      setSelected(next);
-      setVariantId(next.variants[0].id);
-      setStatus(
-        next.variants[0].steps?.length
-          ? "Technique selected. Tap the seals in order."
-          : "Technique selected. Preview its effect below.",
-      );
-    },
-    selectVariant: (id) => {
-      if (selected.variants.some((v) => v.id === id)) {
-        resetSequence();
-        setVariantId(id);
-      }
-    },
+    setArenaFocus: arena.setArenaFocus,
+    onArenaSeal: arena.onArenaSeal,
+    selectTechnique: (id) => technique.selectTechnique(id, resetSequence),
+    selectVariant: (id) => technique.selectVariant(id, resetSequence),
     inputSeal,
     resetSequence,
     previewEffect: () => {
       previewEffect();
-      setStatus(
-        `${effect.name} preview. This does not count as a recognized sequence.`,
-      );
+      setStatus(previewStatus(effect.name));
     },
-    calibrate,
-    clearCalibration: () => {
-      clearInterval(captureTimer.current);
-      capturing.current = false;
-      if (saveTemplates({}))
-        setStatus("All personal calibration samples cleared.");
-      stable.current = new StableSeal();
-    },
+    calibrate: (id) =>
+      calibration.calibrate(
+        id,
+        camera.cameraStatus === "live" && camera.trackerStatus === "ready",
+      ),
+    clearCalibration: calibration.clearCalibration,
     toggleMirror: () => setMirrored((value) => !value),
     toggleReducedMotion: () => setReducedMotion((value) => !value),
   };
