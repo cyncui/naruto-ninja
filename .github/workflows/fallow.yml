@@ -13,6 +13,12 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      # Type-aware analysis and dependency checks read node_modules.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
       - uses: fallow-rs/fallow@v3
         with:
           command: audit
