@@ -10,7 +10,7 @@ Drag Hand sequence by its title bar. Resize using the lower-right corner. Focus 
 
 ## Driving it with Playwright
 
-Run `npm run test:e2e -- --grep "panel drag|phone has" --trace on`. Use region `Movable hand sequence`, buttons `Move sequence panel: HAND SEQUENCE`, `Resize sequence panel` and `Reset panel position and size`. Check bounding boxes after drag, resize and reload. At 390×844, the stage fills the viewport and the panel stays within bounds without page overflow.
+Run `npm run test:e2e -- --grep "panel drag|phone has|short phone" --trace on`. Use region `Movable hand sequence`, buttons `Move sequence panel: HAND SEQUENCE`, `Resize sequence panel` and `Reset panel position and size`. Check bounding boxes after drag, resize and reload. At 390×844, the stage fills the viewport and the panel stays within bounds without page overflow.
 
 ## Gotchas
 
