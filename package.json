@@ -15,6 +15,8 @@
     "typecheck": "tsc -p tsconfig.json",
     "test:unit": "node --experimental-strip-types --test tests/*.test.ts",
     "test:e2e": "playwright test",
+    "fallow": "fallow",
+    "fallow:audit": "fallow audit",
     "predev": "npm run prepare:vision",
     "prebuild": "npm run prepare:vision"
   },
@@ -26,6 +28,7 @@
     "ajv": "8.20.0",
     "ajv-formats": "3.0.1",
     "axe-core": "^4.14.0",
+    "fallow": "3.35.0",
     "prettier": "3.6.2",
     "typescript": "7.0.2",
     "vite": "8.3.4"
