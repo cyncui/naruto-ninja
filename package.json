@@ -16,6 +16,7 @@
     "format": "prettier --write src tests",
     "test:unit": "node --experimental-strip-types --test tests/*.test.ts",
     "test:e2e": "playwright test",
+    "fixtures:training": "node --experimental-strip-types scripts/training-fixtures.ts",
     "fallow": "fallow",
     "fallow:audit": "fallow audit",
     "predev": "npm run prepare:vision",

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { RefObject } from "react";
 import type { Point } from "./recognition";
+import { FrameErrors } from "./frame-errors";
 import { CropMemory } from "./crop";
 import type { CropSource } from "./crop";
 
@@ -164,8 +165,13 @@ export function useCamera(
       let lastEmbedAt = 0;
       let lastEmbedding: { embedding?: number[]; crop?: CropSource } = {};
       const cropMemory = new CropMemory();
+      const errors = {
+        hands: new FrameErrors(),
+        face: new FrameErrors(),
+        embed: new FrameErrors(),
+      };
       const base = new URL(import.meta.env.BASE_URL, location.href).href;
-      const failTracker = () => {
+      const failTracker = (reason?: string) => {
         if (token !== session.current) return;
         ready = false;
         tracker.terminate();
@@ -173,11 +179,11 @@ export function useCamera(
         clearTimeout(timers.current.init);
         setTrackerStatus("error");
         setTrackerMessage(
-          "Tracking unavailable. You can still use camera effects and manual seals. Restart the camera to retry.",
+          `Tracking unavailable${reason ? ` (${reason})` : ""}. You can still use camera effects and manual seals. Restart the camera to retry.`,
         );
         latest.current.onFrame(blankFrame());
       };
-      tracker.onerror = failTracker;
+      tracker.onerror = () => failTracker();
       tracker.onmessage = ({ data }) => {
         if (token !== session.current) return;
         if (data.type === "ready") {
@@ -187,6 +193,7 @@ export function useCamera(
           setTrackerMessage("Hand tracking ready · teach your own seals below");
         } else if (data.type === "result") {
           busy = false;
+          errors.hands.ok();
           lastHands = data.hands;
           latest.current.onFrame({
             hands: data.hands,
@@ -195,11 +202,14 @@ export function useCamera(
             aspect: video.videoWidth / video.videoHeight,
             ...lastEmbedding,
           });
-        } else if (data.type === "error" || data.type === "frame-error")
-          failTracker();
+        } else if (data.type === "frame-error") {
+          busy = false;
+          if (errors.hands.failed("Hand tracking", data.message))
+            failTracker(data.message);
+        } else if (data.type === "error") failTracker(data.message);
       };
       tracker.postMessage({ type: "init", base });
-      timers.current.init = setTimeout(failTracker, 45000);
+      timers.current.init = setTimeout(() => failTracker("timed out"), 45000);
       if (latest.current.withEmbedding) {
         const embedder = visionWorker();
         workers.current.embed = embedder;
@@ -217,9 +227,13 @@ export function useCamera(
           if (data.type === "embed-ready") embedReady = true;
           else if (data.type === "embedding") {
             embedBusy = false;
+            errors.embed.ok();
             lastEmbedding = { embedding: data.embedding, crop: data.crop };
-          } else if (data.type === "error" || data.type === "frame-error")
-            failEmbed();
+          } else if (data.type === "frame-error") {
+            embedBusy = false;
+            if (errors.embed.failed("Image embedding", data.message))
+              failEmbed();
+          } else if (data.type === "error") failEmbed();
         };
         embedder.postMessage({ type: "init", task: "embed", base });
       }
@@ -246,9 +260,12 @@ export function useCamera(
             setFaceStatus("ready");
           } else if (data.type === "result") {
             faceBusy = false;
+            errors.face.ok();
             lastFace = data.face;
-          } else if (data.type === "error" || data.type === "frame-error")
-            failFace();
+          } else if (data.type === "frame-error") {
+            faceBusy = false;
+            if (errors.face.failed("Face tracking", data.message)) failFace();
+          } else if (data.type === "error") failFace();
         };
         faceTracker.postMessage({ type: "init", task: "face", base });
         timers.current.face = setTimeout(failFace, 45000);

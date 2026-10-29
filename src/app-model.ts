@@ -55,6 +55,13 @@ export interface AppModel {
   poseCheck: PoseCheck | null;
   /** The seal the arena is showing, for live pose feedback. */
   setArenaFocus(id: string | null): void;
+  /**
+   * On ?record, the seal or `none:*` label being recorded, which the guide
+   * shows instead of the practice step. Null for sequence clips and outside
+   * record mode.
+   */
+  recordFocus: string | null;
+  setRecordFocus(id: string | null): void;
   samples: Record<string, number>;
   activeEffect: boolean;
   effectName: string;

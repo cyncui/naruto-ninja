@@ -21,6 +21,7 @@ This file gives coding agents project-specific context. Keep it short and update
 - Build: `npm run build` (runs `npm run check`, then Vite and prerender)
 - Test: `npm run test:unit`; `npm run test:e2e` against the production build
 - Typecheck: `npm run typecheck`
+- Seal model evaluation: `cd training && uv run pytest` (parity with `src/runtime`), `uv run baseline.py`, `uv run train.py`; regenerate fixtures with `npm run fixtures:training`
 - Code health: `npm run fallow`, `npm run fallow:audit -- --base origin/main`
 
 ## Fallow

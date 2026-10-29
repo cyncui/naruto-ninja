@@ -5,6 +5,7 @@
     "src/main.{ts,tsx,js,jsx}",
     "scripts/capture-arena.mjs",
     "scripts/subset-jp-font.mjs",
+    "scripts/training-fixtures.ts",
     "docs/data/catalogue.ts"
   ],
   "ignorePatterns": [

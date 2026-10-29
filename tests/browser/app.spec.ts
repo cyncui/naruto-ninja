@@ -549,7 +549,16 @@ test("record mode saves a labelled clip, including frames with no hands", async 
   const record = panel.getByRole("button", { name: "Record", exact: true });
   await expect(record).toBeEnabled({ timeout: 45000 });
   await panel.getByLabel("Person").fill("p1");
+  // The guide follows the label being recorded, not the practice step.
+  await panel.getByLabel("Label").selectOption("ox");
+  // The ring is aria-hidden decoration here, so find the figure by its label.
+  const figure = page.locator('.training-seal [aria-label^="3D hand model"]');
+  await expect(figure).toHaveAttribute("aria-label", /of the Ox seal/);
   await panel.getByLabel("Label").selectOption("none:rest");
+  await expect(figure).toHaveCount(0);
+  await expect(page.locator(".training-seal")).toContainText(
+    "Not a seal · rest. Hands down",
+  );
   await panel.getByLabel("Length").selectOption("5");
   await record.click();
   await expect(panel.getByRole("status")).toContainText("Not a seal · rest");
@@ -580,4 +589,58 @@ test("record mode saves a labelled clip, including frames with no hands", async 
   expect(frames.length).toBe(lines[1].frames);
   expect(frames.every((f) => Array.isArray(f.handedness))).toBe(true);
   expect(frames.some((f) => f.embedding?.length === 1024)).toBe(true);
+});
+
+test("a few failed tracker frames are skipped; a run of them stops tracking with the reason", async ({
+  page,
+}) => {
+  // Turn the next N hand-tracker results into frame errors, as MediaPipe
+  // reports when detectForVideo throws.
+  await page.addInitScript(() => {
+    const failing = window as unknown as { failFrames: number };
+    failing.failFrames = 0;
+    const Base = window.Worker;
+    window.Worker = class extends Base {
+      set onmessage(handler: ((event: MessageEvent) => void) | null) {
+        super.onmessage = (event: MessageEvent) => {
+          if (event.data?.type === "result" && failing.failFrames > 0) {
+            failing.failFrames--;
+            handler?.(
+              new MessageEvent("message", {
+                data: { type: "frame-error", message: "injected failure" },
+              }),
+            );
+          } else handler?.(event);
+        };
+      }
+      get onmessage() {
+        return super.onmessage;
+      }
+    };
+  });
+  await page.goto("/?record");
+  const panel = page.getByRole("region", { name: "Recorder" });
+  await page.getByRole("button", { name: /Start camera/ }).click();
+  const record = panel.getByRole("button", { name: "Record", exact: true });
+  await expect(record).toBeEnabled({ timeout: 45000 });
+  await panel.getByLabel("Label").selectOption("none:rest");
+  await panel.getByLabel("Length").selectOption("5");
+  await record.click();
+  await expect(panel.getByRole("status")).toContainText("Recording", {
+    timeout: 5000,
+  });
+  await page.evaluate(() => {
+    (window as unknown as { failFrames: number }).failFrames = 2;
+  });
+  await expect(panel.locator(".record-stats")).toContainText(
+    "Not a seal · rest",
+    { timeout: 15000 },
+  );
+  await expect(page.getByText("TRACKER: READY")).toBeVisible();
+  await page.evaluate(() => {
+    (window as unknown as { failFrames: number }).failFrames = 3;
+  });
+  await expect(
+    page.getByText("Tracking unavailable (injected failure)").first(),
+  ).toBeVisible({ timeout: 5000 });
 });
