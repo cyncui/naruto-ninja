@@ -264,6 +264,31 @@ function ClipActions({
   );
 }
 
+const sequenceOf = (model: AppModel) => `sequence:${model.variantId}`;
+
+function labelName(model: AppModel, id: string) {
+  if (id === sequenceOf(model)) return `Full sequence · ${model.selected.name}`;
+  return (
+    model.seals.find((s) => s.id === id)?.name ??
+    id.replace("none:", "Not a seal · ")
+  );
+}
+
+/** Expected seal order for a full-sequence clip. */
+const clipSteps = (model: AppModel, id: string) =>
+  id === sequenceOf(model) ? model.sequence.map((s) => s.id) : undefined;
+
+const timeLeft = (phase: Phase, now: number) =>
+  phase.kind === "idle" ? 0 : Math.max(0, phase.until - now);
+
+/** The guide shows the label being recorded; a sequence keeps its own ring. */
+function useGuideFocus(label: string, setFocus: AppModel["setRecordFocus"]) {
+  useEffect(() => {
+    setFocus(label.startsWith("sequence:") ? null : label);
+    return () => setFocus(null);
+  }, [label, setFocus]);
+}
+
 export default function RecordPanel({
   model,
   recorder,
@@ -280,22 +305,18 @@ export default function RecordPanel({
   const [fields, setFields] = useState(loadFields);
   const [label, setLabel] = useState(labels[0]);
   const [seconds, setSeconds] = useState(10);
+  useGuideFocus(label, model.setRecordFocus);
   const ready =
     model.cameraStatus === "live" && model.trackerStatus === "ready";
-  const sequenceLabel = `sequence:${model.variantId}`;
-  const nameOf = (id: string) =>
-    id === sequenceLabel
-      ? `Full sequence · ${model.selected.name}`
-      : (model.seals.find((s) => s.id === id)?.name ??
-        id.replace("none:", "Not a seal · "));
+  const sequenceLabel = sequenceOf(model);
+  const nameOf = (id: string) => labelName(model, id);
 
   const session = useRecordingSession({
     recorder,
     ready,
     seconds,
     onLabel: setLabel,
-    steps: (id) =>
-      id === sequenceLabel ? model.sequence.map((s) => s.id) : undefined,
+    steps: (id) => clipSteps(model, id),
     info: () => ({
       ...fields,
       session: crypto.randomUUID().slice(0, 8),
@@ -319,8 +340,7 @@ export default function RecordPanel({
   }, []);
 
   const stats = recorder.current?.stats() ?? [];
-  const remaining =
-    phase.kind === "idle" ? 0 : Math.max(0, phase.until - session.now);
+  const remaining = timeLeft(phase, session.now);
   const options = [
     ...labels,
     ...(model.sequence.length ? [sequenceLabel] : []),

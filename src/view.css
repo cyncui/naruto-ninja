@@ -33,6 +33,10 @@
   --muted: #c98a4e;
   --red: #ff3b2a;
   --green: #5dff8f;
+  /* The 3D figure's right hand, against the amber left hand. */
+  --hand-r: #8fb4ff;
+  --hand-r-dim: #3a5585;
+  --hand-r-plate: #060d1a;
   --glow: 0 0 10px #ff8a1e66;
   --display: Display, "Arial Narrow", sans-serif;
   --mono: Readout, ui-monospace, monospace;
@@ -569,6 +573,16 @@ summary:focus-visible {
 .figure-bone .figure-core {
   stroke: #160b03;
 }
+.figure-palm.right {
+  fill: var(--hand-r-plate);
+  stroke: var(--hand-r-dim);
+}
+.figure-bone.right line {
+  stroke: var(--hand-r);
+}
+.figure-bone.right .figure-core {
+  stroke: var(--hand-r-plate);
+}
 .figure-bone circle {
   fill: none;
   stroke: var(--green);
@@ -591,6 +605,18 @@ summary:focus-visible {
   fill: var(--green);
   font: 9px var(--mono);
   dominant-baseline: middle;
+}
+.figure-tag.left rect {
+  stroke: var(--amber);
+}
+.figure-tag.left text {
+  fill: var(--amber);
+}
+.figure-tag.right rect {
+  stroke: var(--hand-r);
+}
+.figure-tag.right text {
+  fill: var(--hand-r);
 }
 .figure-handle {
   fill: transparent;

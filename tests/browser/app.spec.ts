@@ -549,7 +549,16 @@ test("record mode saves a labelled clip, including frames with no hands", async 
   const record = panel.getByRole("button", { name: "Record", exact: true });
   await expect(record).toBeEnabled({ timeout: 45000 });
   await panel.getByLabel("Person").fill("p1");
+  // The guide follows the label being recorded, not the practice step.
+  await panel.getByLabel("Label").selectOption("ox");
+  // The ring is aria-hidden decoration here, so find the figure by its label.
+  const figure = page.locator('.training-seal [aria-label^="3D hand model"]');
+  await expect(figure).toHaveAttribute("aria-label", /of the Ox seal/);
   await panel.getByLabel("Label").selectOption("none:rest");
+  await expect(figure).toHaveCount(0);
+  await expect(page.locator(".training-seal")).toContainText(
+    "Not a seal · rest. Hands down",
+  );
   await panel.getByLabel("Length").selectOption("5");
   await record.click();
   await expect(panel.getByRole("status")).toContainText("Not a seal · rest");

@@ -407,6 +407,8 @@ interface RecognitionInput {
   frameAt: RefObject<number>;
   recorder: RefObject<SessionRecorder | null>;
   arenaFocus: RefObject<string | null>;
+  /** The label being recorded on ?record, for live pose feedback. */
+  recordFocus: RefObject<string | null>;
   arenaListener: RefObject<((id: string) => void) | null>;
   inputSeal: (id: string) => void;
   addSample: (id: string, sample: number[]) => { next: Templates };
@@ -494,6 +496,7 @@ function useRecognition(input: RecognitionInput) {
         frameAt,
         recorder,
         arenaFocus,
+        recordFocus,
         arenaListener,
         inputSeal,
       } = latest.current;
@@ -508,20 +511,26 @@ function useRecognition(input: RecognitionInput) {
       const label = diagnosis.reason === "match" ? diagnosis.best : null;
       setDetectedSeal(label && sealName(label));
       const now = performance.now();
+      const { steps, mode } = practice.current;
+      const next = steps[progressRef.current % Math.max(1, steps.length)];
+      // Compare the hands with the reference pose of the seal being practised
+      // or recorded.
+      const focus = practiceFocus(
+        mode,
+        next,
+        arenaFocus.current,
+        recordFocus.current,
+      );
+      const check = focus ? checkPose(focus, frame.hands, frame.aspect) : null;
+      setPoseCheck((previous) =>
+        samePoseCheck(previous, check) ? previous : check,
+      );
       // Recording keeps the live readout but must not teach or advance practice.
       if (recordMode) {
         recorder.current?.frame(frame, now);
         return;
       }
-      const { steps, mode } = practice.current;
-      const next = steps[progressRef.current % Math.max(1, steps.length)];
       const known = next ? (templatesRef.current[next]?.length ?? 0) : 0;
-      // Compare the hands with the reference pose of the seal being practised.
-      const focus = practiceFocus(mode, arenaFocus.current, next);
-      const check = focus ? checkPose(focus, frame.hands, frame.aspect) : null;
-      setPoseCheck((previous) =>
-        samePoseCheck(previous, check) ? previous : check,
-      );
       teachingRef.current =
         mode === "camera" &&
         needsTeaching(next, known) &&
@@ -593,6 +602,17 @@ function useTechnique(setStatus: SetStatus) {
 }
 
 /** In the arena, recognized seals answer the drill instead of the sequence. */
+/** The seal the ?record panel is on: state for the guide, a ref for frames. */
+function useRecordFocus() {
+  const focus = useRef<string | null>(null);
+  const [seal, setSeal] = useState<string | null>(null);
+  const setRecordFocus = useCallback((id: string | null) => {
+    focus.current = id;
+    setSeal(id);
+  }, []);
+  return { focus, seal, setRecordFocus };
+}
+
 function useArenaBridge() {
   const focus = useRef<string | null>(null);
   const listener = useRef<((id: string) => void) | null>(null);
@@ -654,11 +674,17 @@ function useReducedMotion() {
 }
 
 /** The seal practice would check now: the arena's focus, or the next step. */
-const practiceFocus = (
+/** The seal whose reference pose the hands are checked against. */
+function practiceFocus(
   mode: AppModel["mode"],
-  arena: string | null,
   next: string | undefined,
-) => (mode === "arena" ? arena : mode === "camera" ? next : null);
+  arena: string | null,
+  record: string | null,
+) {
+  if (recordMode) return record;
+  if (mode === "arena") return arena;
+  return mode === "camera" ? next : null;
+}
 
 export default function App() {
   const [mode, setMode] = useState<AppModel["mode"]>("demo");
@@ -668,6 +694,7 @@ export default function App() {
   const technique = useTechnique(setStatus);
   const { selected, variant, sequence, effect } = technique;
   const arena = useArenaBridge();
+  const record = useRecordFocus();
   const [matcher] = useState(readMatcher);
   const teachingRef = useRef(false);
   const calibrationOpen = useRef(false);
@@ -726,6 +753,7 @@ export default function App() {
     frameAt,
     recorder,
     arenaFocus: arena.focus,
+    recordFocus: record.focus,
     arenaListener: arena.listener,
     inputSeal,
     addSample: calibration.addSample,
@@ -751,7 +779,7 @@ export default function App() {
         reducedMotion={reducedMotion}
         figure={
           mode !== "arena" &&
-          (activeEffect || !sealGuides[sequence[progress]?.id])
+          (activeEffect || !sealGuides[record.seal ?? sequence[progress]?.id])
         }
       />
     ),
@@ -787,6 +815,8 @@ export default function App() {
     ...modeControls(camera, mode, setMode, resetSequence, setStatus),
     poseCheck,
     setArenaFocus: arena.setArenaFocus,
+    recordFocus: record.seal,
+    setRecordFocus: record.setRecordFocus,
     onArenaSeal: arena.onArenaSeal,
     selectTechnique: (id) => technique.selectTechnique(id, resetSequence),
     selectVariant: (id) => technique.selectVariant(id, resetSequence),

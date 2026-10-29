@@ -43,6 +43,9 @@ const defaultView = { yaw: 0, pitch: -12 };
  * reticle. Drag or use the arrow keys to turn it. Digits listed in `issues`
  * (e.g. "L:index") are drawn in red.
  */
+// Each hand has its own colour so crossed or interlaced fingers can be told apart.
+const hand: Record<Side, string> = { L: "left", R: "right" };
+
 export default function HandFigure({
   sealId,
   still,
@@ -120,7 +123,7 @@ export default function HandFigure({
       node: (
         <polygon
           key={`${side}-palm`}
-          className="figure-palm"
+          className={`figure-palm ${hand[side]}`}
           points={palmPoints.map((p) => `${p.x},${p.y}`).join(" ")}
         />
       ),
@@ -135,7 +138,7 @@ export default function HandFigure({
         node: (
           <g
             key={`${side}-${a}-${b}`}
-            className={`figure-bone ${issue ? "issue" : ""}`}
+            className={`figure-bone ${hand[side]} ${issue ? "issue" : ""}`}
           >
             <line x1={p.x} y1={p.y} x2={q.x} y2={q.y} strokeWidth={w} />
             <line
@@ -153,7 +156,7 @@ export default function HandFigure({
     });
     const wrist = points[0];
     tags.push(
-      <g key={`${side}-tag`} className="figure-tag">
+      <g key={`${side}-tag`} className={`figure-tag ${hand[side]}`}>
         <rect x={wrist.x - 7} y={wrist.y + 6} width="14" height="14" />
         <text x={wrist.x} y={wrist.y + 13.5} textAnchor="middle">
           {side}
