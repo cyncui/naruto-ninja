@@ -1,6 +1,6 @@
 # Trained seal classifier plan
 
-Planned October 21, 2026. Milestone 1 is built and Milestone 2 is scaffolded. Nothing has been measured on real recordings yet. It replaces nearest-example calibration with a small trained model, following the pipeline proposed in [browser-vision-stack-research.md](browser-vision-stack-research.md).
+Planned October 21, 2026. Milestones 1–3 are built. First results come from two sessions of one person on October 29: [docs/eval/baseline.md](eval/baseline.md) and [docs/eval/model.md](eval/model.md). It replaces nearest-example calibration with a small trained model, following the pipeline proposed in [browser-vision-stack-research.md](browser-vision-stack-research.md).
 
 ## Why
 
@@ -69,6 +69,14 @@ Done when: `uv run baseline.py` writes a markdown report to `docs/eval/` for bot
 ## Milestone 3 — training
 
 Goal: a model that beats the baseline on held-out sessions.
+
+**Status: built, first result in** ([train.py](../training/train.py), [dataset.py](../training/dataset.py)). `uv run train.py` holds each session out in turn and writes `docs/eval/model.md` with the model and both shipped matchers scored on the same held-out frames. On the two October 29 sessions, the model recognises 55% (A) and 61% (B) of held-out seal frames, against 21% for the landmark matcher and 3% for the image matcher. It triggers falsely 12 times a minute on `none` clips, against 2.0 for landmarks. That figure is from the only fold with `none` clips, whose training session had none, so the model had no `none` class to learn from. Record `none:*` clips in every session.
+
+How it differs from the plan below:
+- scikit-learn's `MLPClassifier` (same 64 → 32 ReLU layers and softmax) instead of PyTorch. Its weight arrays export directly for Milestone 4, without a large dependency for about 10k weights.
+- The first 1.5 s of each seal clip (`--settle`) is dropped, because it is the hands moving into the pose. `training/exclusions.json` drops further ranges, such as a clip where the pose was learned partway through.
+- `p` and `m` come from the last 30% of each training clip, after a fit on the first 70%; the network is then refit on all of it. The targets are 95% precision on accepted seals and at most 5% of `none` frames accepted. No fold met them yet, so the report gives the best validation precision instead.
+- Augmentation: two copies of each frame with up to ±10° rotation, ±10% scale and small jitter. No mirroring.
 
 - **Input.** Fixed size: two hand slots (sorted left to right, as today) × 21 points × 2, plus a presence flag per slot; missing hands are zeros. Two feature sets to compare:
   - A: the raw normalized coordinates (what the matcher uses now).
