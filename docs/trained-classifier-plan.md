@@ -1,6 +1,6 @@
 # Trained seal classifier plan
 
-Planned October 21, 2026. Nothing here is built or measured yet. It replaces nearest-example calibration with a small trained model, following the pipeline proposed in [browser-vision-stack-research.md](browser-vision-stack-research.md).
+Planned October 21, 2026. Milestone 1 is built and Milestone 2 is scaffolded. Nothing has been measured on real recordings yet. It replaces nearest-example calibration with a small trained model, following the pipeline proposed in [browser-vision-stack-research.md](browser-vision-stack-research.md).
 
 ## Why
 
@@ -51,6 +51,8 @@ Done when: one session of all 15 labels can be recorded and re-read by a script,
 ## Milestone 2 — baseline evaluation
 
 Goal: numbers for the current matchers before training anything.
+
+**Status: scaffolded, waiting on recordings** ([training/](../training/)). Put sessions in `data/recordings/`, then run `uv run baseline.py` from `training/` to write `docs/eval/baseline.md`. Each session calibrates in turn, using the first 3 steady holds per seal as hands-free teaching takes them (`--samples` up to 12), and every other session is replayed against it. With one session the report calibrates and tests on the same frames and says so. The image matcher is scored only when frames carry embeddings, which needs `?matcher=image` while recording. `features()`, both `diagnose` functions, `StableSeal`, `advanceSequence`, `SteadyCapture` and the JSONL loader are ported to [matchers.py](../training/matchers.py) and [load.py](../training/load.py). The parity tests (`uv run pytest`) check them against the app's own outputs, which `npm run fixtures:training` writes to `training/tests/fixtures/parity.json`. Regenerate that file whenever those functions change. The tests don't cover `MATCH_MARGIN` or `IMAGE_MATCH_MARGIN` exactly: no fixture pose has a runner-up gap close to either value. The port lives in `matchers.py` rather than the `features.py` named below. NumPy, scikit-learn and PyTorch wait for Milestone 3, since the baseline doesn't need them.
 
 - `training/` folder, Python managed with `uv`, NumPy + scikit-learn + PyTorch. Kept out of the web build.
 - `load.py` reads sessions into frames with labels, session and person.
