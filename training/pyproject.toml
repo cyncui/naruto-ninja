@@ -3,7 +3,10 @@ name = "naruto-ninja-training"
 version = "0.1.0"
 description = "Evaluation and training for the seal classifier (docs/trained-classifier-plan.md)"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "numpy>=2.5.4",
+    "scikit-learn>=1.9.1",
+]
 
 [dependency-groups]
 dev = ["pytest>=8.3"]
